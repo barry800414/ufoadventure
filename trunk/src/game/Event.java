@@ -1,5 +1,7 @@
 package game;
 
-public class Event {
-
+public abstract class Event {
+    
+    public abstract void apply(Player user, Player target, Land location);
+    
 }

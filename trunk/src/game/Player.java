@@ -18,18 +18,18 @@ public class Player {
     protected int[] house = new int[100];
     
     //職業
-    protected Career career;
+    protected int career;
     
     //狀態
     protected Event[] state;
     
     //位置
-    protected Land location;
+    protected int location;
     
     //點數
     protected int credit;
     
-    //圖片資訊
+    //圖片資訊(未完成)
     protected GraphicsEngine graph;
     
 }
