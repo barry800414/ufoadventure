@@ -4,6 +4,6 @@ public abstract class SpecialLocation extends Land{
     
     protected Event event;
     
-    protected abstract boolean check();
+    protected abstract boolean condition();
     
 }
