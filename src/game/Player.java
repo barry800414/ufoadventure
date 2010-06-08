@@ -34,7 +34,6 @@ public class Player {
     
     //圖片資訊(未完成)
     protected String picturename;
-    protected String picture_name;
     protected int centerx , centery;
     protected int upleftx , uplefty;
     
