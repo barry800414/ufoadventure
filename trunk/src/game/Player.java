@@ -20,16 +20,22 @@ public class Player {
     //職業
     protected int career;
     
+    //骰子
+    protected int dice;
+    
     //狀態
     protected Event[] state;
     
     //位置
-    protected int location;
+    protected Land location;
     
     //點數
     protected int credit;
     
     //圖片資訊(未完成)
-    protected GraphicsEngine graph;
+    protected String picturename;
+    protected String picture_name;
+    protected int centerx , centery;
+    protected int upleftx , uplefty;
     
 }
