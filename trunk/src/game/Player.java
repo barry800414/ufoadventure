@@ -9,7 +9,7 @@ public class Player {
     protected int deposit;
     
     //最多20個道具
-    protected int[] item = new int[20];
+    protected Item[] item = new Item[20];
     
     //名字
     protected String name;
@@ -24,7 +24,7 @@ public class Player {
     protected Event[] state;
     
     //位置
-    protected int location;
+    protected Land location;
     
     //點數
     protected int credit;
