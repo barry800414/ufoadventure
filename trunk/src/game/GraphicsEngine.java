@@ -1,128 +1,117 @@
 package game;
 
-import javax.swing.*;
-
-
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.geom.*;
-import java.io.File;
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import java.awt.font.TextAttribute;
+import java.text.*;
+
+public class GraphicsEngine{
+
+	//the window screen size
+	public final int WIDTH = 800;
+	public final int HEIGHT = 600;
 	
-public class GraphicsEngine {
+	//the drawing area size
+	public final int DRAW_WIDTH;
+	public final int DRAW_HEIGHT;
 	
-	private Game game;
-	private GameInfo ginfo;
 	
 	private JFrame main_scr;
+	//the BufferStrategy is to avoid screen flickering
 	private BufferStrategy buffer;
+	//the BufferedImage is to save the info of image
+	private BufferedImage map;
+	private BufferedImage test;
 	
-	private BufferedImage[] playerimage;
-	private BufferedImage[] landimage;
+	//the border size of the Screen, which will depends on OS
+	private Insets border ;
 	
-	public GraphicsEngine(Game game) {
-	    this.game = game;
-	    this.ginfo = game.ginfo;
-	}
+	int x = 2600,y = 600;
 	
-	public void init() {
-	    main_scr = new JFrame();
-	    main_scr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    main_scr.setSize(ginfo.SCREEN_WIDTH, ginfo.SCREEN_HEIGHT);
-	    main_scr.setVisible(true);
-	    
-	    try{
-		for(int i=0;i<ginfo.players_num;i++)
-		    playerimage[i] = ImageIO.read(getClass().getResourceAsStream(ginfo.playerlist[i].picturename));
-		for(int i=0;i<ginfo.lands_num;i++)
-		    landimage[i] = ImageIO.read(getClass().getResourceAsStream(ginfo.landlist[i].picture_name));
-		catch(Exception e){
-			System.out.println(e);
-		}
+	public GraphicsEngine(){
+		main_scr = new JFrame("NTU Monopoly!");
+		//when you click the X of the window , the window will be closed
+		main_scr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//set the window screen size
+		main_scr.setSize(WIDTH,HEIGHT);
 		
-		//draw();
-	}
-	public void DrawGameScreen(Player p){
-	    int upleftx = p.centerx - ginfo.SCREEN_WIDTH/2 ;
-	    int uplefty = p.centery - ginfo.SCREEN_HEIGHT/2;
-	    
-	    
-	    
+		//You can use this method to remove the border of the window
+		//setUndecorated(true);
+		
+		//let the window visible on your computer
+		main_scr.setVisible(true);
+		//get the border information of the window
+		border = main_scr.getInsets();
+		
+		//calculate the drawing area of the window
+		DRAW_WIDTH = WIDTH - (border.left + border.right);
+		DRAW_HEIGHT = HEIGHT - (border.top + border.bottom);
 	}
 	
-	public void draw() {
+	public void DisplayMainMenu(){
 		
-		/* We cannot create BufferStrategy if it is not diaplayable
-		 * (will result in a exception), and it is not necessary to
-		 * draw screen if it is not displayable.
-		 */
-		if(main_scr.isDisplayable()) {
-			// Create BufferStrategy on first draw.
-			if(buffer == null) {
-				main_scr.createBufferStrategy(2);
-				buffer = main_scr.getBufferStrategy();
-			}
-			
-			// Get the graphics buffer
-			Graphics g = buffer.getDrawGraphics();
-			Graphics2D g2d = (Graphics2D)g;
-			
-			// Clean buffer
-			g2d.clearRect(0, 0, (int)info.getWidth(), (int)info.getHeight());
-			
-			// Draw all components
-			drawBullets(g2d);
-			drawPlayers(g2d);
-			
-			// Cleanup
-			g.dispose();
-			buffer.show();
-			
-			// Calculate fps
-			long since_last_update = time_now - last_fps_update;
-			frames_drew++;
-			if(since_last_update >= UPDATE_FPS_PERIOD) {
-				fps = frames_drew * 1000.0 / since_last_update;
-				main_scr.setTitle(String.format("FPS: %.2f", fps));
-				frames_drew = 0;
-				last_fps_update = time_now;
-			}
-			
-			// Force to update
-			Toolkit.getDefaultToolkit().sync();
-		}
-		
-		// Generate next draw event
-		last_draw = time_now;
-		enqueueNextDraw();
 	}
 	
-	private void drawBullets(Graphics2D g) {
-		for(Bullet b : info.getAllBullets()) {
-			g.drawImage(bullet,(int)(b.locX-BULLET_SIZE/2),(int)(b.locY-BULLET_SIZE/2),null);
+	public void GameScreen_init(){
+		//create the BufferedStrategy for the window
+		main_scr.createBufferStrategy(2);
+		
+		//get the buffer of the BufferedStrategy
+		buffer = main_scr.getBufferStrategy();
+		
+		//load the PNG image from files
+		try{
+			map = ImageIO.read(new File("NTUmap.png"));
+			test = ImageIO.read(new File("test.png"));
+		}catch(Exception e){
+			System.out.println("picture load failure");
 		}
 	}
-	
-	private void drawPlayers(Graphics2D g) {
-		for(Player p : info.getAllPlayers()) {
-			if(p.isAlive()) {
-				g.drawImage(ufo,(int)(p.locX-PLAYER_SIZE/2),(int)(p.locY-PLAYER_SIZE/2),null);
-			}
-		}
-	}
-	
-	private void enqueueNextDraw() {
-		final GraphicsEngine ge = this;
-		final long time_next_draw = last_draw + 1000 / TARGET_FPS;
+	public void DrawGameScreen(){
+		//get the buffer's graphics
+		Graphics2D g =(Graphics2D)buffer.getDrawGraphics();
 		
-		game.getGameQueue().addEvent(new Event() {
-			public long getTime() { return time_next_draw; }
-			public void action() { ge.draw(); }
-		});
+		//clear the screen to a color
+		g.clearRect(border.left, border.top,DRAW_WIDTH, DRAW_HEIGHT);
+		
+		//draw an area of image on an area of buffer (Image , draw area upleftx,draw area uplefty , draw area downrightx, draw area downrighty 
+		//                                 image area upleftx,image area uplefty , image area downrightx,image area downrighty ,ImageObserver );
+		g.drawImage(map,border.left,border.top,border.left + DRAW_WIDTH,border.top +DRAW_HEIGHT,x,y,x+DRAW_WIDTH,y+DRAW_HEIGHT,null);
+		
+		//draw the whole image on buffer
+		g.drawImage(test,border.left,border.top,null);
+		
+		
+		//
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		//the output string
+		String s = "測試測試";
+		System.out.println(s.length());
+		
+		// load the font info from your system
+		// (font name,?? , font size)
+		Font font = new Font("Serif",Font.PLAIN,48);
+		Font biakai = new Font("標楷體",Font.PLAIN,96);
+		
+		//g.setFont(font);
+		// the more powerful class for drawing string
+		AttributedString as = new AttributedString(s);
+		as.addAttribute(TextAttribute.FONT,font);
+		as.addAttribute(TextAttribute.FONT,biakai,0,2);
+		as.addAttribute(TextAttribute.FOREGROUND,Color.red,1,3);
+		as.addAttribute(TextAttribute.BACKGROUND,Color.blue,2,4);
+		g.drawString(as.getIterator(), 200, 200);
+		
+		System.out.println("test!");
+		//g.dispose();
+		
+		
+		buffer.show();
+		Toolkit.getDefaultToolkit().sync();
 	}
 	
-	public JFrame getMainFrame() {
-		return main_scr;
-	}
 }
