@@ -39,7 +39,7 @@ public class GraphicsEngine{
 		main_scr.setSize(WIDTH,HEIGHT);
 		
 		//You can use this method to remove the border of the window
-		//setUndecorated(true);
+		//main_scr.setUndecorated(true);
 		
 		//let the window visible on your computer
 		main_scr.setVisible(true);
@@ -109,7 +109,7 @@ public class GraphicsEngine{
 		System.out.println("test!");
 		//g.dispose();
 		
-		
+		//show the 
 		buffer.show();
 		Toolkit.getDefaultToolkit().sync();
 	}
