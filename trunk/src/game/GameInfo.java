@@ -12,6 +12,7 @@ public class GameInfo {
     
     //construct  all the item classes , event classes , land classes , player classes
     public GameInfo(String[] itemclassname ,String[] eventclassname,String[] landclassname){
+    	
     	playerlist = new Player[players_num];
     	items_num = itemclassname.length;
     	events_num = eventclassname.length;

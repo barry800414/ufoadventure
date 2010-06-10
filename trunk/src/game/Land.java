@@ -2,7 +2,7 @@ package game;
 
 import java.awt.image.*;
 
-public abstract class Land {
+public abstract class Land extends GameObject {
     
     //¨Ï¥ÎªÌ
     protected Player player;
