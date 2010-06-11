@@ -2,7 +2,7 @@ package game;
 
 public class Game {
     
-	public GameInfo ginfo;
+    public GameInfo ginfo;
     public GraphicsEngine gengine;
     public Updater gupdater;
     public Control control;
