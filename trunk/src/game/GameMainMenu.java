@@ -5,10 +5,14 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
+
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import javax.swing.JRadioButton;
+import javax.swing.JButton;
+import javax.swing.ButtonGroup;
 
 public class GameMainMenu extends JFrame {
 
@@ -23,6 +27,7 @@ public class GameMainMenu extends JFrame {
 	private JLabel jLabel3 = null;
 	private JLabel jLabel4 = null;
 	private JLabel jLabel5 = null;
+	private JLabel jLabel9 = null;  // the buttom label
 	private JRadioButton jRadioButton = null;
 	private JRadioButton jRadioButton1 = null;
 	private JRadioButton jRadioButton2 = null;
@@ -38,12 +43,31 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton jRadioButton12 = null;
 	private JRadioButton jRadioButton13 = null;
 	private JRadioButton jRadioButton14 = null;
+	private JLabel jLabel6 = null;
+	private JLabel jLabel7 = null;
+	private JLabel jLabel8 = null;
+	private JButton jButton = null;
+	private ButtonGroup playergroup = null;
+	private ButtonGroup propertygroup = null;
+	private ButtonGroup percentgroup = null;
+	private ButtonGroup pointgroup = null;
+	private ButtonGroup modegroup = null; 
+	private Font newfont = new Font("標楷體",Font.PLAIN,18);
+	
+	private GameInfo ginfo = null;
+	private int player_num = 2; 
+	private int property = 500000 ;
+	private int percent = 5;
+	private int point = 0 ;
+	private int mode = 1;
+	private boolean gameflag = false;
 	
 	/**
 	 * This is the default constructor
 	 */
-	public GameMainMenu() {
+	public GameMainMenu(GameInfo ginfo) {
 		super();
+		this.ginfo = ginfo;
 		initialize();
 	}
 
@@ -55,9 +79,17 @@ public class GameMainMenu extends JFrame {
 	private void initialize() {
 		this.setSize(800, 600);
 		this.setContentPane(getJContentPane());
-		this.setTitle("JFrame");
+		this.setTitle("NTU Monopoly");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	public void Display(){
+		setVisible(true);
+		while(!gameflag){};
+		setVisible(false);
+		
+	}
+	
 	/**
 	 * This method initializes jContentPane
 	 * 
@@ -70,6 +102,7 @@ public class GameMainMenu extends JFrame {
 			jContentPane.add(getJPanel(), BorderLayout.SOUTH);
 			jContentPane.add(getJPanel1(),BorderLayout.NORTH);
 			jContentPane.add(getJPanel2(), BorderLayout.CENTER);
+			
 		}
 		return jContentPane;
 	}
@@ -85,11 +118,12 @@ public class GameMainMenu extends JFrame {
 			gridBagConstraints1.insets = new Insets(5, 218, 5, 219);
 			gridBagConstraints1.gridy = 0;
 			gridBagConstraints1.gridx = 0;
-			jLabel = new JLabel();
-			jLabel.setText("歡迎來到NTU Monopoly  , you can select the option of the game");
+			jLabel9 = new JLabel();
+			jLabel9.setFont(newfont);
+			setButtomJLabel();
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(jLabel, gridBagConstraints1);
+			jPanel.add(jLabel9, gridBagConstraints1);
 		}
 		return jPanel;
 	}
@@ -97,16 +131,42 @@ public class GameMainMenu extends JFrame {
 	private JPanel getJPanel1(){
 		if(jPanel1 == null){
 			jLabel = new JLabel();
+			jLabel.setFont(newfont);
 			jLabel.setText("歡迎來到NTU Monopoly  , you can select the option of the game");
 			jPanel1 = new JPanel();
 			jPanel1.add(jLabel, null);
-			jPanel.setLayout(new GridBagLayout());
+			jPanel1.setLayout(new GridBagLayout());
 		}
 		return jPanel1;
 	}
 	
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.gridx = 4;
+			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints5.gridy = 7;
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.gridx = 3;
+			gridBagConstraints4.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints4.gridy = 6;
+			jLabel8 = new JLabel();
+			jLabel8.setFont(newfont);
+			jLabel8.setText("總財產超過250萬");
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = 2;
+			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints3.gridy = 6;
+			jLabel7 = new JLabel();
+			jLabel7.setFont(newfont);
+			jLabel7.setText("擁有超過50棟房屋");
+			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
+			gridBagConstraints2.gridx = 1;
+			gridBagConstraints2.insets = new Insets(5, 5, 5, 5);
+			gridBagConstraints2.gridy = 6;
+			jLabel6 = new JLabel();
+			jLabel6.setFont(newfont);
+			jLabel6.setText("玩至其他玩家破產為止");
 			GridBagConstraints gridBagConstraints56 = new GridBagConstraints();
 			gridBagConstraints56.gridx = 3;
 			gridBagConstraints56.insets = new Insets(5, 5, 5, 5);
@@ -174,6 +234,7 @@ public class GameMainMenu extends JFrame {
 			gridBagConstraints41.anchor = GridBagConstraints.WEST;
 			gridBagConstraints41.gridy = 5;
 			jLabel5 = new JLabel();
+			jLabel5.setFont(newfont);
 			jLabel5.setText("遊戲模式:");
 			GridBagConstraints gridBagConstraints40 = new GridBagConstraints();
 			gridBagConstraints40.gridx = 0;
@@ -182,6 +243,7 @@ public class GameMainMenu extends JFrame {
 			gridBagConstraints40.anchor = GridBagConstraints.WEST;
 			gridBagConstraints40.gridy = 4;
 			jLabel4 = new JLabel();
+			jLabel4.setFont(newfont);
 			jLabel4.setText("初始點數:");
 			GridBagConstraints gridBagConstraints39 = new GridBagConstraints();
 			gridBagConstraints39.gridx = 0;
@@ -190,6 +252,7 @@ public class GameMainMenu extends JFrame {
 			gridBagConstraints39.anchor = GridBagConstraints.WEST;
 			gridBagConstraints39.gridy = 3;
 			jLabel3 = new JLabel();
+			jLabel3.setFont(newfont);
 			jLabel3.setText("初始現金/存款比率:");
 			GridBagConstraints gridBagConstraints38 = new GridBagConstraints();
 			gridBagConstraints38.gridx = 0;
@@ -198,6 +261,7 @@ public class GameMainMenu extends JFrame {
 			gridBagConstraints38.anchor = GridBagConstraints.WEST;
 			gridBagConstraints38.gridy = 2;
 			jLabel2 = new JLabel();
+			jLabel2.setFont(newfont);
 			jLabel2.setText("初始總財產:");
 			GridBagConstraints gridBagConstraints37 = new GridBagConstraints();
 			gridBagConstraints37.gridx = 0;
@@ -206,6 +270,7 @@ public class GameMainMenu extends JFrame {
 			gridBagConstraints37.anchor = GridBagConstraints.WEST;
 			gridBagConstraints37.gridy = 1;
 			jLabel1 = new JLabel();
+			jLabel1.setFont(newfont);
 			jLabel1.setText("遊戲人數:");
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
@@ -221,6 +286,13 @@ public class GameMainMenu extends JFrame {
 			jPanel2.add(jLabel3, gridBagConstraints39);
 			jPanel2.add(jLabel4, gridBagConstraints40);
 			jPanel2.add(jLabel5, gridBagConstraints41);
+			
+			playergroup = new ButtonGroup();
+			propertygroup = new ButtonGroup();
+			percentgroup = new ButtonGroup();
+			pointgroup = new ButtonGroup();
+			modegroup = new ButtonGroup(); 
+			
 			jPanel2.add(getJRadioButton(), gridBagConstraints42);
 			jPanel2.add(getJRadioButton1(), gridBagConstraints43);
 			jPanel2.add(getJRadioButton2(), gridBagConstraints44);
@@ -236,6 +308,10 @@ public class GameMainMenu extends JFrame {
 			jPanel2.add(getJRadioButton12(), gridBagConstraints54);
 			jPanel2.add(getJRadioButton13(), gridBagConstraints55);
 			jPanel2.add(getJRadioButton14(), gridBagConstraints56);
+			jPanel2.add(jLabel6, gridBagConstraints2);
+			jPanel2.add(jLabel7, gridBagConstraints3);
+			jPanel2.add(jLabel8, gridBagConstraints4);
+			jPanel2.add(getJButton(), gridBagConstraints5);
 		}
 		return jPanel2;
 	}
@@ -248,7 +324,17 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton() {
 		if (jRadioButton == null) {
 			jRadioButton = new JRadioButton();
+			jRadioButton.setFont(newfont);
 			jRadioButton.setText("2人");
+			jRadioButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					player_num = 2;
+					setButtomJLabel();
+					System.out.println("2"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			jRadioButton.doClick();
+			playergroup.add(jRadioButton);
 		}
 		return jRadioButton;
 	}
@@ -261,7 +347,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton1() {
 		if (jRadioButton1 == null) {
 			jRadioButton1 = new JRadioButton();
+			jRadioButton1.setFont(newfont);
 			jRadioButton1.setText("3人");
+			jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					player_num = 3;
+					setButtomJLabel();
+					System.out.println("3"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			playergroup.add(jRadioButton1);
 		}
 		return jRadioButton1;
 	}
@@ -274,7 +369,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton2() {
 		if (jRadioButton2 == null) {
 			jRadioButton2 = new JRadioButton();
+			jRadioButton2.setFont(newfont);
 			jRadioButton2.setText("4人");
+			jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					player_num = 4;
+					setButtomJLabel();
+					System.out.println("4"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			playergroup.add(jRadioButton2);
 		}
 		return jRadioButton2;
 	}
@@ -287,7 +391,17 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton3() {
 		if (jRadioButton3 == null) {
 			jRadioButton3 = new JRadioButton();
+			jRadioButton3.setFont(newfont);
 			jRadioButton3.setText("50萬");
+			jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					property = 500000;
+					setButtomJLabel();
+					System.out.println("50w"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			jRadioButton3.doClick();
+			propertygroup.add(jRadioButton3);
 		}
 		return jRadioButton3;
 	}
@@ -300,7 +414,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton4() {
 		if (jRadioButton4 == null) {
 			jRadioButton4 = new JRadioButton();
+			jRadioButton4.setFont(newfont);
 			jRadioButton4.setText("100萬");
+			jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					property = 1000000;
+					setButtomJLabel();
+					System.out.println("100w"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			propertygroup.add(jRadioButton4);
 		}
 		return jRadioButton4;
 	}
@@ -313,7 +436,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton5() {
 		if (jRadioButton5 == null) {
 			jRadioButton5 = new JRadioButton();
+			jRadioButton5.setFont(newfont);
 			jRadioButton5.setText("150萬");
+			jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					property = 1500000;
+					setButtomJLabel();
+					System.out.println("150w"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			propertygroup.add(jRadioButton5);
 		}
 		return jRadioButton5;
 	}
@@ -326,7 +458,17 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton6() {
 		if (jRadioButton6 == null) {
 			jRadioButton6 = new JRadioButton();
+			jRadioButton6.setFont(newfont);
 			jRadioButton6.setText("50%/50%");
+			jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					percent = 5;
+					setButtomJLabel();
+					System.out.println("50%/50%"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			jRadioButton6.doClick();
+			percentgroup.add(jRadioButton6);
 		}
 		return jRadioButton6;
 	}
@@ -339,7 +481,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton7() {
 		if (jRadioButton7 == null) {
 			jRadioButton7 = new JRadioButton();
+			jRadioButton7.setFont(newfont);
 			jRadioButton7.setText("30%/70%");
+			jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					percent = 3;
+					setButtomJLabel();
+					System.out.println("30%/70%"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			percentgroup.add(jRadioButton7);
 		}
 		return jRadioButton7;
 	}
@@ -352,7 +503,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton8() {
 		if (jRadioButton8 == null) {
 			jRadioButton8 = new JRadioButton();
+			jRadioButton8.setFont(newfont);
 			jRadioButton8.setText("70%/30%");
+			jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					percent = 7;
+					setButtomJLabel();
+					System.out.println("70%/30%"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			percentgroup.add(jRadioButton8);
 		}
 		return jRadioButton8;
 	}
@@ -365,7 +525,17 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton9() {
 		if (jRadioButton9 == null) {
 			jRadioButton9 = new JRadioButton();
+			jRadioButton9.setFont(newfont);
 			jRadioButton9.setText("0點");
+			jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					point = 0;
+					setButtomJLabel();
+					System.out.println("0 point"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			jRadioButton9.doClick();
+			pointgroup.add(jRadioButton9);
 		}
 		return jRadioButton9;
 	}
@@ -378,7 +548,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton10() {
 		if (jRadioButton10 == null) {
 			jRadioButton10 = new JRadioButton();
+			jRadioButton10.setFont(newfont);
 			jRadioButton10.setText("100點");
+			jRadioButton10.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					point = 100;
+					setButtomJLabel();
+					System.out.println("100 point"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			pointgroup.add(jRadioButton10);
 		}
 		return jRadioButton10;
 	}
@@ -391,7 +570,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton11() {
 		if (jRadioButton11 == null) {
 			jRadioButton11 = new JRadioButton();
+			jRadioButton11.setFont(newfont);
 			jRadioButton11.setText("200點");
+			jRadioButton11.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					point = 200 ;
+					setButtomJLabel();
+					System.out.println("200 point"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			pointgroup.add(jRadioButton11);
 		}
 		return jRadioButton11;
 	}
@@ -404,7 +592,17 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton12() {
 		if (jRadioButton12 == null) {
 			jRadioButton12 = new JRadioButton();
+			jRadioButton12.setFont(newfont);
 			jRadioButton12.setText("真‧大富翁");
+			jRadioButton12.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					mode = 1;
+					setButtomJLabel();
+					System.out.println("real monopoly"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			jRadioButton12.doClick();
+			modegroup.add(jRadioButton12);
 		}
 		return jRadioButton12;
 	}
@@ -417,7 +615,16 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton13() {
 		if (jRadioButton13 == null) {
 			jRadioButton13 = new JRadioButton();
+			jRadioButton13.setFont(newfont);
 			jRadioButton13.setText("真‧房地產大亨");
+			jRadioButton13.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					mode = 2;
+					setButtomJLabel();
+					System.out.println("real house king"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			modegroup.add(jRadioButton13);
 		}
 		return jRadioButton13;
 	}
@@ -430,8 +637,47 @@ public class GameMainMenu extends JFrame {
 	private JRadioButton getJRadioButton14() {
 		if (jRadioButton14 == null) {
 			jRadioButton14 = new JRadioButton();
+			jRadioButton14.setFont(newfont);
 			jRadioButton14.setText("真‧好野人");
+			jRadioButton14.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					mode = 3 ;
+					setButtomJLabel();
+					System.out.println("real rich man"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			modegroup.add(jRadioButton14);
 		}
 		return jRadioButton14;
 	}
+
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton() {
+		if (jButton == null) {
+			jButton = new JButton();
+			jButton.setFont(newfont);
+			jButton.setText("開始遊戲!");
+			jButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ginfo.players_num = player_num;
+					ginfo.init_cash = property * percent / 10 ;
+					ginfo.init_deposit = property * (10 - percent) / 10;
+					ginfo.init_point = point;
+					ginfo.gamemode = mode;
+					System.out.println("actionPerformed()" + ginfo.init_cash); // TODO Auto-generated Event stub actionPerformed()
+					gameflag = true;
+				}
+			});
+		}
+		return jButton;
+	}
+	private void setButtomJLabel(){
+		jLabel9.setText("遊戲人數:" +  player_num + "  初始現金:" + property * percent / 10 + "  初始存款:" + property * (10-percent) /10 + "  初始點數:" + point + "  遊戲模式:" + mode);
+	}
 }
+
+

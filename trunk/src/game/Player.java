@@ -22,16 +22,12 @@ public class Player extends GameObject{
     //點數
     protected int point;
  
-	public Player(int cash,int deposit,Item item[],String name,int[] house,
-			int career,int dice_num,Land start_loc,int credit){
+    //to do : Item[] item  , int[] house , Career , Road start
+	public Player(String name,int cash,int deposit,int dice_num,int point){
     	this.cash = cash ;
     	this.deposit = deposit;
-    	for(int i=0;i<item.length;i++)
-    		this.item[i] = item[i];
     	this.name = name ;
-    	this.career = career ;
     	this.dice_num = dice_num;
-    	location = start_loc;
     	this.point = point;
     }
 	   
