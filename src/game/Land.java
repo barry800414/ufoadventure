@@ -1,30 +1,14 @@
 package game;
 
-import java.awt.image.*;
-
 public abstract class Land extends GameObject {
     
-    //¨Ï¥ÎªÌ
-    protected Player player;
-    
-    //¦WºÙ
+    //åå­—
     protected String name;
     
-    //¦ì¸m
-    protected int location;
-    
-    //¾Ö¦³ªÌ
+    //æ“æœ‰è€…
     protected Player owner;
     
-    //¹Ï¤ù¸ê°T(¥¼§¹¦¨)
-    protected String picture_name;
-    protected int centerx , centery;
-    protected int upleftx , uplefty;
-    
-    //»¡©ú(¥¼§¹¦¨)
-    protected String[] explanation = new String[0];
-    
-    //Ä²µo
-    protected abstract void trigger();
+    //èªªæ˜()
+    protected String explanation;
     
 }
