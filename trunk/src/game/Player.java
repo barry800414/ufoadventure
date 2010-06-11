@@ -1,38 +1,38 @@
 package game;
 
 public class Player extends GameObject{
-	//²{ª÷
+	//ç¾é‡‘
     protected int cash;
-    //¦s´Ú
+    //å­˜æ¬¾
     protected int deposit;
-    //³Ì¦h20­Ó¹D¨ã
+    //é“å…·
     protected Item[] item = new Item[20];
-    //¦W¦r
+    //åå­—
     protected String name;
-    //¾Ö¦³©Ğ«Î   to be repaired
+    //æˆ¿å±‹   to be repaired
     protected int[] house = new int[100];
-    //Â¾·~
+    //è·æ¥­
     protected int career;
-    //»ë¤l
-    protected int dicenum;
-    //ª¬ºA
-    protected Event[] state;
-    //¦ì¸m
+    //éª°å­æ•¸
+    protected int dice_num;
+    //ç‹€æ…‹
+    protected int[] state;
+    //ä½ç½®
     protected Land location;
-    //ÂI¼Æ
-    protected int credit;
+    //é»æ•¸
+    protected int point;
  
 	public Player(int cash,int deposit,Item item[],String name,int[] house,
-			int career,int dicenum,Land start_loc,int credit){
+			int career,int dice_num,Land start_loc,int credit){
     	this.cash = cash ;
     	this.deposit = deposit;
     	for(int i=0;i<item.length;i++)
     		this.item[i] = item[i];
     	this.name = name ;
     	this.career = career ;
-    	this.dicenum = dicenum;
+    	this.dice_num = dice_num;
     	location = start_loc;
-    	this.credit = credit;
+    	this.point = point;
     }
 	   
 }

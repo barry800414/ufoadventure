@@ -10,16 +10,16 @@ public class Item {
 	
     }
     
-    //¦WºÙ
+    //åå­—
     protected String name;
     
-    //ÂI¼Æ
+    //é»æ•¸
     protected int point;
     
-    //»¡©ú
+    //èªªæ˜
     protected String info;
     
-    //¨Æ¥ó
+    //äº‹ä»¶
     protected Event event;
     
 }
