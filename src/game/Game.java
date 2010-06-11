@@ -8,7 +8,9 @@ public class Game {
         Computer gcom;
         //Control control;
         //String[] itemlist, eventlist , landclassname ; 
-    
+    public static void main(String[] args){
+	
+    }
         
         while(gengine.MainMenu()){
         	ginfo.init();
