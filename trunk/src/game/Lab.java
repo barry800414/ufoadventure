@@ -2,12 +2,12 @@ package game;
 
 public class Lab extends Land{
     
-    //»ù®æ
-    protected int[] price = new int[2];
+    //åƒ¹æ ¼
+    protected int price;
     
-    //¼h¼Æ
+    //å±¤æ•¸
     protected int floor;
     
-    //¥i¬ãµoª«
+    //ç ”ç©¶
     protected Item research;
 }
