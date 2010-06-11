@@ -24,26 +24,26 @@ public class GameInfo {
     	//eventlist = new Event[events_num];
     	//landlist = new Land[lands_num];
 	
-    	Scanner input;
+	//Itemlist a = new Itemlist();
+	
+    	Scanner input = null;
+    	
 	try {
 	    
-	    input = new Scanner(new FileReader("itemlist.txt"));
-
+	    input = new Scanner(new FileInputStream("itemlist.txt"));
+	    
 	    int buf = input.nextInt();
-	    System.out.println(buf);
 	    
-	    //int buf = input.nextInt();
-	    
-	    //itemlist = new Item[buf];
+	    itemlist = new Item[buf];
 	    	
-	    //for(int i=0;i<buf;i++) {
+	    for(int i=0;i<buf;i++) {
 	    	    
-	//	String name = input.next();
-	  //  	int point = input.nextInt();
-	    //	String info = input.next();
-	    	//itemlist[i] = new Item(name, point, info);
+		String name = input.next();
+	    	int point = input.nextInt();
+	    	String info = input.next();
+	    	itemlist[i] = new Item(name, point, info);
 	    	
-	    //}
+	    }
 	    
 	} catch (FileNotFoundException e) {
 	    System.out.println("..............");
