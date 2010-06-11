@@ -15,8 +15,8 @@ public class GraphicsEngine{
 	public final int HEIGHT = 600;
 	
 	//the drawing area size
-	public final int DRAW_WIDTH;
-	public final int DRAW_HEIGHT;
+	public final int DRAW_WIDTH ;
+	public final int DRAW_HEIGHT ;
 	
 	
 	private JFrame main_scr;
@@ -89,13 +89,13 @@ public class GraphicsEngine{
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		//the output string
-		String s = "´ú¸Õ´ú¸Õ";
+		String s = "æ¸¬è©¦æ¸¬è©¦æ¸¬è©¦";
 		System.out.println(s.length());
 		
 		// load the font info from your system
 		// (font name,?? , font size)
 		Font font = new Font("Serif",Font.PLAIN,48);
-		Font biakai = new Font("¼Ð·¢Åé",Font.PLAIN,96);
+		Font biakai = new Font("æ¸¬è©¦",Font.PLAIN,96);
 		
 		//g.setFont(font);
 		// the more powerful class for drawing string
