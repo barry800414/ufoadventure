@@ -41,6 +41,14 @@ public class GraphicsEngine{
 		//You can use this method to remove the border of the window
 		//main_scr.setUndecorated(true);
 		
+		
+	}
+	
+	public boolean MainMenu(){
+		
+	}
+	
+	public void GameScreen_init(){
 		//let the window visible on your computer
 		main_scr.setVisible(true);
 		//get the border information of the window
@@ -49,13 +57,7 @@ public class GraphicsEngine{
 		//calculate the drawing area of the window
 		DRAW_WIDTH = WIDTH - (border.left + border.right);
 		DRAW_HEIGHT = HEIGHT - (border.top + border.bottom);
-	}
-	
-	public void DisplayMainMenu(){
 		
-	}
-	
-	public void GameScreen_init(){
 		//create the BufferedStrategy for the window
 		main_scr.createBufferStrategy(2);
 		
