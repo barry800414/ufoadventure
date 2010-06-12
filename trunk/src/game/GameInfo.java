@@ -11,6 +11,8 @@ public class GameInfo {
     public int init_deposit;
     public int init_point;
     public int gamemode;
+    public Player winner;
+    public Player[] loser;
     
     public Player[] playerlist ;
     public Item[] itemlist;
@@ -21,13 +23,67 @@ public class GameInfo {
     public void init(){
     	
     	playerlist = new Player[players_num];
+    	loser = new Player[players_num-1];
     	System.out.println(players_num + "  dsadasds");
     	for(int i=0;i<players_num;i++) {
-    		playerlist[i] = new Player("Player " + (i+1),init_cash,init_deposit,1,init_point);
-    		System.out.println("player " + (i+1) + " cash :" + playerlist[i].cash + " deposit :" + playerlist[i].deposit  + " point: " + playerlist[i].point);
+    	    playerlist[i] = new Player("Player " + (i+1),init_cash,init_deposit,1,init_point);
+    	    System.out.println("player " + (i+1) + " cash :" + playerlist[i].cash + " deposit :" + playerlist[i].deposit  + " point: " + playerlist[i].point);
     		
     	}
-    	
+    }
+    public boolean CheckMode(){
+	int loser_num = 0;
+	if(gamemode==1){
+	    for(int i=0;i<players_num;i++)
+		if(playerlist[i].career+playerlist[i].cash<=0)
+		    loser_num++;
+	    if(loser_num<players_num-1)
+		return true;
+	    else if(loser_num==players_num-1){
+		for(int i=0,j=0;i<players_num;i++){
+		    if(playerlist[i].career+playerlist[i].cash<=0)
+			loser[j++]=playerlist[i];
+		    else winner=playerlist[i];
+		}
+		return false;
+	    }
+	}
+	else if(gamemode==2){
+	    for(int i=0;i<players_num;i++)
+		if(playerlist[i].house.length<50)
+		    loser_num++;
+	    if(loser_num<players_num-1)
+		return true;
+		    
+	    else if(loser_num==players_num-1){
+		for(int i=0,j=0;i<players_num;i++){
+		    if(playerlist[i].house.length<50)
+			loser[j++]=playerlist[i];
+		    else winner=playerlist[i];
+		}
+		return false;
+	    }
+	}
+	else if(gamemode==3){
+	    for(int i=0;i<players_num;i++)
+		if(playerlist[i].house.<50)
+		    loser_num++;
+	    if(loser_num<players_num-1)
+		return true;
+		    
+	    else if(loser_num==players_num-1){
+		for(int i=0,j=0;i<players_num;i++){
+		    if(playerlist[i].house.length<50)
+			loser[j++]=playerlist[i];
+		    else winner=playerlist[i];
+		}
+		return false;
+	    }
+	}
+	    
+		    
+	return false;
+    }
     	
 	    /*
     	Scanner input = null;   	
@@ -55,5 +111,5 @@ public class GameInfo {
     		System.out.println("..............");
     	}
     	*/
-    }
+
 }
