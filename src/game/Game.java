@@ -5,7 +5,7 @@ public class Game {
     public static void main(String[] args){
     	GameInfo ginfo =  new GameInfo();
         //GraphicsEngine gengine = new GraphicsEngine();
-        Computer gcom;
+        Computer gcom = new Computer(ginfo);
         //Control control;
         //String[] itemlist, eventlist , landclassname ; 
         
@@ -21,7 +21,9 @@ public class Game {
         	ginfo.init();
         	MainLoop();        	
         }*/
-  
+        while(gcom.GameContinue()){
+            gcom.Run();
+        }
     }
     
 }
