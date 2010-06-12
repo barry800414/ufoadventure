@@ -23,12 +23,15 @@ public class Player extends GameObject{
     protected int point;
  
     //to do : Item[] item  , int[] house , Career , Road start
-	public Player(String name,int cash,int deposit,int dice_num,int point){
+    public Player(String name,int cash,int deposit,int dice_num,int point){
     	this.cash = cash ;
     	this.deposit = deposit;
     	this.name = name ;
     	this.dice_num = dice_num;
     	this.point = point;
+    }
+    public void Update(){
+	
     }
 	   
 }
