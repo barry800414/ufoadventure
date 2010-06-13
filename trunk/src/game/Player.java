@@ -1,5 +1,7 @@
 package game;
 
+import java.util.*;
+
 public class Player extends GameObject{
 	//現金
     protected int cash;
@@ -10,7 +12,7 @@ public class Player extends GameObject{
     //名字
     protected String name;
     //房屋   to be repaired
-    protected int[] house = new int[100];
+    protected ArrayList<Land> house = new ArrayList<Land>(0);
     //職業
     protected int career;
     //骰子數
@@ -21,6 +23,8 @@ public class Player extends GameObject{
     protected Land location;
     //點數
     protected int point;
+    //總財產
+    protected int property;
  
     //to do : Item[] item  , int[] house , Career , Road start
     public Player(String name,int cash,int deposit,int dice_num,int point){
@@ -32,6 +36,11 @@ public class Player extends GameObject{
     }
     public void Update(){
 	
+    }
+    
+    public Land[] GetHouseList(){
+	Land[] houselist = new Land[0];
+	return house.toArray(houselist);
     }
 	   
 }

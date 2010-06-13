@@ -32,6 +32,8 @@ public class GameInfo {
     	}
     	coodinate = new int[19][21];
     }
+    
+    
     public boolean CheckMode(){
 	int loser_num = 0;
 	if(gamemode==1){
@@ -51,14 +53,14 @@ public class GameInfo {
 	}
 	else if(gamemode==2){
 	    for(int i=0;i<players_num;i++)
-		if(playerlist[i].house.length<50)
+		if(playerlist[i].house.size()<50)
 		    loser_num++;
 	    if(loser_num<players_num-1)
 		return true;
 		    
 	    else if(loser_num==players_num-1){
 		for(int i=0,j=0;i<players_num;i++){
-		    if(playerlist[i].house.length<50)
+		    if(playerlist[i].house.size()<50)
 			loser[j++]=playerlist[i];
 		    else winner=playerlist[i];
 		}
@@ -66,23 +68,15 @@ public class GameInfo {
 	    }
 	}
 	else if(gamemode==3){
-	    for(int i=0;i<players_num;i++)
-		if(playerlist[i].house.<50)
-		    loser_num++;
-	    if(loser_num<players_num-1)
-		return true;
-		    
-	    else if(loser_num==players_num-1){
-		for(int i=0,j=0;i<players_num;i++){
-		    if(playerlist[i].house.length<50)
-			loser[j++]=playerlist[i];
-		    else winner=playerlist[i];
-		}
-		return false;
+	    for(int i=0;i<players_num;i++){
+		int all_money = playerlist[i].cash + playerlist[i].deposit;
+		for(Land land : playerlist[i].house)
+		    all_money = all_money + land.price;
+		if(all_money>2500000) return false;
 	    }
+	    return true;
 	}
 	    
-		    
 	return false;
     }
     	

@@ -2,12 +2,10 @@ package game;
 
 public class Building extends Land{
     
-    //¼h¼Æ
+    //ï¿½hï¿½ï¿½
     protected int MAX_FLOOR = 5;
-    //»ù®æ
-    protected int[] price = new int[MAX_FLOOR];
     
-    //¹L¸ô¶O
+    //ï¿½Lï¿½ï¿½ï¿½O
     protected int[] charge = new int[MAX_FLOOR];
     
     protected void trigger(Player player)
