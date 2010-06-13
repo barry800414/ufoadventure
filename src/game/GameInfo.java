@@ -14,6 +14,7 @@ public class GameInfo {
     public Player winner;
     public Player[] loser;
     
+    public int[][] coodinate;
     public Player[] playerlist ;
     public Item[] itemlist;
     public Land[] landlist;
@@ -28,8 +29,8 @@ public class GameInfo {
     	for(int i=0;i<players_num;i++) {
     	    playerlist[i] = new Player("Player " + (i+1),init_cash,init_deposit,1,init_point);
     	    System.out.println("player " + (i+1) + " cash :" + playerlist[i].cash + " deposit :" + playerlist[i].deposit  + " point: " + playerlist[i].point);
-    		
     	}
+    	coodinate = new int[19][21];
     }
     public boolean CheckMode(){
 	int loser_num = 0;
