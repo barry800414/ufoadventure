@@ -1,5 +1,7 @@
 package game;
 
+import java.util.*;
+
 public class Computer {
 	
 	private GameInfo ginfo ;
@@ -24,6 +26,12 @@ public class Computer {
 	 * move the player by steps
 	 */
 	public void MovePlayer(Player p,int dicenum){
+		Random rnd = new Random();
+		int movement = 0;
+		for(int i=0;i<dicenum;i++){
+		    movement = movement + rnd.nextInt(6) + 1;
+		}
+		
 		
 	}
 	/*
@@ -50,7 +58,7 @@ public class Computer {
 	    for(int i=0;i<ginfo.players_num;i++){
 		playerlist[i].Update();
 		while(playerRound[i]==true){
-		    
+		    if(playercontrol==1) MovePlayer(playerlist[i], playerlist[i].dice_num);
 		}
 	    }
 	}
