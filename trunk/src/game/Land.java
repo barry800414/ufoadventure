@@ -12,8 +12,11 @@ public abstract class Land extends GameObject {
     
     public Land(String name,String explanation,Player owner,int price,Event event){
     	this.name = name ;
-    	this.explanation
+    	this.explanation = explanation ;
+    	this.owner = owner ;
+    	this.price = price ; 
+    	this.event = event ;
     }
     
-    public abstract void land_trigger(Player p);
+    public abstract void land_trigger(GraphicsEngine gengine,Player p);
 }

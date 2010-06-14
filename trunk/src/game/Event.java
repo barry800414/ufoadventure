@@ -2,6 +2,6 @@ package game;
 
 public abstract class Event {
     
-    public abstract void apply(Player target, Road location);
+    public abstract void apply(GameInfo ginfo,GraphicsEngine gengine);
     
 }
