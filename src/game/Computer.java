@@ -7,20 +7,12 @@ public class Computer {
 	private GameInfo ginfo ;
 	private Player[] playerlist;
 	public boolean[] playerRound;
-	public int year;
-	public int month;
-	public int day;
-	public int round;
 	public int playercontrol;
 	public Computer(GameInfo info){
 		ginfo = info ;
 		playerlist = ginfo.playerlist;
 		playerRound = new boolean[ginfo.players_num];
 		ResetPlayerRound();
-		round=1;
-		year=2010;
-		month=6;
-		day=10;
 	}
 	
 	/*
@@ -28,12 +20,9 @@ public class Computer {
 	 */
 	public void MovePlayer(Player p){
 		Random rnd = new Random();
-		int movement = 0;
-		for(int i=0;i<p.dice_num;i++){
-		    movement = movement + rnd.nextInt(6) + 1;
-		    CheckRoad(p);
-		}
-		
+		int step = 0;
+		for(int i=0;i<p.dice_num;i++) step = step + rnd.nextInt(6) + 1;
+		for(int i=step;i>0;i++) 
 		
 	}
 	/*
@@ -67,22 +56,22 @@ public class Computer {
 	}
 	
 	public void Update(){
-	    round++;
+	    ginfo.round++;
 	    AddDate();
 	    ResetPlayerRound();
 	}
 	public void AddDate(){
-	    day++;
-	    if(day==32||
-		    ((month==4||month==6||month==9||month==11)&&day==31)||
-		    (month==2&&(year%400==0||(year%4==0&&year%100!=0))&&day>29)||
-		    (month==2&&(year%4!=0||(year%400!=0&&year%100==0))&&day>28)){
-		month++;
-		day=1;
+	    ginfo.day++;
+	    if(ginfo.day==32||
+		    ((ginfo.month==4||ginfo.month==6||ginfo.month==9||ginfo.month==11)&&ginfo.day==31)||
+		    (ginfo.month==2&&(ginfo.year%400==0||(ginfo.year%4==0&&ginfo.year%100!=0))&&ginfo.day>29)||
+		    (ginfo.month==2&&(ginfo.year%4!=0||(ginfo.year%400!=0&&ginfo.year%100==0))&&ginfo.day>28)){
+		ginfo.month++;
+		ginfo.day=1;
 	    }
-	    if(month==13){
-		year++;
-		month=1;
+	    if(ginfo.month==13){
+		ginfo.year++;
+		ginfo.month=1;
 	    }
 	}
 	public void ResetPlayerRound(){
