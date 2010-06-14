@@ -40,16 +40,6 @@ public class GraphicsEngine{
 		
 		//You can use this method to remove the border of the window
 		//main_scr.setUndecorated(true);
-		
-		
-	}
-	
-	public boolean MainMenu(){
-		
-	}
-	
-	public void GameScreen_init(){
-		//let the window visible on your computer
 		main_scr.setVisible(true);
 		//get the border information of the window
 		border = main_scr.getInsets();
@@ -57,6 +47,16 @@ public class GraphicsEngine{
 		//calculate the drawing area of the window
 		DRAW_WIDTH = WIDTH - (border.left + border.right);
 		DRAW_HEIGHT = HEIGHT - (border.top + border.bottom);
+		
+	}
+	/*
+	public boolean MainMenu(){
+		
+	}*/
+	
+	public void GameScreen_init(){
+		//let the window visible on your computer
+		
 		
 		//create the BufferedStrategy for the window
 		main_scr.createBufferStrategy(2);
@@ -81,7 +81,7 @@ public class GraphicsEngine{
 		
 		//draw an area of image on an area of buffer (Image , draw area upleftx,draw area uplefty , draw area downrightx, draw area downrighty 
 		//                                 image area upleftx,image area uplefty , image area downrightx,image area downrighty ,ImageObserver );
-		g.drawImage(map,border.left,border.top,border.left + DRAW_WIDTH,border.top +DRAW_HEIGHT,x,y,x+DRAW_WIDTH,y+DRAW_HEIGHT,null);
+		g.drawImage(map,border.left,border.top,border.left + DRAW_WIDTH-100,border.top +DRAW_HEIGHT-100,x,y,x+DRAW_WIDTH-100,y+DRAW_HEIGHT-100,null);
 		
 		//draw the whole image on buffer
 		g.drawImage(test,border.left,border.top,null);
@@ -108,6 +108,7 @@ public class GraphicsEngine{
 		as.addAttribute(TextAttribute.BACKGROUND,Color.blue,2,4);
 		g.drawString(as.getIterator(), 200, 200);
 		
+		main_scr.add(new JButton("Test!!"));
 		System.out.println("test!");
 		//g.dispose();
 		
