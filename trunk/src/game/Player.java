@@ -8,7 +8,7 @@ public class Player extends GameObject{
     //存款
     protected int deposit;
     //道具
-    protected Item[] item = new Item[20];
+    protected ArrayList<Item> item = new ArrayList<Item>(0);
     //名字
     protected String name;
     //房屋   to be repaired
