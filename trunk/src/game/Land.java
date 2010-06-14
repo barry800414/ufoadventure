@@ -2,24 +2,18 @@ package game;
 
 public abstract class Land extends GameObject {
     
-    //名字
-    protected String name;
     
-    //擁有者
-    protected Player owner;
-
-    //價格
-    protected int price;
+    protected String name;  //名字
+    protected Player owner;  //擁有者
+    protected int price;  //價格
+    protected String explanation; //說明()
+    //protected int ID;  //編號
+    protected Event event;
     
-    //說明()
-    protected String explanation;
+    public Land(String name,String explanation,Player owner,int price,Event event){
+    	this.name = name ;
+    	this.explanation
+    }
     
-    //編號
-    protected int number;
-    
-    //X軸
-    protected int X;
-    
-    //Y軸
-    protected int Y;
+    public abstract void land_trigger(Player p);
 }
