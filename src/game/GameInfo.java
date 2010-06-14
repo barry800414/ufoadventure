@@ -21,7 +21,7 @@ public class GameInfo {
     public int[][] coodinate;
     public Player[] playerlist ;
     public Item[] itemlist;
-    public Land[] landlist;
+    public Road[] Roadlist;
     public Event[] eventlist;
     
     
