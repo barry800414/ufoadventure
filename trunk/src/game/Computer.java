@@ -11,6 +11,7 @@ public class Computer {
 	public int month;
 	public int day;
 	public int round;
+	public int playercontrol;
 	public Computer(GameInfo info){
 		ginfo = info ;
 		playerlist = ginfo.playerlist;
@@ -25,11 +26,12 @@ public class Computer {
 	/*
 	 * move the player by steps
 	 */
-	public void MovePlayer(Player p,int dicenum){
+	public void MovePlayer(Player p){
 		Random rnd = new Random();
 		int movement = 0;
-		for(int i=0;i<dicenum;i++){
+		for(int i=0;i<p.dice_num;i++){
 		    movement = movement + rnd.nextInt(6) + 1;
+		    CheckRoad(p);
 		}
 		
 		
@@ -58,8 +60,9 @@ public class Computer {
 	    for(int i=0;i<ginfo.players_num;i++){
 		playerlist[i].Update();
 		while(playerRound[i]==true){
-		    if(playercontrol==1) MovePlayer(playerlist[i], playerlist[i].dice_num);
+		    if(playercontrol==1) MovePlayer(playerlist[i]);
 		}
+		RoundEnd(playerlist[i]);
 	    }
 	}
 	
