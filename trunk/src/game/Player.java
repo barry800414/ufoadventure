@@ -20,7 +20,7 @@ public class Player extends GameObject{
     //狀態
     protected int[] state;
     //位置
-    protected Land location;
+    protected int location;
     //點數
     protected int point;
     //總財產

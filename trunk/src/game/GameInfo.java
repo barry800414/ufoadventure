@@ -11,6 +11,10 @@ public class GameInfo {
     public int init_deposit;
     public int init_point;
     public int gamemode;
+    public int year;
+    public int month;
+    public int day;
+    public int round;
     public Player winner;
     public Player[] loser;
     
@@ -22,7 +26,10 @@ public class GameInfo {
     
     
     public void init(){
-    	
+	round=1;
+	year=2010;
+	month=6;
+	day=10;
     	playerlist = new Player[players_num];
     	loser = new Player[players_num-1];
     	System.out.println(players_num + "  dsadasds");
@@ -70,13 +77,11 @@ public class GameInfo {
 	else if(gamemode==3){
 	    for(int i=0;i<players_num;i++){
 		int all_money = playerlist[i].cash + playerlist[i].deposit;
-		for(Land land : playerlist[i].house)
-		    all_money = all_money + land.price;
+		for(Land land : playerlist[i].house) all_money = all_money + land.price;
 		if(all_money>2500000) return false;
 	    }
 	    return true;
 	}
-	    
 	return false;
     }
     	
