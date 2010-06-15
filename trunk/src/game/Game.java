@@ -3,27 +3,25 @@ package game;
 public class Game {
     
     public static void main(String[] args){
-    	GameInfo ginfo =  new GameInfo();
-        //GraphicsEngine gengine = new GraphicsEngine();
-        Computer gcom = new Computer(ginfo);
-        //Control control;
-        //String[] itemlist, eventlist , landclassname ; 
+    	//GameInfo ginfo =  new GameInfo();
+        GraphicsEngine gengine = new GraphicsEngine();
+        //Computer gcom = new Computer(ginfo);
         
-        //gengine.GameScreen_init();
-        //gengine.DrawGameScreen();
-        GameMainMenu a = new GameMainMenu(ginfo);
-        a.Display();
+        //GameMainMenu a = new GameMainMenu(ginfo);
+        //a.Display();
+        gengine.setVisible(true);
         
-        ginfo.init();
+        //ginfo.init();
         
         /*
         while(gengine.MainMenu()){
         	ginfo.init();
         	MainLoop();        	
         }*/
+        /*
         while(gcom.GameContinue()){
             gcom.Run();
-        }
+        }*/
     }
     
 }

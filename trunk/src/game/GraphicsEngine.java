@@ -1,120 +1,214 @@
 package game;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+
+import java.awt.Font;
+import java.awt.Rectangle;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+
 import java.awt.font.TextAttribute;
-import java.text.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.text.AttributedString;
 
-public class GraphicsEngine{
+import javax.imageio.ImageIO;
 
-	//the window screen size
-	public final int WIDTH = 800;
-	public final int HEIGHT = 600;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Graphics2D;
+import java.awt.Dimension;
+import javax.swing.border.LineBorder;
+
+
+
+
+
+public class GraphicsEngine extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel jContentPane = null;
+	private int WIDTH = 960 ,HEIGHT = 600;
+	private int GAME_SCREEN_WIDTH = 760 , GAME_SCREEN_HEIGHT = 550;
+	private JLabel gamescreen_jLabel = null;
+	private JLabel calendar_jLabel = null;
+	private JLabel ntu_jLabel = null;
+	private JLabel status_col_jLabel = null;
+	private JButton jButton = null;
+	private JButton jButton1 = null;
+
+	private BufferedImage status_col;
+	private BufferedImage top_bar;
+	private BufferedImage calendar_bar;
+	private BufferedImage item_bar;
+	private BufferedImage exit_button;
+	private BufferedImage ntu_map;
+	private BufferedImage houses[] = new BufferedImage[Building.MAX_FLOOR];
+	private BufferedImage labs[] = new BufferedImage[Lab.MAX_FLOOR];
+	private BufferedImage players[] = new BufferedImage[Player.MAX_TYPE];
+	private BufferedImage items[] =  new BufferedImage[Item.MAX_ITEMS];
 	
-	//the drawing area size
-	public final int DRAW_WIDTH ;
-	public final int DRAW_HEIGHT ;
 	
 	
-	private JFrame main_scr;
-	//the BufferStrategy is to avoid screen flickering
-	private BufferStrategy buffer;
-	//the BufferedImage is to save the info of image
-	private BufferedImage map;
-	private BufferedImage test;
-	
-	//the border size of the Screen, which will depends on OS
-	private Insets border ;
-	
-	int x = 2600,y = 600;
-	
-	public GraphicsEngine(){
-		main_scr = new JFrame("NTU Monopoly!");
-		//when you click the X of the window , the window will be closed
-		main_scr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//set the window screen size
-		main_scr.setSize(WIDTH,HEIGHT);
-		
-		//You can use this method to remove the border of the window
-		//main_scr.setUndecorated(true);
-		main_scr.setVisible(true);
-		//get the border information of the window
-		border = main_scr.getInsets();
-		
-		//calculate the drawing area of the window
-		DRAW_WIDTH = WIDTH - (border.left + border.right);
-		DRAW_HEIGHT = HEIGHT - (border.top + border.bottom);
-		
+	/**
+	 * This is the default constructor
+	 */
+	public GraphicsEngine() {
+		super();
+		initialize();
 	}
-	/*
-	public boolean MainMenu(){
+
+	/**
+	 * This method initializes this
+	 * 
+	 * @return void
+	 */
+	private void initialize() {
+		this.setSize(WIDTH, HEIGHT);
+		this.setMaximumSize(new Dimension(WIDTH,HEIGHT));
+		this.setMinimumSize(new Dimension(WIDTH,HEIGHT));
+		//this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setTitle("NTU Monopoly");
 		
-	}*/
-	
-	public void GameScreen_init(){
-		//let the window visible on your computer
-		
-		
-		//create the BufferedStrategy for the window
-		main_scr.createBufferStrategy(2);
-		
-		//get the buffer of the BufferedStrategy
-		buffer = main_scr.getBufferStrategy();
-		
-		//load the PNG image from files
+		//load picture
 		try{
-			map = ImageIO.read(new File("NTUmap.png"));
-			test = ImageIO.read(new File("test.png"));
-		}catch(Exception e){
-			System.out.println("picture load failure");
+			status_col = ImageIO.read(new File("status_col.png"));
+			ntu_map = ImageIO.read(new File("NTUmap.png"));
+			calendar_bar = ImageIO.read(new File("calendar_bar.png"));
 		}
+		catch (Exception e){
+			System.out.println("test!");
+		}
+		
+		this.setContentPane(getJContentPane());
+		
+		
 	}
-	public void DrawGameScreen(){
-		//get the buffer's graphics
-		Graphics2D g =(Graphics2D)buffer.getDrawGraphics();
+	/**
+	 * This method initializes jContentPane
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private JPanel getJContentPane() {
+		if (jContentPane == null) {
+			jContentPane = new JPanel();
+			jContentPane.setLayout(null);
+			
+			jContentPane.add(get_ntu_jLabel(), null);
+			jContentPane.add(get_calendar_jLabel(),null);
+			jContentPane.add(get_status_col_jLabel(),null);
+			jContentPane.add(get_gamescreen_jLabel(), null);
+			jContentPane.add(get_ItemJButton(), null);
+			jContentPane.add(get_ExitJButton1(), null);
+		}
+		return jContentPane;
+	}
+
+	private JLabel get_ntu_jLabel(){
+		if(ntu_jLabel == null){
+			ntu_jLabel = new JLabel();
+			ntu_jLabel.setBounds(new Rectangle(200, 0, 350, 50));
+			ntu_jLabel.setText("NTU Monopoly");
+			ntu_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+		}
+		return ntu_jLabel;
+	}
+	
+	private JLabel get_calendar_jLabel(){
+		if(calendar_jLabel == null){
+			calendar_jLabel = new JLabel();
+			calendar_jLabel.setBounds(new Rectangle(0, 0, 200, 50));
+			calendar_jLabel.setText("calendar");
+			calendar_jLabel.setIcon(new ImageIcon(calendar_bar));
+			calendar_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+		}
+		return calendar_jLabel;
+	}
+	private JLabel get_gamescreen_jLabel(){
+		if(gamescreen_jLabel == null){
+			gamescreen_jLabel = new JLabel();
+			gamescreen_jLabel.setBounds(new Rectangle(0,50,GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT));
+			gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(1800,1450)));
+		}
+		return gamescreen_jLabel;
+	}
+	
+	private JLabel get_status_col_jLabel(){
+		if(status_col_jLabel == null){
+			status_col_jLabel = new JLabel();
+			status_col_jLabel.setBounds(new Rectangle(760,50,200,550));
+			status_col_jLabel.setIcon(new ImageIcon(status_col));
+			status_col_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+		}
+		return status_col_jLabel;
+	}
+	
+	private BufferedImage draw_game_screen(int center_x,int center_y){
+		int w = GAME_SCREEN_WIDTH, h = GAME_SCREEN_HEIGHT;
+		BufferedImage buf = new BufferedImage(GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT,BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g = buf.createGraphics();
+		g.drawImage(ntu_map,0,0,w,h,center_x - w/2 ,center_y - h/2, center_x + w/2 , center_y + h/2,null);
 		
-		//clear the screen to a color
-		g.clearRect(border.left, border.top,DRAW_WIDTH, DRAW_HEIGHT);
 		
-		//draw an area of image on an area of buffer (Image , draw area upleftx,draw area uplefty , draw area downrightx, draw area downrighty 
-		//                                 image area upleftx,image area uplefty , image area downrightx,image area downrighty ,ImageObserver );
-		g.drawImage(map,border.left,border.top,border.left + DRAW_WIDTH-100,border.top +DRAW_HEIGHT-100,x,y,x+DRAW_WIDTH-100,y+DRAW_HEIGHT-100,null);
-		
-		//draw the whole image on buffer
-		g.drawImage(test,border.left,border.top,null);
-		
-		
-		//
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		
-		//the output string
-		String s = "測試測試測試";
-		System.out.println(s.length());
-		
-		// load the font info from your system
-		// (font name,?? , font size)
-		Font font = new Font("Serif",Font.PLAIN,48);
-		Font biakai = new Font("測試",Font.PLAIN,96);
-		
-		//g.setFont(font);
-		// the more powerful class for drawing string
+		return buf;
+	}
+	
+	
+	/**
+	 * This method initializes jButton	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton get_ItemJButton() {
+		if (jButton == null) {
+			jButton = new JButton();
+			jButton.setBounds(new Rectangle(710, 0,150, 50));
+			jButton.setText("items");
+			jButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+		}
+		return jButton;
+	}
+
+	/**
+	 * This method initializes jButton1	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton get_ExitJButton1() {
+		if (jButton1 == null) {
+			jButton1 = new JButton();
+			jButton1.setBounds(new Rectangle(860,0,100,50));
+			jButton1.setText("exit");
+			jButton1.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+		}
+		return jButton1;
+	}
+
+	private Image DrawStatusBar(){
+		BufferedImage buf = new BufferedImage(200,550,5);
+		Graphics g = buf.getGraphics();
+		g.drawImage(status_col,0,0,null);
+		String s = "測試測試" ;
+		Font biakai = new Font("標楷體",Font.PLAIN,16);
 		AttributedString as = new AttributedString(s);
-		as.addAttribute(TextAttribute.FONT,font);
-		as.addAttribute(TextAttribute.FONT,biakai,0,2);
-		as.addAttribute(TextAttribute.FOREGROUND,Color.red,1,3);
-		as.addAttribute(TextAttribute.BACKGROUND,Color.blue,2,4);
-		g.drawString(as.getIterator(), 200, 200);
+		as.addAttribute(TextAttribute.FONT,biakai);
+		g.drawString(as.getIterator(),100,100);
 		
-		main_scr.add(new JButton("Test!!"));
-		System.out.println("test!");
-		//g.dispose();
-		
-		//show the 
-		buffer.show();
-		Toolkit.getDefaultToolkit().sync();
+		return buf;
 	}
 	
 }
