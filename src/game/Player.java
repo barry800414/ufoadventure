@@ -3,6 +3,8 @@ package game;
 import java.util.*;
 
 public class Player extends GameObject{
+	
+	public static int MAX_TYPE;
 	//現金
     protected int cash;
     //存款
