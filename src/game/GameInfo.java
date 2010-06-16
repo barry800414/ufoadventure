@@ -8,7 +8,7 @@ public class GameInfo {
     
     public static final int MAX_ROAD = 80;
 	
-	public int players_num;
+    public int players_num;
     public int init_cash;
     public int init_deposit;
     public int init_point;
@@ -19,6 +19,7 @@ public class GameInfo {
     public int round;
     public Player winner;
     public Player[] loser;
+    public int loser_num = 0;
     
     public int[][] coodinate;
     public Player[] playerlist ;
@@ -44,42 +45,28 @@ public class GameInfo {
     
     
     public boolean CheckMode(){
-	int loser_num = 0;
 	if(gamemode==1){
-	    for(int i=0;i<players_num;i++)
-		if(playerlist[i].career+playerlist[i].cash<=0)
-		    loser_num++;
-	    if(loser_num<players_num-1)
-		return true;
-	    else if(loser_num==players_num-1){
-		for(int i=0,j=0;i<players_num;i++){
-		    if(playerlist[i].career+playerlist[i].cash<=0)
-			loser[j++]=playerlist[i];
-		    else winner=playerlist[i];
-		}
+	    if(loser_num < players_num - 1) return true;
+	    else{
+		for(int i=0;i<players_num;i++)
+		    if(playerlist[i].getCash()+playerlist[i].getDeposit()>0) winner = playerlist[i];
 		return false;
 	    }
 	}
 	else if(gamemode==2){
+	    int winner_num = 0;
 	    for(int i=0;i<players_num;i++)
-		if(playerlist[i].house.size()<50)
-		    loser_num++;
-	    if(loser_num<players_num-1)
-		return true;
-		    
-	    else if(loser_num==players_num-1){
-		for(int i=0,j=0;i<players_num;i++){
-		    if(playerlist[i].house.size()<50)
-			loser[j++]=playerlist[i];
-		    else winner=playerlist[i];
+		if(playerlist[i].getHouseList().length>50){
+		    winner_num++;
+		    winner = playerlist[i];
 		}
-		return false;
-	    }
+	    if(winner_num > 0) return false;
+	    else return true;
 	}
 	else if(gamemode==3){
 	    for(int i=0;i<players_num;i++){
-		int all_money = playerlist[i].cash + playerlist[i].deposit;
-		for(Land land : playerlist[i].house) all_money = all_money + land.price;
+		int all_money = playerlist[i].getCash() + playerlist[i].getDeposit();
+		for(Land land : playerlist[i].getHouseList()) all_money = all_money + land.price;
 		if(all_money>2500000) return false;
 	    }
 	    return true;

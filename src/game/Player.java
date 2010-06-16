@@ -40,7 +40,7 @@ public class Player extends GameObject{
     public int getLocation(){  return location;  }
     public int getPoint() {   return point;  }
     public int getProperty() { return property;  }
-    public Land[] GetHouseList(){
+    public Land[] getHouseList(){
     	Land[] houselist = new Land[0];
     	return house.toArray(houselist);
     }
