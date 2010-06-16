@@ -34,19 +34,23 @@ public class GraphicsEngine extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private int WIDTH = 960 ,HEIGHT = 600;
-	private int GAME_SCREEN_WIDTH = 760 , GAME_SCREEN_HEIGHT = 550;
+	private int GAME_SCREEN_WIDTH = 752 , GAME_SCREEN_HEIGHT = 516;
 	private JLabel gamescreen_jLabel = null;
 	private JLabel calendar_jLabel = null;
 	private JLabel ntu_jLabel = null;
 	private JLabel status_col_jLabel = null;
-	private JButton jButton = null;
-	private JButton jButton1 = null;
-
+	private JButton item_jButton = null;
+	private JButton exit_jButton = null;
+	private JButton dice_jButton = null;
+	//private Insets border = null ;
+	
+	
 	private BufferedImage status_col;
 	private BufferedImage top_bar;
+	private BufferedImage dice_button[] = new BufferedImage[2];
 	private BufferedImage calendar_bar;
-	private BufferedImage item_bar;
-	private BufferedImage exit_button;
+	private BufferedImage item_button[] = new BufferedImage[2];
+	private BufferedImage exit_button[] = new BufferedImage[2];
 	private BufferedImage ntu_map;
 	private BufferedImage houses[] = new BufferedImage[Building.MAX_FLOOR];
 	private BufferedImage labs[] = new BufferedImage[Lab.MAX_FLOOR];
@@ -81,13 +85,19 @@ public class GraphicsEngine extends JFrame {
 			status_col = ImageIO.read(new File("status_col.png"));
 			ntu_map = ImageIO.read(new File("NTUmap.png"));
 			calendar_bar = ImageIO.read(new File("calendar_bar.png"));
+			top_bar = ImageIO.read(new File("top_bar.png"));
+			dice_button[0] = ImageIO.read(new File("dice_button.png"));
+			dice_button[1] = ImageIO.read(new File("dice_button2.png"));
+			exit_button[0] = ImageIO.read(new File("exit_button.png"));
+			exit_button[1] = ImageIO.read(new File("exit_button2.png"));
+			item_button[0] = ImageIO.read(new File("item_button.png"));
+			item_button[1] = ImageIO.read(new File("item_button2.png"));
 		}
 		catch (Exception e){
 			System.out.println("test!");
 		}
 		
 		this.setContentPane(getJContentPane());
-		
 		
 	}
 	/**
@@ -100,12 +110,13 @@ public class GraphicsEngine extends JFrame {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
 			
-			jContentPane.add(get_ntu_jLabel(), null);
-			jContentPane.add(get_calendar_jLabel(),null);
-			jContentPane.add(get_status_col_jLabel(),null);
-			jContentPane.add(get_gamescreen_jLabel(), null);
-			jContentPane.add(get_ItemJButton(), null);
-			jContentPane.add(get_ExitJButton1(), null);
+			jContentPane.add(get_ntu_jLabel());
+			jContentPane.add(get_calendar_jLabel());
+			jContentPane.add(get_status_col_jLabel());
+			jContentPane.add(get_gamescreen_jLabel());
+			jContentPane.add(get_ItemJButton());
+			jContentPane.add(get_ExitJButton1());
+			jContentPane.add(get_dice_jButton());
 		}
 		return jContentPane;
 	}
@@ -115,7 +126,8 @@ public class GraphicsEngine extends JFrame {
 			ntu_jLabel = new JLabel();
 			ntu_jLabel.setBounds(new Rectangle(200, 0, 350, 50));
 			ntu_jLabel.setText("NTU Monopoly");
-			ntu_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+			//ntu_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+			ntu_jLabel.setIcon(new ImageIcon(top_bar));
 		}
 		return ntu_jLabel;
 	}
@@ -126,7 +138,7 @@ public class GraphicsEngine extends JFrame {
 			calendar_jLabel.setBounds(new Rectangle(0, 0, 200, 50));
 			calendar_jLabel.setText("calendar");
 			calendar_jLabel.setIcon(new ImageIcon(calendar_bar));
-			calendar_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+			//calendar_jLabel.setBorder(new LineBorder(Color.BLACK,1));
 		}
 		return calendar_jLabel;
 	}
@@ -142,9 +154,9 @@ public class GraphicsEngine extends JFrame {
 	private JLabel get_status_col_jLabel(){
 		if(status_col_jLabel == null){
 			status_col_jLabel = new JLabel();
-			status_col_jLabel.setBounds(new Rectangle(760,50,200,550));
+			status_col_jLabel.setBounds(new Rectangle(752,50,200,466));
 			status_col_jLabel.setIcon(new ImageIcon(status_col));
-			status_col_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+			//status_col_jLabel.setBorder(new LineBorder(Color.BLACK,1));
 		}
 		return status_col_jLabel;
 	}
@@ -166,17 +178,20 @@ public class GraphicsEngine extends JFrame {
 	 * @return javax.swing.JButton	
 	 */
 	private JButton get_ItemJButton() {
-		if (jButton == null) {
-			jButton = new JButton();
-			jButton.setBounds(new Rectangle(710, 0,150, 50));
-			jButton.setText("items");
-			jButton.addActionListener(new java.awt.event.ActionListener() {
+		if (item_jButton == null) {
+			item_jButton = new JButton();
+			item_jButton.setBounds(new Rectangle(702, 0,150, 50));
+			item_jButton.setBorderPainted(false);
+			item_jButton.setContentAreaFilled(false);
+			item_jButton.setIcon(new ImageIcon(item_button[0]));
+			item_jButton.setPressedIcon(new ImageIcon(item_button[1]));
+			item_jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 		}
-		return jButton;
+		return item_jButton;
 	}
 
 	/**
@@ -185,19 +200,36 @@ public class GraphicsEngine extends JFrame {
 	 * @return javax.swing.JButton	
 	 */
 	private JButton get_ExitJButton1() {
-		if (jButton1 == null) {
-			jButton1 = new JButton();
-			jButton1.setBounds(new Rectangle(860,0,100,50));
-			jButton1.setText("exit");
-			jButton1.addActionListener(new java.awt.event.ActionListener() {
+		if (exit_jButton == null) {
+			exit_jButton = new JButton();
+			exit_jButton.setBounds(new Rectangle(852,0,100,50));
+			exit_jButton.setBorderPainted(false);
+			exit_jButton.setContentAreaFilled(false);
+			exit_jButton.setIcon(new ImageIcon(exit_button[0]));
+			exit_jButton.setPressedIcon(new ImageIcon(exit_button[1]));
+			exit_jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					System.out.println("Exit"); // TODO Auto-generated Event stub actionPerformed()
+					System.exit(0);
 				}
 			});
 		}
-		return jButton1;
+		return exit_jButton;
 	}
 
+	private JButton get_dice_jButton(){
+		if(dice_jButton == null){
+			dice_jButton = new JButton();
+			dice_jButton.setBounds(new Rectangle(752,515,198,50));
+			dice_jButton.setBorderPainted(false);
+			dice_jButton.setContentAreaFilled(false);
+			dice_jButton.setIcon(new ImageIcon(dice_button[0]));
+			dice_jButton.setPressedIcon(new ImageIcon(dice_button[1]));
+			
+		}
+		return dice_jButton ;
+	}
+	
 	private Image DrawStatusBar(){
 		BufferedImage buf = new BufferedImage(200,550,5);
 		Graphics g = buf.getGraphics();
