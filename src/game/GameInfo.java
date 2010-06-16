@@ -6,7 +6,9 @@ import java.util.Scanner;
 
 public class GameInfo {
     
-    public int players_num;
+    public static final int MAX_ROAD = 80;
+	
+	public int players_num;
     public int init_cash;
     public int init_deposit;
     public int init_point;
