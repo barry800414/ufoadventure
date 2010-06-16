@@ -2,7 +2,7 @@ package game;
 
 public class Item {
 
-	public static int MAX_ITEMS ;
+	public static int MAX_ITEMS = 20;
 	
 	public Item(String name, int point, String info) {
 	

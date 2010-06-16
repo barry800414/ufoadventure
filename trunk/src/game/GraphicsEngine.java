@@ -39,9 +39,10 @@ public class GraphicsEngine extends JFrame {
 	private JLabel calendar_jLabel = null;
 	private JLabel ntu_jLabel = null;
 	private JLabel status_col_jLabel = null;
-	private JButton item_jButton = null;
+	private JButton item_bar_jButton = null;
 	private JButton exit_jButton = null;
 	private JButton dice_jButton = null;
+	private JButton item_jButton[] =  new JButton[Item.MAX_ITEMS];
 	//private Insets border = null ;
 	
 	
@@ -49,15 +50,14 @@ public class GraphicsEngine extends JFrame {
 	private BufferedImage top_bar;
 	private BufferedImage dice_button[] = new BufferedImage[2];
 	private BufferedImage calendar_bar;
-	private BufferedImage item_button[] = new BufferedImage[2];
+	private BufferedImage item_bar_button[] = new BufferedImage[2];
 	private BufferedImage exit_button[] = new BufferedImage[2];
 	private BufferedImage ntu_map;
 	private BufferedImage houses[] = new BufferedImage[Building.MAX_FLOOR];
 	private BufferedImage labs[] = new BufferedImage[Lab.MAX_FLOOR];
 	private BufferedImage players[] = new BufferedImage[Player.MAX_TYPE];
 	private BufferedImage items[] =  new BufferedImage[Item.MAX_ITEMS];
-	
-	
+	private BufferedImage item_buttom[] = new BufferedImage[2] ;
 	
 	/**
 	 * This is the default constructor
@@ -90,8 +90,10 @@ public class GraphicsEngine extends JFrame {
 			dice_button[1] = ImageIO.read(new File("dice_button2.png"));
 			exit_button[0] = ImageIO.read(new File("exit_button.png"));
 			exit_button[1] = ImageIO.read(new File("exit_button2.png"));
-			item_button[0] = ImageIO.read(new File("item_button.png"));
-			item_button[1] = ImageIO.read(new File("item_button2.png"));
+			item_bar_button[0] = ImageIO.read(new File("item_button.png"));
+			item_bar_button[1] = ImageIO.read(new File("item_button2.png"));
+			item_buttom[0] = ImageIO.read(new File("item_buttom.png"));
+			item_buttom[1] = ImageIO.read(new File("item_buttom2.png"));
 		}
 		catch (Exception e){
 			System.out.println("test!");
@@ -109,7 +111,6 @@ public class GraphicsEngine extends JFrame {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
-			
 			jContentPane.add(get_ntu_jLabel());
 			jContentPane.add(get_calendar_jLabel());
 			jContentPane.add(get_status_col_jLabel());
@@ -178,20 +179,21 @@ public class GraphicsEngine extends JFrame {
 	 * @return javax.swing.JButton	
 	 */
 	private JButton get_ItemJButton() {
-		if (item_jButton == null) {
-			item_jButton = new JButton();
-			item_jButton.setBounds(new Rectangle(702, 0,150, 50));
-			item_jButton.setBorderPainted(false);
-			item_jButton.setContentAreaFilled(false);
-			item_jButton.setIcon(new ImageIcon(item_button[0]));
-			item_jButton.setPressedIcon(new ImageIcon(item_button[1]));
-			item_jButton.addActionListener(new java.awt.event.ActionListener() {
+		if (item_bar_jButton == null) {
+			item_bar_jButton = new JButton();
+			item_bar_jButton.setBounds(new Rectangle(702, 0,150, 50));
+			item_bar_jButton.setBorderPainted(false);
+			item_bar_jButton.setContentAreaFilled(false);
+			item_bar_jButton.setIcon(new ImageIcon(item_bar_button[0]));
+			item_bar_jButton.setPressedIcon(new ImageIcon(item_bar_button[1]));
+			item_bar_jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					System.out.println("open button column"); // TODO Auto-generated Event stub actionPerformed()
+					OpenItemColumn();
 				}
 			});
 		}
-		return item_jButton;
+		return item_bar_jButton;
 	}
 
 	/**
@@ -241,6 +243,37 @@ public class GraphicsEngine extends JFrame {
 		g.drawString(as.getIterator(),100,100);
 		
 		return buf;
+	}
+	
+	private JButton create_item_jButton(int x,int y,String item_name){
+		int index = x*5+y;
+		if(item_jButton[index]==null){
+			item_jButton[index] = new JButton();
+			item_jButton[index].setBounds(new Rectangle(184+80*y, 446+ 30*x,80,30));
+			item_jButton[index].setBorderPainted(false);
+			item_jButton[index].setContentAreaFilled(false);
+			item_jButton[index].setIcon(new ImageIcon(item_buttom[0]));
+			item_jButton[index].setPressedIcon(new ImageIcon(item_buttom[1]));
+			item_jButton[index].addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("xdd"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+		}
+		return item_jButton[index];
+	}
+	
+	public void OpenItemColumn(){
+		for(int i=0;i<4;i++){
+			for(int j=0;j<5;j++){
+				System.out.println("test" + i + " " + j);
+				JButton buf = create_item_jButton(i,j,"test "+ i + " " + j);
+				jContentPane.add(buf);
+				jContentPane.setComponentZOrder(buf, 0);
+				
+			}
+		}
+		this.repaint();
 	}
 	
 }

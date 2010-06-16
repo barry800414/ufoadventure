@@ -5,29 +5,20 @@ import java.util.*;
 public class Player extends GameObject{
 	
 	public static int MAX_TYPE;
-	//現金
-    protected int cash;
-    //存款
-    protected int deposit;
-    //道具
-    protected ArrayList<Item> item = new ArrayList<Item>(0);
-    //名字
-    protected String name;
-    //房屋   to be repaired
-    protected ArrayList<Land> house = new ArrayList<Land>(0);
-    //職業
-    protected int career;
-    //骰子數
-    protected int dice_num;
-    //狀態
-    protected int[] state;
-    //位置
-    protected int location;
-    //點數
-    protected int point;
-    //總財產
-    protected int property;
- 
+	public static final int MAX_STATE = 20;
+	
+    private int cash;                                          //現金
+    private int deposit;                                       //存款
+    private String name;                                       //名字
+    private int career;                                        //職業
+    private int dice_num;                                      //骰子數
+    private boolean[] state = new boolean[MAX_STATE];          //狀態
+    private int location;                                      //位置
+    private int point;                                         //點數
+    private int property;                                      //總財產
+    private ArrayList<Item> item = new ArrayList<Item>(0);     //道具
+    private ArrayList<Land> house = new ArrayList<Land>(0);    //房屋   to be repaired
+    
     //to do : Item[] item  , int[] house , Career , Road start
     public Player(String name,int cash,int deposit,int dice_num,int point){
     	this.cash = cash ;
@@ -40,9 +31,99 @@ public class Player extends GameObject{
 	
     }
     
+    public int getCash(){  return cash;  }
+    public int getDeposit(){  return deposit;  }
+    public String getName(){  return name;     }
+    public int getCareer(){   return career;   }
+    public int getDicenum(){  return dice_num; }
+    public boolean[] getState(){  return state;    }
+    public int getLocation(){  return location;  }
+    public int getPoint() {   return point;  }
+    public int getProperty() { return property;  }
     public Land[] GetHouseList(){
-	Land[] houselist = new Land[0];
-	return house.toArray(houselist);
+    	Land[] houselist = new Land[0];
+    	return house.toArray(houselist);
     }
+    public Item[] getItemList(){
+    	Item[] itemlist = new Item[0];
+    	return item.toArray(itemlist);
+    }
+    public void setCash(int cash){
+    	if(cash < 0)
+    		setDeposit(this.deposit - cash);
+    	else
+    		this.cash = cash;
+    }
+    public void setDeposit(int deposit){
+    	this.deposit = deposit >= 0 ? deposit : 0;
+    }
+    
+    public void setName(String name){
+    	if(name != null)
+    		this.name = name;
+    }
+    public boolean setCareer(int career){
+    	if(career >=2 || career <=6){
+    		if(this.career ==1){
+    			this.career = career;
+    			return true;
+    		}
+    		else 
+    			return false;
+    	}
+    	else if(career == 1){
+    		if(this.career == 0){
+    			this.career = career ;
+    			return true;
+    		}
+    		else
+    			return false;
+    	}
+    	else 
+    		return false;
+    }
+    public void setDicenum(int dice_num){
+    	if(dice_num <= 4 && dice_num >0)
+    		this.dice_num = dice_num;
+    }
+    public void setState(int index ,boolean open){
+    	if(index >=0 && index < MAX_STATE){
+    		this.state[index] = open;
+    	}
+    }
+    public void setLocation(int location){
+    	if(location >= GameInfo.MAX_ROAD)
+    		this.location = location % GameInfo.MAX_ROAD;
+    	else if(location < 0){
+    		this.location = (((((-1)*location)/GameInfo.MAX_ROAD)+1)*GameInfo.MAX_ROAD + location)%GameInfo.MAX_ROAD ;
+    	}
+    	else
+    		this.location = location;
+    }
+    
+    public void setPoint(int point){
+    	if(point <= 9999 && point >= 0)
+    		this.point = point;
+    }
+    
+    
+    // TODO : calc the building value etc.. 
+    public void calcProperty(){
+    	this.property = this.cash + this.deposit;
+    }
+    
+    public void addHouse(Land house){
+    	this.house.add(house);
+    }
+    public void addItem(Item item){
+    	this.item.add(item);
+    }
+    public void removeHouse(Land house){
+    	this.house.remove(house);
+    }
+    public void removeItem(Item item){
+    	this.item.remove(item);
+    }
+    
 	   
 }
