@@ -37,13 +37,17 @@ public class Computer {
     
     public void GoToBuilding(Player p, Building b){
 	if(b.getOwner()==p)
-		
+		;
 	else if(b.getOwner()==null)
-	    
+	    ;
 	else{
-	    p.setCash(p.getCash() - b.tolls)
+	    
+	    p.setCash(p.getCash() - b.getPrice());
+	    b.getOwner().setDeposit(b.getOwner().getDeposit() + b.getPrice());
+	    
 	}
     }
+    
     public void ChangeCareer(Player p,int career){
 	p.setCareer(career);
     }
