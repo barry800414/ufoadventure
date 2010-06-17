@@ -6,6 +6,7 @@ public class Roadlist {
     
     public Roadlist(){
 	
+	
 	PrintWriter output = null;
     
 	try{
@@ -113,4 +114,7 @@ public class Roadlist {
 	
 	}
     
+    public int getX(int x){
+	return (x - 625) / 125;
+    }
 }
