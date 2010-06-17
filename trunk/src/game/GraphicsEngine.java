@@ -270,6 +270,7 @@ public class GraphicsEngine extends JFrame {
 				JButton buf = create_item_jButton(i,j,"test "+ i + " " + j);
 				jContentPane.add(buf);
 				jContentPane.setComponentZOrder(buf, 0);
+				//buf.setIcon(new ImageIcon(item_buttom[0]));
 			}
 		}
 		this.repaint();

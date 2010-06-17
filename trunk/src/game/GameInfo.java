@@ -36,6 +36,7 @@ public class GameInfo {
     	
     	item_init("itemlist.txt");
     	road_init("roadlist.txt");
+    	land_init("landlist.txt");
     	/*
     	playerlist = new Player[players_num];
     	System.out.println(players_num + "  dsadasds");
@@ -96,7 +97,7 @@ public class GameInfo {
     		}
     	}
     	catch(Exception e){
-    		System.out.println(e.getStackTrace());
+    		e.printStackTrace();
     		return false;
     	}
     	return true;
@@ -127,6 +128,37 @@ public class GameInfo {
     	}
     	catch(Exception e){
     		e.printStackTrace();
+    		return false;
+    	}
+    	return true;
+    }
+    private boolean land_init(String filename){
+    	try {
+    		Scanner input = new Scanner(new FileInputStream(filename));
+    		int num ,index ;
+    		String name ;
+    		Rectangle pic = new Rectangle();
+    		Point coor = new Point();
+    		num = input.nextInt();
+    		
+    		roadlist = new Road[num];
+    		for(int i=0;i<num;i++){
+    			name = input.next();
+    			pic.x = input.nextInt();
+    			pic.y = input.nextInt();
+    			pic.width = input.nextInt();
+    			pic.height = input.nextInt();
+    			coor.x = input.nextInt();
+    			coor.y = input.nextInt();
+    			index = input.nextInt();
+    			//System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + index);
+    			roadlist[i] = new Road(name,coor,pic);
+    			
+    		}
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    		return false;
     	}
     	return true;
     }
