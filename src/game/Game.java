@@ -9,7 +9,7 @@ public class Game {
         
         //GameMainMenu a = new GameMainMenu(ginfo);
         //a.Display();
-        //gengine.setVisible(true);
+        gengine.setVisible(true);
         
         //ginfo.init();
         
