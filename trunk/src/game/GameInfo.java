@@ -2,7 +2,8 @@ package game;
 
 import java.io.*;
 import java.util.Scanner;
-
+import java.awt.Point;
+import java.awt.Rectangle;
 
 public class GameInfo {
     
@@ -23,7 +24,7 @@ public class GameInfo {
     public int[][] coodinate;
     public Player[] playerlist ;
     public Item[] itemlist;
-    public Road[] Roadlist;
+    public Road[] roadlist;
     public Event[] eventlist;
     
     
@@ -34,6 +35,7 @@ public class GameInfo {
     	day=10;
     	
     	item_init("itemlist.txt");
+    	road_init("roadlist.txt");
     	/*
     	playerlist = new Player[players_num];
     	System.out.println(players_num + "  dsadasds");
@@ -95,6 +97,36 @@ public class GameInfo {
     	}
     	catch(Exception e){
     		System.out.println(e.getStackTrace());
+    		return false;
+    	}
+    	return true;
+    }
+    private boolean road_init(String filename){
+    	try {
+    		Scanner input = new Scanner(new FileInputStream(filename));
+    		int num ,index ;
+    		String name ;
+    		Rectangle pic = new Rectangle();
+    		Point coor = new Point();
+    		num = input.nextInt();
+    		
+    		roadlist = new Road[num];
+    		for(int i=0;i<num;i++){
+    			name = input.next();
+    			pic.x = input.nextInt();
+    			pic.y = input.nextInt();
+    			pic.width = input.nextInt();
+    			pic.height = input.nextInt();
+    			coor.x = input.nextInt();
+    			coor.y = input.nextInt();
+    			index = input.nextInt();
+    			//System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + index);
+    			roadlist[i] = new Road(name,coor,pic);
+    			
+    		}
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
     	}
     	return true;
     }
