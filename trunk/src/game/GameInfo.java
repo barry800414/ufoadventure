@@ -26,6 +26,7 @@ public class GameInfo {
     public Item[] itemlist;
     public Road[] roadlist;
     public Event[] eventlist;
+    public Land[] landlist;
     
     
     public GameInfo(){
@@ -135,13 +136,13 @@ public class GameInfo {
     private boolean land_init(String filename){
     	try {
     		Scanner input = new Scanner(new FileInputStream(filename));
-    		int num ,index ;
+    		int num ,type ,price;
     		String name ;
     		Rectangle pic = new Rectangle();
     		Point coor = new Point();
     		num = input.nextInt();
     		
-    		roadlist = new Road[num];
+    		landlist = new Land[num];
     		for(int i=0;i<num;i++){
     			name = input.next();
     			pic.x = input.nextInt();
@@ -150,8 +151,8 @@ public class GameInfo {
     			pic.height = input.nextInt();
     			coor.x = input.nextInt();
     			coor.y = input.nextInt();
-    			index = input.nextInt();
-    			//System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + index);
+    			price = input.nextInt();
+    			System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + price);
     			roadlist[i] = new Road(name,coor,pic);
     			
     		}
