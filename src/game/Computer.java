@@ -21,8 +21,8 @@ public class Computer {
     public void MovePlayer(Player p){
 	Random rnd = new Random();
 	int step = 0;
-	for(int i=0;i<p.dice_num;i++) step = step + rnd.nextInt(6) + 1;
-	for(int i=step;i>0;i--) ginfo.Roadlist[p.location].road_trigger(p, i-1);
+	for(int i=0;i<p.getDicenum();i++) step = step + rnd.nextInt(6) + 1;
+	for(int i=step;i>0;i--) ginfo.Roadlist[p.getLocation()].road_trigger(p, i-1);
     }
     /*
      * 
@@ -34,9 +34,18 @@ public class Computer {
     public void BuyItem(Player p,int[] item_index){
 	for(int i=0;i<item_index.length;i++) p.item.add(ginfo.itemlist[item_index[i]]);
     }
-	
+    
+    public void GoToBuilding(Player p, Building b){
+	if(b.getOwner()==p)
+		
+	else if(b.getOwner()==null)
+	    
+	else{
+	    p.setCash(p.getCash() - b.tolls)
+	}
+    }
     public void ChangeCareer(Player p,int career){
-	p.career = career;
+	p.setCareer(career);
     }
 	
     public boolean GameContinue(){
