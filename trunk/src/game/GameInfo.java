@@ -18,7 +18,6 @@ public class GameInfo {
     public int day;
     public int round;
     public Player winner;
-    public Player[] loser;
     public int loser_num = 0;
     
     public int[][] coodinate;
@@ -28,22 +27,25 @@ public class GameInfo {
     public Event[] eventlist;
     
     
-    public void init(){
-	round=1;
-	year=2010;
-	month=6;
-	day=10;
+    public GameInfo(){
+    	round=1;
+    	year=2010;
+    	month=6;
+    	day=10;
+    	
+    	item_init("itemlist.txt");
+    	/*
     	playerlist = new Player[players_num];
-    	loser = new Player[players_num-1];
     	System.out.println(players_num + "  dsadasds");
     	for(int i=0;i<players_num;i++) {
     	    playerlist[i] = new Player("Player " + (i+1),init_cash,init_deposit,1,init_point);
     	    System.out.println("player " + (i+1) + " cash :" + playerlist[i].cash + " deposit :" + playerlist[i].deposit  + " point: " + playerlist[i].point);
     	}
     	coodinate = new int[19][21];
+    	*/
     }
     
-    
+    /*
     public boolean CheckMode(){
 	if(gamemode==1){
 	    if(loser_num < players_num - 1) return true;
@@ -66,39 +68,34 @@ public class GameInfo {
 	else if(gamemode==3){
 	    for(int i=0;i<players_num;i++){
 		int all_money = playerlist[i].getCash() + playerlist[i].getDeposit();
-		for(Land land : playerlist[i].getHouseList()) all_money = all_money + land.price;
+		for(Land land : playerlist[i].getHouseList()) all_money = all_money + land.get;
 		if(all_money>2500000) return false;
 	    }
 	    return true;
 	}
 	return false;
     }
+    */
+    private boolean item_init(String filename){
     	
-	    /*
-    	Scanner input = null;   	
     	try {
-    	    input = new Scanner(new FileInputStream("eventlist"));
-    	    
-    	    int buf = input.nextInt();
-    	} 
-    	catch (FileNotFoundException e) {
-    		System.out.println("..............");
-    	}
-    	try {
-    		input = new Scanner(new FileInputStream("itemlist.txt"));
-    		int buf = input.nextInt();
-    		itemlist = new Item[buf];
-    		for(int i=0;i<buf;i++) {
-    			String name = input.next();
-    			int point = input.nextInt();
-    			String info = input.next();
-    			//int Event = input.next();
-    			itemlist[i] = new Item(name, point, info);
+    		Scanner input = new Scanner(new FileInputStream(filename));
+    		int num , point ;
+    		String name , info;
+    		num = input.nextInt();
+    		
+    		itemlist = new Item[num];
+    		for(int i=0;i<num;i++){
+    			name = input.next();
+    			point = input.nextInt();
+    			info = input.next();
+    			itemlist[i] = new Item(name,point,info);
+    			System.out.println(itemlist[i].name + " " + itemlist[i].point + " " + itemlist[i].info);
     		}
     	}
-    	catch (FileNotFoundException e) {
-    		System.out.println("..............");
+    	catch(Exception e){
+    		System.out.println(e.getStackTrace());
     	}
-    	*/
-
+    	return true;
+    }
 }

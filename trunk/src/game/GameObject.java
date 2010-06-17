@@ -10,8 +10,10 @@ public class GameObject {
 	private String pic_filename;
 	
 	public GameObject(String filename,Point map_coor,Rectangle pic_coor){
-		this.map_coor = map_coor;
-		this.pic_coor = pic_coor;
+		setMapCoor(map_coor);
+		System.out.print(" " + map_coor.x + " " + map_coor.y +" ");
+		setPicCoor(pic_coor);
+		System.out.print(" " + pic_coor.x + " " + pic_coor.y + " " + pic_coor.height + " " + pic_coor.width + " " );
 		this.pic_filename = filename;
 	}
 	

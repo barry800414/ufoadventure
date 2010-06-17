@@ -4,16 +4,13 @@ import java.io.*;
 
 public class Itemlist {
     
-    public Itemlist(){
+    public static void main(String[] args){
 	
-	PrintWriter output = null;
-    
-	try{
-	
-	    output = new PrintWriter(new FileOutputStream("itemlist.txt"));
-    
-	} catch(FileNotFoundException e) {
-	    System.out.println(".........");
+    	PrintWriter output = null;
+    	try{
+    		output = new PrintWriter(new FileOutputStream("itemlist.txt"));
+	}   catch(FileNotFoundException e) {
+			System.out.println(".........");
 	}
     
 	output.print(
