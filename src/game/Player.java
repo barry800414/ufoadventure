@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.*;
 
 public class Player extends GameObject{
@@ -19,8 +21,10 @@ public class Player extends GameObject{
     private ArrayList<Item> item = new ArrayList<Item>(0);     //道具
     private ArrayList<Land> house = new ArrayList<Land>(0);    //房屋   to be repaired
     
+    
     //to do : Item[] item  , int[] house , Career , Road start
-    public Player(String name,int cash,int deposit,int dice_num,int point){
+    public Player(String name,int cash,int deposit,int dice_num,int point,String filename,Point map_coor,Rectangle pic_coor){
+    	super(filename,map_coor,pic_coor);
     	this.cash = cash ;
     	this.deposit = deposit;
     	this.name = name ;
@@ -48,6 +52,7 @@ public class Player extends GameObject{
     	Item[] itemlist = new Item[0];
     	return item.toArray(itemlist);
     }
+    
     public void setCash(int cash){
     	if(cash < 0)
     		setDeposit(this.deposit - cash);
@@ -105,7 +110,6 @@ public class Player extends GameObject{
     	if(point <= 9999 && point >= 0)
     		this.point = point;
     }
-    
     
     // TODO : calc the building value etc.. 
     public void calcProperty(){
