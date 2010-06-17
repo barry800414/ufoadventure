@@ -4,7 +4,7 @@ import java.io.*;
 
 public class Roadlist {
     
-    public Roadlist(){
+    public static void main(String[] args){
 	
 	
 	PrintWriter output = null;
@@ -115,6 +115,6 @@ public class Roadlist {
 	}
     
     public int getX(int x){
-	return (x - 625) / 125;
+    	return (x - 625) / 125;
     }
 }

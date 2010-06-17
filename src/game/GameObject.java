@@ -10,6 +10,8 @@ public class GameObject {
 	private String pic_filename;
 	
 	public GameObject(String filename,Point map_coor,Rectangle pic_coor){
+		this.map_coor = new Point();
+		this.pic_coor = new Rectangle();
 		setMapCoor(map_coor);
 		System.out.print(" " + map_coor.x + " " + map_coor.y +" ");
 		setPicCoor(pic_coor);
