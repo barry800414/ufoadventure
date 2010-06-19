@@ -7,7 +7,7 @@ import java.awt.Rectangle;
 
 public class GameInfo {
     
-    public static final int MAX_ROAD = 80;
+    public static final int MAX_ROAD = 90;
 	public static final int BUILDING = 1;
 	public static final int LAB = 2;
 	public static final int SPECIAL_LOCATION = 3;
@@ -86,6 +86,7 @@ public class GameInfo {
 	return false;
     }
     */
+    
     private boolean item_init(String filename){
     	
     	try {
@@ -198,11 +199,11 @@ public class GameInfo {
 	pic.height = 200;
 	pic.width = 100;
 	pic.x = 2250;
-	pic.y = 1250 - (pic.height - 100);
+	pic.y = 1250;
 	
     	playerlist = new Player[players_num];
     	for(int i=0;i<players_num;i++) {
-    	    playerlist[i] = new Player(this,"Player " + (i+1),init_cash,init_deposit,1,init_point,coor,pic,b_pic_filename);
+    	    playerlist[i] = new Player(this,"Player " + (i+1),init_cash,init_deposit,1,init_point,0,coor,pic,b_pic_filename);
     	   
     	}
 	

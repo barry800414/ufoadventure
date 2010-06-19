@@ -24,14 +24,17 @@ public class Player extends GameObject{
     
     
     //to do : Item[] item  , int[] house , Career , Road start
-    public Player(GameInfo ginfo,String name,int cash,int deposit,int dice_num,int point,Point map_coor,Rectangle pic_coor,String[] filename){
+    public Player(GameInfo ginfo,String name,int cash,int deposit,int dice_num,int point,int location,Point map_coor,Rectangle pic_coor,String[] filename){
     	super(map_coor,pic_coor,filename);
+    	this.location = location;
     	this.ginfo = ginfo;
     	this.cash = cash ;
     	this.deposit = deposit;
     	this.name = name ;
     	this.dice_num = dice_num;
     	this.point = point;
+    	setPicCoor();
+    	
     }
     public void Update(){
 	
@@ -106,6 +109,8 @@ public class Player extends GameObject{
     	}
     	else
     		this.location = location;
+    	
+    	setPicCoor();
     }
     
     public void setPoint(int point){
@@ -114,10 +119,11 @@ public class Player extends GameObject{
     }
     
     public void setPicCoor(){
-    	Rectangle src = ginfo.roadlist[location].getPicCoor();
-    	int x = src.x + GraphicsEngine.GAME_SCREEN_WIDTH/2;
-    	int y = src.y + GraphicsEngine.GAME_SCREEN_HEIGHT/2;
-    	this.setPicCoor(x - getPicCoor().width/2, y - getPicCoor().height/2 - 100/2, getPicCoor().width, getPicCoor().height);
+    	Rectangle road = ginfo.roadlist[location].getPicCoor();
+    	int x = road.x;
+    	int y = road.y + road.height / 2  -  getPicCoor().height ;
+    	this.setPicCoor(x , y , getPicCoor().width, getPicCoor().height);
+    	System.out.println( y + " mmmmmmm  " +  road.y );
     }
     
     // TODO : calc the building value etc.. 
