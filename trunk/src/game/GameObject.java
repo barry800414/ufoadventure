@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Point;
+
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,15 +22,18 @@ public class GameObject {
 		//System.out.print(" " + map_coor.x + " " + map_coor.y +" ");
 		setPicCoor(pic_coor);
 		//System.out.print(" " + pic_coor.x + " " + pic_coor.y + " " + pic_coor.height + " " + pic_coor.width + " " );
-		/*
-		pic = new BufferedImage[filename.length];
-		try{
-			for(int i=0;i<filename.length;i++)
-				pic[i] = ImageIO.read(new File(""));
+		
+		if(filename != null){
+			pic = new BufferedImage[filename.length];
+			System.out.println("ojfasdljhfdskhdsjh");
+			try{
+				for(int i=0;i<filename.length;i++)
+					pic[i] = ImageIO.read(new File(filename[i]));
+			}
+			catch(Exception pic_e){
+				pic_e.printStackTrace();
+			}
 		}
-		catch(Exception pic_e){
-			pic_e.printStackTrace();
-		}*/
 	}
 	public Point getMapCoor(){
 		return map_coor;
@@ -60,6 +64,8 @@ public class GameObject {
 		this.pic_coor.width = width;
 		this.pic_coor.height = height;
 	}
-	
+	public BufferedImage getImage(){
+		return pic[0];
+	}
 	
 }

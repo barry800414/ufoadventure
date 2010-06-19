@@ -6,9 +6,10 @@ import java.util.*;
 
 public class Player extends GameObject{
 	
-	public static int MAX_TYPE;
+	public static int MAX_TYPE = 1;
 	public static final int MAX_STATE = 20;
 	
+	private GameInfo ginfo;
     private int cash;                                          //現金
     private int deposit;                                       //存款
     private String name;                                       //名字
@@ -23,8 +24,9 @@ public class Player extends GameObject{
     
     
     //to do : Item[] item  , int[] house , Career , Road start
-    public Player(String name,int cash,int deposit,int dice_num,int point,Point map_coor,Rectangle pic_coor,String[] filename){
+    public Player(GameInfo ginfo,String name,int cash,int deposit,int dice_num,int point,Point map_coor,Rectangle pic_coor,String[] filename){
     	super(map_coor,pic_coor,filename);
+    	this.ginfo = ginfo;
     	this.cash = cash ;
     	this.deposit = deposit;
     	this.name = name ;
@@ -109,6 +111,13 @@ public class Player extends GameObject{
     public void setPoint(int point){
     	if(point <= 9999 && point >= 0)
     		this.point = point;
+    }
+    
+    public void setPicCoor(){
+    	Rectangle src = ginfo.roadlist[location].getPicCoor();
+    	int x = src.x + GraphicsEngine.GAME_SCREEN_WIDTH/2;
+    	int y = src.y + GraphicsEngine.GAME_SCREEN_HEIGHT/2;
+    	this.setPicCoor(x - getPicCoor().width/2, x - getPicCoor().height/2 - 100/2, getPicCoor().width, getPicCoor().height);
     }
     
     // TODO : calc the building value etc.. 
