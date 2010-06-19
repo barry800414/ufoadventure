@@ -14,8 +14,8 @@ public abstract class Land extends GameObject {
     private Event event;
     
     //TODO : add event to constructor
-    public Land(String name,Player owner,int land_price,String filename,Point map_coor,Rectangle pic_coor){
-    	super(filename,map_coor,pic_coor);
+    public Land(String name,Player owner,int land_price,Point map_coor,Rectangle pic_coor){
+    	super(null,map_coor,pic_coor);
     	this.name = name ;
     	//this.explanation = explanation ;
     	this.owner = owner ;
