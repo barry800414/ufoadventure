@@ -21,8 +21,8 @@ public class GameObject {
 		//System.out.print(" " + map_coor.x + " " + map_coor.y +" ");
 		setPicCoor(pic_coor);
 		//System.out.print(" " + pic_coor.x + " " + pic_coor.y + " " + pic_coor.height + " " + pic_coor.width + " " );
-		pic = new BufferedImage[filename.length];
 		/*
+		pic = new BufferedImage[filename.length];
 		try{
 			for(int i=0;i<filename.length;i++)
 				pic[i] = ImageIO.read(new File(""));
