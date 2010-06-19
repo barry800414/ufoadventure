@@ -3,7 +3,7 @@ package game;
 public class Game {
     
     public static void main(String[] args){
-    	GameInfo ginfo =  new GameInfo();
+    	//GameInfo ginfo =  new GameInfo();
         GraphicsEngine gengine = new GraphicsEngine();
         //Computer gcom = new Computer(ginfo);
         

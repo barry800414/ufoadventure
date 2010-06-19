@@ -12,9 +12,9 @@ public class Lab extends Land{
     protected Item research;
     
     //TODO add research item , event to constructor
-    public Lab(String name,Player owner,int price,String filename,Point map_coor,Rectangle pic_coor){
+    public Lab(String name,Player owner,int price,Item item,String filename,Point map_coor,Rectangle pic_coor){
     	super(name,owner,price,filename,map_coor,pic_coor);
-    	
+    	this.research = item ;
     	/*this.tolls = new int[MAX_FLOOR];
     	for(int i=0;i<MAX_FLOOR;i++){
     		this.tolls[i] = tolls[i];

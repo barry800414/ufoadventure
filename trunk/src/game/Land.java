@@ -9,15 +9,16 @@ public abstract class Land extends GameObject {
     private String name;  //名字
     private Player owner;  //擁有者
     private int land_price;  //價格
+    private String filename;
     //private String info; //說明()
     //protected int ID;  //編號
     private Event event;
     
     //TODO : add event to constructor
-    public Land(String name,Player owner,int land_price,Point map_coor,Rectangle pic_coor){
+    public Land(String name,Player owner,int land_price,String filename,Point map_coor,Rectangle pic_coor){
     	super(null,map_coor,pic_coor);
     	this.name = name ;
-    	//this.explanation = explanation ;
+    	this.filename = filename ; 
     	this.owner = owner ;
     	this.land_price = land_price ; 
     	//this.event = event ;

@@ -4,10 +4,10 @@ import java.io.*;
 
 public class Landlist {
     
-    public Landlist(){
+    public static void main(String[] args){
 	
 	
-	PrintWriter output = null;
+    	PrintWriter output = null;
     
 	try{
 	
@@ -105,6 +105,8 @@ public class Landlist {
 		//+"1 = building, 2 = lab, 3 = special location"
 		);
 	output.close();
+	
+	
 	
 	}
     
