@@ -117,7 +117,7 @@ public class Player extends GameObject{
     	Rectangle src = ginfo.roadlist[location].getPicCoor();
     	int x = src.x + GraphicsEngine.GAME_SCREEN_WIDTH/2;
     	int y = src.y + GraphicsEngine.GAME_SCREEN_HEIGHT/2;
-    	this.setPicCoor(x - getPicCoor().width/2, x - getPicCoor().height/2 - 100/2, getPicCoor().width, getPicCoor().height);
+    	this.setPicCoor(x - getPicCoor().width/2, y - getPicCoor().height/2 - 100/2, getPicCoor().width, getPicCoor().height);
     }
     
     // TODO : calc the building value etc.. 
