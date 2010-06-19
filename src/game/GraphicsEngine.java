@@ -46,6 +46,7 @@ public class GraphicsEngine extends JFrame {
 	private JButton item_jButton[] =  new JButton[Item.MAX_ITEMS];
 	//private Insets border = null ;
 	
+	private boolean pressedbutton = true;
 	
 	private BufferedImage status_col;
 	private BufferedImage top_bar;
@@ -167,11 +168,11 @@ public class GraphicsEngine extends JFrame {
 	
 	private BufferedImage draw_game_screen(Player p){
 		int scr_w = GAME_SCREEN_WIDTH, scr_h = GAME_SCREEN_HEIGHT;
-		//Rectangle road_pic_coor = ginfo.roadlist[p.getLocation()].getPicCoor();
 		Rectangle player_pic_coor = p.getPicCoor();
+		Rectangle road_pic_coor = ginfo.roadlist[p.getLocation()].getPicCoor();
 		int center_x , center_y;
-		center_x = player_pic_coor.x + player_pic_coor.width/2;
-		center_y = player_pic_coor.y + player_pic_coor.height/2;
+		center_x = road_pic_coor.x + road_pic_coor.width/2;
+		center_y = road_pic_coor.y + road_pic_coor.height/2;
 		int x,y,w,h;
 		x = scr_w/2 + (player_pic_coor.x - center_x) ;
 		y = scr_h/2 + (player_pic_coor.y - center_y) ;
@@ -243,7 +244,9 @@ public class GraphicsEngine extends JFrame {
 			dice_jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
-					
+					synchronized (ginfo){
+						ginfo.notifyAll();
+					}
 				}
 			});
 		}
@@ -293,4 +296,17 @@ public class GraphicsEngine extends JFrame {
 		this.repaint();
 	}
 	
+	public  void GainControl(int player_index){
+		status_col_jLabel.setIcon(new ImageIcon(status_col));
+		gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
+		synchronized (ginfo){	
+				
+				try {
+					ginfo.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+	}
 }
