@@ -37,11 +37,6 @@ public class GameInfo {
     	year=2010;
     	month=6;
     	day=10;
-    	
-    	item_init("itemlist.txt");
-    	land_init("landlist.txt");   // land must be initialized before road
-    	road_init("roadlist.txt");
-    	
     	/*
     	playerlist = new Player[players_num];
     	System.out.println(players_num + "  dsadasds");
@@ -51,6 +46,12 @@ public class GameInfo {
     	}
     	coodinate = new int[19][21];
     	*/
+    }
+    public void Game_Init(){
+    	item_init("itemlist.txt");
+    	land_init("landlist.txt");
+    	road_init("roadlist.txt");
+    	
     }
     
     /*

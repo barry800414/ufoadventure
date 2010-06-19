@@ -23,8 +23,8 @@ public class Player extends GameObject{
     
     
     //to do : Item[] item  , int[] house , Career , Road start
-    public Player(String name,int cash,int deposit,int dice_num,int point,String filename,Point map_coor,Rectangle pic_coor){
-    	super(filename,map_coor,pic_coor);
+    public Player(String name,int cash,int deposit,int dice_num,int point,Point map_coor,Rectangle pic_coor,String[] filename){
+    	super(map_coor,pic_coor,filename);
     	this.cash = cash ;
     	this.deposit = deposit;
     	this.name = name ;

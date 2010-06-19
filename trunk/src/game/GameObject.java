@@ -22,13 +22,14 @@ public class GameObject {
 		setPicCoor(pic_coor);
 		//System.out.print(" " + pic_coor.x + " " + pic_coor.y + " " + pic_coor.height + " " + pic_coor.width + " " );
 		pic = new BufferedImage[filename.length];
+		/*
 		try{
 			for(int i=0;i<filename.length;i++)
 				pic[i] = ImageIO.read(new File(""));
 		}
 		catch(Exception pic_e){
 			pic_e.printStackTrace();
-		}
+		}*/
 	}
 	public Point getMapCoor(){
 		return map_coor;
