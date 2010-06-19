@@ -11,8 +11,8 @@ public class Building extends Land{
     
     
      
-    public Building(String name,Player owner,int price,String filename,Point map_coor,Rectangle pic_coor){
-    	super(name,owner,price,filename,map_coor,pic_coor);
+    public Building(String name,Player owner,int price,Point map_coor,Rectangle pic_coor,String[] filename){
+    	super(name,owner,price,map_coor,pic_coor,filename);
     	
     }
     

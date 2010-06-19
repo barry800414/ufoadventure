@@ -2,31 +2,39 @@ package game;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 public class GameObject {
 	
 	private Point map_coor;
 	private Rectangle pic_coor;
-	private String pic_filename;
+	private BufferedImage[] pic ;
 	
-	public GameObject(String filename,Point map_coor,Rectangle pic_coor){
+	
+	public GameObject(Point map_coor,Rectangle pic_coor,String[] filename){
 		this.map_coor = new Point();
 		this.pic_coor = new Rectangle();
 		setMapCoor(map_coor);
-		System.out.print(" " + map_coor.x + " " + map_coor.y +" ");
+		//System.out.print(" " + map_coor.x + " " + map_coor.y +" ");
 		setPicCoor(pic_coor);
-		System.out.print(" " + pic_coor.x + " " + pic_coor.y + " " + pic_coor.height + " " + pic_coor.width + " " );
-		this.pic_filename = filename;
+		//System.out.print(" " + pic_coor.x + " " + pic_coor.y + " " + pic_coor.height + " " + pic_coor.width + " " );
+		pic = new BufferedImage[filename.length];
+		try{
+			for(int i=0;i<filename.length;i++)
+				pic[i] = ImageIO.read(new File(""));
+		}
+		catch(Exception pic_e){
+			pic_e.printStackTrace();
+		}
 	}
-	
 	public Point getMapCoor(){
 		return map_coor;
 	}
 	public Rectangle getPicCoor(){
 		return pic_coor;
-	}
-	public String getPicFilename(){
-		return pic_filename;
 	}
 	
 	//TODO : add the map constraint
