@@ -36,8 +36,9 @@ public class GameInfo {
     	day=10;
     	
     	item_init("itemlist.txt");
+    	land_init("landlist.txt");   // land must be initialized before road
     	road_init("roadlist.txt");
-    	land_init("landlist.txt");
+    	
     	/*
     	playerlist = new Player[players_num];
     	System.out.println(players_num + "  dsadasds");
@@ -123,8 +124,7 @@ public class GameInfo {
     			coor.y = input.nextInt();
     			index = input.nextInt();
     			//System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + index);
-    			roadlist[i] = new Road(name,coor,pic);
-    			
+    			roadlist[i] = new Road(name,landlist[index],coor,pic);
     		}
     	}
     	catch(Exception e){
@@ -152,8 +152,8 @@ public class GameInfo {
     			coor.x = input.nextInt();
     			coor.y = input.nextInt();
     			price = input.nextInt();
-    			System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + price);
-    			roadlist[i] = new Road(name,coor,pic);
+    			System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + price );
+    			landlist[i] = new Land(name,null,price,coor,pic);
     			
     		}
     	}
