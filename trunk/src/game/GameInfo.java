@@ -51,6 +51,7 @@ public class GameInfo {
     	item_init("itemlist.txt");
     	land_init("landlist.txt");
     	road_init("roadlist.txt");
+    	player_init();
     	
     }
     
@@ -184,5 +185,27 @@ public class GameInfo {
     		return false;
     	}
     	return true;
+    }
+    
+    private void player_init(){
+	
+	String[] b_pic_filename = new String[1];
+	b_pic_filename[0] = "Player0.png";
+	Point coor = new Point();
+	coor.x = 13;
+	coor.y = 6;
+	Rectangle pic = new Rectangle();
+	pic.height = 100;
+	pic.width = 100;
+	pic.x = 2250;
+	pic.y = 1375;
+	
+    	playerlist = new Player[players_num];
+    	System.out.println(players_num + "  dsadasds");
+    	for(int i=0;i<players_num;i++) {
+    	    playerlist[i] = new Player("Player " + (i+1),init_cash,init_deposit,1,init_point,coor,pic,b_pic_filename);
+    	   
+    	}
+	
     }
 }
