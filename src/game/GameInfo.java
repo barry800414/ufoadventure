@@ -8,7 +8,10 @@ import java.awt.Rectangle;
 public class GameInfo {
     
     public static final int MAX_ROAD = 80;
-	
+	public static final int BUILDING = 1;
+	public static final int LAB = 2;
+	public static final int SPECIAL_LOCATION = 3;
+    
     public int players_num;
     public int init_cash;
     public int init_deposit;
@@ -136,7 +139,7 @@ public class GameInfo {
     private boolean land_init(String filename){
     	try {
     		Scanner input = new Scanner(new FileInputStream(filename));
-    		int num ,type ,price;
+    		int num ,type ,price,item_index;
     		String name ;
     		Rectangle pic = new Rectangle();
     		Point coor = new Point();
@@ -144,6 +147,7 @@ public class GameInfo {
     		
     		landlist = new Land[num];
     		for(int i=0;i<num;i++){
+    			type = input.nextInt();
     			name = input.next();
     			pic.x = input.nextInt();
     			pic.y = input.nextInt();
@@ -152,9 +156,17 @@ public class GameInfo {
     			coor.x = input.nextInt();
     			coor.y = input.nextInt();
     			price = input.nextInt();
-    			System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + price );
-    			landlist[i] = new Land(name,null,price,coor,pic);
     			
+    			System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + price );
+    			
+    			if(type == BUILDING)
+    				landlist[i] = new Building(name,null,price,filename,coor,pic);
+    			else if(type == LAB){
+    				item_index = input.nextInt();
+    				landlist[i] = new Lab(name,null,price,itemlist[item_index],filename,coor,pic);
+    			}
+    			else 
+    				landlist[i] = new SpecialLocation(name,null,price,filename,coor,pic);
     		}
     	}
     	catch(Exception e){
