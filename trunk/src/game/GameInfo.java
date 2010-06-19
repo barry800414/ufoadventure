@@ -141,6 +141,9 @@ public class GameInfo {
     		Scanner input = new Scanner(new FileInputStream(filename));
     		int num ,type ,price,item_index;
     		String name ;
+    		String[] b_pic_filename = new String[6];
+    		String[] l_pic_filename = new String[3];
+    		String[] s_pic_filename = new String[1];
     		Rectangle pic = new Rectangle();
     		Point coor = new Point();
     		num = input.nextInt();
@@ -156,17 +159,23 @@ public class GameInfo {
     			coor.x = input.nextInt();
     			coor.y = input.nextInt();
     			price = input.nextInt();
-    			
     			System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + price );
-    			
-    			if(type == BUILDING)
-    				landlist[i] = new Building(name,null,price,filename,coor,pic);
+    			if(type == BUILDING){
+    				for(int j=0;j<b_pic_filename.length;j++)
+    					b_pic_filename[j] = input.next();
+    				landlist[i] = new Building(name,null,price,coor,pic,b_pic_filename);
+    			}
     			else if(type == LAB){
     				item_index = input.nextInt();
-    				landlist[i] = new Lab(name,null,price,itemlist[item_index],filename,coor,pic);
+    				for(int j=0;j<l_pic_filename.length;j++)
+    					l_pic_filename[j] = input.next();
+    				landlist[i] = new Lab(name,null,price,itemlist[item_index],coor,pic,l_pic_filename);
     			}
-    			else 
-    				landlist[i] = new SpecialLocation(name,null,price,filename,coor,pic);
+    			else if(type == SPECIAL_LOCATION){
+    				for(int j=0;j<s_pic_filename.length;j++)
+    					s_pic_filename[j] = input.next();
+    				landlist[i] = new SpecialLocation(name,null,price,coor,pic,l_pic_filename);
+    			}
     		}
     	}
     	catch(Exception e){
