@@ -1,4 +1,4 @@
-﻿83
+83
 3 資工系館 2250 1375 100 100 13 6 0
 1 博理館 2375 1375 100 100 14 6 11000 building0.png building1.png building2.png building3.png building4.png building5.png
 2 法律學研究所 2500 1125 100 100 15 4 52000 16 lab0.png lab1.png lab2.png
