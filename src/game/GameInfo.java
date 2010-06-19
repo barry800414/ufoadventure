@@ -129,7 +129,7 @@ public class GameInfo {
     			coor.y = input.nextInt();
     			index = input.nextInt();
     			//System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + index);
-    			roadlist[i] = new Road(name,landlist[index],coor,pic);
+    			roadlist[i] = new Road(name,landlist[index],coor,pic,null);
     		}
     	}
     	catch(Exception e){
@@ -149,7 +149,7 @@ public class GameInfo {
     		Rectangle pic = new Rectangle();
     		Point coor = new Point();
     		num = input.nextInt();
-    		
+    		System.out.println(num + "  sld;ad'asd;'asd';asld;'asl");
     		landlist = new Land[num];
     		for(int i=0;i<num;i++){
     			type = input.nextInt();
@@ -165,18 +165,18 @@ public class GameInfo {
     			if(type == BUILDING){
     				for(int j=0;j<b_pic_filename.length;j++)
     					b_pic_filename[j] = input.next();
-    				landlist[i] = new Building(name,null,price,coor,pic,b_pic_filename);
+    				landlist[i] = new Building(name,null,price,coor,pic,null);
     			}
     			else if(type == LAB){
     				item_index = input.nextInt();
     				for(int j=0;j<l_pic_filename.length;j++)
     					l_pic_filename[j] = input.next();
-    				landlist[i] = new Lab(name,null,price,itemlist[item_index],coor,pic,l_pic_filename);
+    				landlist[i] = new Lab(name,null,price,itemlist[item_index],coor,pic,null);
     			}
     			else if(type == SPECIAL_LOCATION){
-    				for(int j=0;j<s_pic_filename.length;j++)
-    					s_pic_filename[j] = input.next();
-    				landlist[i] = new SpecialLocation(name,null,price,coor,pic,l_pic_filename);
+    				//for(int j=0;j<s_pic_filename.length;j++)
+    				//	s_pic_filename[j] = input.next();
+    				landlist[i] = new SpecialLocation(name,null,price,coor,pic,null);
     			}
     		}
     	}
@@ -193,17 +193,16 @@ public class GameInfo {
 	b_pic_filename[0] = "Player0.png";
 	Point coor = new Point();
 	coor.x = 13;
-	coor.y = 6;
+	coor.y = 5;
 	Rectangle pic = new Rectangle();
-	pic.height = 100;
+	pic.height = 200;
 	pic.width = 100;
 	pic.x = 2250;
-	pic.y = 1375;
+	pic.y = 1250 - (pic.height - 100);
 	
     	playerlist = new Player[players_num];
-    	System.out.println(players_num + "  dsadasds");
     	for(int i=0;i<players_num;i++) {
-    	    playerlist[i] = new Player("Player " + (i+1),init_cash,init_deposit,1,init_point,coor,pic,b_pic_filename);
+    	    playerlist[i] = new Player(this,"Player " + (i+1),init_cash,init_deposit,1,init_point,coor,pic,b_pic_filename);
     	   
     	}
 	

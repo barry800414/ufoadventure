@@ -5,12 +5,15 @@ public class Game {
     public static void main(String[] args){
     	
     	GameInfo ginfo =  new GameInfo();
+    	GraphicsEngine gengine = new GraphicsEngine(ginfo);
     	GameMainMenu menu = new GameMainMenu(ginfo);
     	menu.Display();
     	System.out.println("test");
     	ginfo.Game_Init();
+    	gengine.initialize();
+    	gengine.setVisible(true);
     	
-        //GraphicsEngine gengine = new GraphicsEngine();
+        
         //Computer gcom = new Computer(ginfo);
         
         //GameMainMenu a = new GameMainMenu(ginfo);

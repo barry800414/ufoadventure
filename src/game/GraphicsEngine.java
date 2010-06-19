@@ -25,8 +25,8 @@ import java.awt.Toolkit;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 import javax.swing.border.LineBorder;
-
-
+import java.awt.Point;
+import java.awt.Rectangle;
 
 
 
@@ -35,7 +35,7 @@ public class GraphicsEngine extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private int WIDTH = 960 ,HEIGHT = 600;
-	private int GAME_SCREEN_WIDTH = 752 , GAME_SCREEN_HEIGHT = 516;
+	public static int GAME_SCREEN_WIDTH = 752 , GAME_SCREEN_HEIGHT = 516;
 	private JLabel gamescreen_jLabel = null;
 	private JLabel calendar_jLabel = null;
 	private JLabel ntu_jLabel = null;
@@ -56,16 +56,18 @@ public class GraphicsEngine extends JFrame {
 	private BufferedImage ntu_map;
 	private BufferedImage houses[] = new BufferedImage[Building.MAX_FLOOR];
 	private BufferedImage labs[] = new BufferedImage[Lab.MAX_FLOOR];
-	private BufferedImage players[] = new BufferedImage[Player.MAX_TYPE];
+	private BufferedImage player[] = new BufferedImage[Player.MAX_TYPE];
 	private BufferedImage items[] =  new BufferedImage[Item.MAX_ITEMS];
 	private BufferedImage item_buttom[] = new BufferedImage[2] ;
+	
+	GameInfo ginfo = null;
 	
 	/**
 	 * This is the default constructor
 	 */
-	public GraphicsEngine() {
+	public GraphicsEngine(GameInfo ginfo) {
 		super();
-		initialize();
+		this.ginfo = ginfo;
 	}
 
 	/**
@@ -73,7 +75,7 @@ public class GraphicsEngine extends JFrame {
 	 * 
 	 * @return void
 	 */
-	private void initialize() {
+	public void initialize() {
 		this.setSize(WIDTH, HEIGHT);
 		this.setMaximumSize(new Dimension(WIDTH,HEIGHT));
 		this.setMinimumSize(new Dimension(WIDTH,HEIGHT));
@@ -148,7 +150,7 @@ public class GraphicsEngine extends JFrame {
 		if(gamescreen_jLabel == null){
 			gamescreen_jLabel = new JLabel();
 			gamescreen_jLabel.setBounds(new Rectangle(0,50,GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT));
-			gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(1800,1450)));
+			gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[0])));
 		}
 		return gamescreen_jLabel;
 	}
@@ -163,13 +165,23 @@ public class GraphicsEngine extends JFrame {
 		return status_col_jLabel;
 	}
 	
-	private BufferedImage draw_game_screen(int center_x,int center_y){
-		int w = GAME_SCREEN_WIDTH, h = GAME_SCREEN_HEIGHT;
-		BufferedImage buf = new BufferedImage(GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT,BufferedImage.TYPE_3BYTE_BGR);
+	private BufferedImage draw_game_screen(Player p){
+		int scr_w = GAME_SCREEN_WIDTH, scr_h = GAME_SCREEN_HEIGHT;
+		//Rectangle road_pic_coor = ginfo.roadlist[p.getLocation()].getPicCoor();
+		Rectangle player_pic_coor = p.getPicCoor();
+		int center_x , center_y;
+		center_x = player_pic_coor.x + player_pic_coor.width/2;
+		center_y = player_pic_coor.y + player_pic_coor.height/2;
+		int x,y,w,h;
+		x = scr_w/2 + (player_pic_coor.x - center_x) ;
+		y = scr_h/2 + (player_pic_coor.y - center_y) ;
+		w = player_pic_coor.width;
+		h = player_pic_coor.height;
+		
+		BufferedImage buf = new BufferedImage(scr_w,scr_h,BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g = buf.createGraphics();
-		g.drawImage(ntu_map,0,0,w,h,center_x - w/2 ,center_y - h/2, center_x + w/2 , center_y + h/2,null);
-		
-		
+		g.drawImage(ntu_map,0,0,scr_w,scr_h,center_x - scr_w/2 ,center_y - scr_h/2, center_x + scr_w/2 , center_y + scr_h/2,null);
+		g.drawImage(p.getImage(), x , y , x+w  , y+h , 0 , 0 , w , h ,null);
 		return buf;
 	}
 	
@@ -228,7 +240,12 @@ public class GraphicsEngine extends JFrame {
 			dice_jButton.setContentAreaFilled(false);
 			dice_jButton.setIcon(new ImageIcon(dice_button[0]));
 			dice_jButton.setPressedIcon(new ImageIcon(dice_button[1]));
-			
+			dice_jButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
+					
+				}
+			});
 		}
 		return dice_jButton ;
 	}

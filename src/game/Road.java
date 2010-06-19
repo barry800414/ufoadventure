@@ -9,8 +9,8 @@ public class Road extends GameObject{
     private Land land;
     private String name;
     
-    public Road(String name ,Land land,Point map_coor,Rectangle pic_coor){
-    	super(null,map_coor,pic_coor);
+    public Road(String name ,Land land,Point map_coor,Rectangle pic_coor,String[] filename){
+    	super(map_coor,pic_coor,filename);
     	this.name = name;
     	this.land = land;
     	System.out.println(" " + name);
