@@ -27,6 +27,9 @@ import javax.swing.border.LineBorder;
 import java.awt.Point;
 import java.awt.Rectangle;
 import javax.swing.JScrollPane;
+import javax.swing.OverlayLayout;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
 
 
 
@@ -64,7 +67,7 @@ public class GraphicsEngine extends JFrame {
 	GameInfo ginfo = null;
 	
 	private JLabel back_map;
-	private JPanel map;
+	private JPanel map,buffer_map;
 	private JScrollPane map_scroll;
 	
 	/**
@@ -115,20 +118,35 @@ public class GraphicsEngine extends JFrame {
 		if(map_scroll == null){
 			map_scroll = new JScrollPane(getMap());
 			map_scroll.setBounds(0,50,GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT);
-			map_scroll.setVerticalScrollBar(map_scroll.createVerticalScrollBar());
+			map_scroll.setVerticalScrollBar(new );
 			map_scroll.setHorizontalScrollBar(map_scroll.createHorizontalScrollBar());
+			//if(map_scroll.getVerticalScrollBar() == null)
 		}
 		return map_scroll;
 	}
 		
 	private JPanel getMap(){
-		if(map == null){
-			map = new JPanel();
-			map.setLayout(null);
-			//TODO : add button
+		//if(buffer_map == null){
+			if(map == null){
+				map = new JPanel();
+				map.setLayout(null);
+				//map.setOpaque(false);
+				JButton test = new JButton();
+				test.setBounds(2250,1250,100,100);
+				map.setComponentZOrder(test, 0);
+				//map.setLayout(new OverlayLayout(map));
+				
+				map.add(test);
+				//TODO : add button
+				map.add(getBackMap());
+			}
+		
+			//buffer_map = new JPanel();
 			
-			map.add(getBackMap());
-		}
+			//buffer_map.setLayout(new GridLayout(1,1));
+			//buffer_map.add(map);
+			
+		//}
 		return map;
 	}
 	
