@@ -16,9 +16,9 @@ public class Building extends Land{
     	
     }
     
-    /*
+    
     public void land_trigger(GameInfo ginfo,GraphicsEngine gengine,Player p){
-    	((BuildingEvent)event).apply(ginfo,gengine,p);
-    }*/
+    	//((BuildingEvent)event).apply(ginfo,gengine,p);
+    }
     
 }

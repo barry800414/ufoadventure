@@ -23,7 +23,7 @@ public abstract class Land extends GameObject {
     	//this.event = event ;
     }
     
-    //public abstract void land_trigger(GraphicsEngine gengine,Player p);
+    public abstract void land_trigger(GraphicsEngine gengine,Player p);
 
     public String getName(){
     	return name;

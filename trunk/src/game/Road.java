@@ -8,6 +8,7 @@ public class Road extends GameObject{
     private Event event;
     private Land land;
     private String name;
+    private boolean[] state;
     
     public Road(String name ,Land land,Point map_coor,Rectangle pic_coor,String[] filename){
     	super(map_coor,pic_coor,filename);
@@ -15,7 +16,7 @@ public class Road extends GameObject{
     	this.land = land;
     	System.out.println(" " + name);
     	//this.event = event ;
-    	//this.land = land ;
+    	this.land = land ;
     }
     
     public String getName(){
@@ -30,11 +31,11 @@ public class Road extends GameObject{
     	return event;
     }
     
-    /*
-    public void road_trigger(GameInfo ginfo,GraphicsEngine gengine,Player p,int rest_steps) {
-    	(RoadEvent)event.apply(ginfo,gengine,p,rest_steps);	
+    
+    public void road_trigger(Computer com,GameInfo ginfo,GraphicsEngine gengine,Player p,int rest_steps) {
+    	//(RoadEvent)event.apply(ginfo,gengine,p,rest_steps);	
     }
-    */
+    
     
     
 }
