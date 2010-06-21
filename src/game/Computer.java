@@ -5,11 +5,14 @@ import java.util.*;
 public class Computer {
 	
     private GameInfo ginfo ;
+    private GraphicsEngine gengine;
     private Player[] playerlist;
     public boolean[] playerRound;
     public int playercontrol;
-    public Computer(GameInfo info){
+    public int step = 0;
+    public Computer(GameInfo info, GraphicsEngine engine){
     	ginfo = info ;
+    	gengine = engine;
     	playerlist = ginfo.playerlist;
     	playerRound = new boolean[ginfo.players_num];
     	ResetPlayerRound();
@@ -20,10 +23,29 @@ public class Computer {
      */
     public void MovePlayer(Player p){
     	Random rnd = new Random();
-    	int step = 0;
+    	step = 0;
     	for(int i=0;i<p.getDicenum();i++) step = step + rnd.nextInt(6) + 1;
-    	for(int i=step;i>0;i--) ginfo.Roadlist[p.getLocation()].road_trigger(p, i-1);
+    	displaySteps();
+    	for(int i=step;i>0;i--){
+    	    for(int j=0;j<ginfo.players_num;j++){
+    		
+    		if(j == p.getID()) continue;
+    		
+    		else if(ginfo.playerlist[j].getLocation() == p.getLocation())
+    		    if(ginfo.playerlist[j].getState()[0] != p.getState()[0]){
+    			ginfo.playerlist[j].setState(0,!ginfo.playerlist[j].getState()[0]);
+    			p.setState(0,!p.getState()[0]);
+    		    }
+    		
+    	    }
+    	    ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
+    	}
     }
+    
+    public void displaySteps(){
+	
+    }
+    
     /*
      * 
      */

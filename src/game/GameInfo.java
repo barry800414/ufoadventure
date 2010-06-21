@@ -150,7 +150,6 @@ public class GameInfo {
     		Rectangle pic = new Rectangle();
     		Point coor = new Point();
     		num = input.nextInt();
-    		System.out.println(num + "  sld;ad'asd;'asd';asld;'asl");
     		landlist = new Land[num];
     		for(int i=0;i<num;i++){
     			type = input.nextInt();
@@ -190,8 +189,10 @@ public class GameInfo {
     
     private void player_init(){
 	
-	String[] b_pic_filename = new String[1];
-	b_pic_filename[0] = "Player0.png";
+	String[][] b_pic_filename = new String[3][1];
+	for(int i=0;i<b_pic_filename.length;i++){
+	    b_pic_filename[i][0] = "Player"+i+".png";
+	}
 	Point coor = new Point();
 	coor.x = 13;
 	coor.y = 5;
@@ -203,7 +204,7 @@ public class GameInfo {
 	
     	playerlist = new Player[players_num];
     	for(int i=0;i<players_num;i++) {
-    	    playerlist[i] = new Player(this,"Player " + (i+1),init_cash,init_deposit,1,init_point,0,coor,pic,b_pic_filename);
+    	    playerlist[i] = new Player(this,i,"Player " + (i+1),init_cash,init_deposit,1,init_point,0,coor,pic,b_pic_filename[i]);
     	   
     	}
 	

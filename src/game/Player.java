@@ -6,10 +6,11 @@ import java.util.*;
 
 public class Player extends GameObject{
 	
-	public static int MAX_TYPE = 1;
-	public static final int MAX_STATE = 20;
-	
-	private GameInfo ginfo;
+    public static int MAX_TYPE = 1;
+    public static final int MAX_STATE = 20;
+    
+    private GameInfo ginfo;
+    private int ID;
     private int cash;                                          //現金
     private int deposit;                                       //存款
     private String name;                                       //名字
@@ -24,8 +25,9 @@ public class Player extends GameObject{
     
     
     //to do : Item[] item  , int[] house , Career , Road start
-    public Player(GameInfo ginfo,String name,int cash,int deposit,int dice_num,int point,int location,Point map_coor,Rectangle pic_coor,String[] filename){
+    public Player(GameInfo ginfo,int ID,String name,int cash,int deposit,int dice_num,int point,int location,Point map_coor,Rectangle pic_coor,String[] filename){
     	super(map_coor,pic_coor,filename);
+    	this.ID = ID;
     	this.location = location;
     	this.ginfo = ginfo;
     	this.cash = cash ;
@@ -40,6 +42,7 @@ public class Player extends GameObject{
 	
     }
     
+    public int getID(){  return ID;  }
     public int getCash(){  return cash;  }
     public int getDeposit(){  return deposit;  }
     public String getName(){  return name;     }
