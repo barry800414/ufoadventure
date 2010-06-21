@@ -12,11 +12,11 @@ public class Game {
     	ginfo.Game_Init();
     	gengine.initialize();
     	gengine.setVisible(true);
-    	int count = 0;
+    	int[] count = {0,0,0,0};
     	
     	while(true){
     		for(int i=0 ;i < ginfo.players_num ;i++){
-    			ginfo.playerlist[i].setLocation(count++);
+    			ginfo.playerlist[i].setLocation(count[i]++);
     			gengine.GainControl(i);
     		}
     	}
