@@ -300,7 +300,6 @@ public class GraphicsEngine extends JFrame {
 		status_col_jLabel.setIcon(new ImageIcon(status_col));
 		gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
 		synchronized (ginfo){	
-				
 				try {
 					ginfo.wait();
 				} catch (InterruptedException e) {
