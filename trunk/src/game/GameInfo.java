@@ -23,6 +23,7 @@ public class GameInfo {
     public int round;
     public Player winner;
     public int loser_num = 0;
+    public int current_player;
     
     public int[][] coodinate;
     public Player[] playerlist ;
