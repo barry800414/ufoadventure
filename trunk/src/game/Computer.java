@@ -29,7 +29,9 @@ public class Computer {
     	for(int i=step;i>0;i--){
     	    for(int j=0;j<ginfo.players_num;j++){
     		
-    		if(j == p.getID()) continue;
+    		if(j == p.getID()){
+    		    
+    		}
     		
     		else if(ginfo.playerlist[j].getLocation() == p.getLocation())
     		    if(ginfo.playerlist[j].getState()[0] != p.getState()[0]){
@@ -55,18 +57,6 @@ public class Computer {
 	
     public void BuyItem(Player p,int[] item_index){
     	for(int i=0;i<item_index.length;i++) p.item.add(ginfo.itemlist[item_index[i]]);
-    }
-    
-    public void GoToBuilding(Player p, Building b){
-    	if(b.getOwner()==p)
-    		;
-    	else if(b.getOwner()==null)
-    		;
-    	else{
-	    
-    		p.setCash(p.getCash() - b.getPrice());
-    		b.getOwner().setDeposit(b.getOwner().getDeposit() + b.getPrice());
-    	}
     }
     
     public void ChangeCareer(Player p,int career){
