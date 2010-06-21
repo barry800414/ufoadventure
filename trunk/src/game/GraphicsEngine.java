@@ -30,7 +30,6 @@ import javax.swing.JScrollPane;
 
 
 
-
 public class GraphicsEngine extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -55,7 +54,7 @@ public class GraphicsEngine extends JFrame {
 	private BufferedImage calendar_bar;
 	private BufferedImage item_bar_button[] = new BufferedImage[2];
 	private BufferedImage exit_button[] = new BufferedImage[2];
-	private BufferedImage ntu_map;
+	private BufferedImage ntu_map_img;
 	private BufferedImage houses[] = new BufferedImage[Building.MAX_FLOOR];
 	private BufferedImage labs[] = new BufferedImage[Lab.MAX_FLOOR];
 	private BufferedImage player[] = new BufferedImage[Player.MAX_TYPE];
@@ -64,9 +63,9 @@ public class GraphicsEngine extends JFrame {
 	
 	GameInfo ginfo = null;
 	
-	private JLabel map;
-	private JPanel game_screen;
-	private JScrollPane game_screen_scroll;
+	private JLabel back_map;
+	private JPanel map;
+	private JScrollPane map_scroll;
 	
 	/**
 	 * This is the default constructor
@@ -92,7 +91,7 @@ public class GraphicsEngine extends JFrame {
 		//load picture
 		try{
 			status_col = ImageIO.read(new File("status_col.png"));
-			ntu_map = ImageIO.read(new File("NTUmap.png"));
+			ntu_map_img = ImageIO.read(new File("NTUmap.png"));
 			calendar_bar = ImageIO.read(new File("calendar_bar.png"));
 			top_bar = ImageIO.read(new File("top_bar.png"));
 			dice_button[0] = ImageIO.read(new File("dice_button.png"));
@@ -108,20 +107,38 @@ public class GraphicsEngine extends JFrame {
 			System.out.println("test!");
 		}
 		
-		this.setContentPane(getJContentPane());
+		this.setContentPane(getMainScreenPane());
 		
 	}
 	
-	private JScrollPane getGameScreenScroll(){
-		if(game_screen_scroll == null)
-			game_screen_scroll = new JScrollPane(getGameScreen());
-		return game_screen_scroll;
+	private JScrollPane getMapScroll(){
+		if(map_scroll == null){
+			map_scroll = new JScrollPane(getMap());
+			map_scroll.setBounds(0,50,GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT);
+			map_scroll.setVerticalScrollBar(map_scroll.createVerticalScrollBar());
+			map_scroll.setHorizontalScrollBar(map_scroll.createHorizontalScrollBar());
+		}
+		return map_scroll;
 	}
 		
-	private JPanel getGameScreen(){
-		if(game_screen == null)
-			game_screen = new JPanel();
-		
+	private JPanel getMap(){
+		if(map == null){
+			map = new JPanel();
+			map.setLayout(null);
+			//TODO : add button
+			
+			map.add(getBackMap());
+		}
+		return map;
+	}
+	
+	private JLabel getBackMap(){
+		if(back_map == null){
+			back_map = new JLabel();
+			back_map.setSize(4000, 4000);
+			back_map.setIcon(new ImageIcon(ntu_map_img));
+		}
+		return back_map;
 	}
 	
 	/**
@@ -129,14 +146,15 @@ public class GraphicsEngine extends JFrame {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJContentPane() {
+	private JPanel getMainScreenPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
 			jContentPane.add(get_ntu_jLabel());
 			jContentPane.add(get_calendar_jLabel());
 			jContentPane.add(get_status_col_jLabel());
-			jContentPane.add(get_gamescreen_jLabel());
+			//jContentPane.add(get_gamescreen_jLabel());
+			jContentPane.add(getMapScroll());
 			jContentPane.add(get_ItemJButton());
 			jContentPane.add(get_ExitJButton1());
 			jContentPane.add(get_dice_jButton());
@@ -199,7 +217,7 @@ public class GraphicsEngine extends JFrame {
 		
 		BufferedImage buf = new BufferedImage(scr_w,scr_h,BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g = buf.createGraphics();
-		g.drawImage(ntu_map,0,0,scr_w,scr_h,center_x - scr_w/2 ,center_y - scr_h/2, center_x + scr_w/2 , center_y + scr_h/2,null);
+		g.drawImage(ntu_map_img,0,0,scr_w,scr_h,center_x - scr_w/2 ,center_y - scr_h/2, center_x + scr_w/2 , center_y + scr_h/2,null);
 		g.drawImage(p.getImage(), x , y , x+w  , y+h , 0 , 0 , w , h ,null);
 		return buf;
 	}
@@ -316,7 +334,7 @@ public class GraphicsEngine extends JFrame {
 	
 	public  void GainControl(int player_index){
 		status_col_jLabel.setIcon(new ImageIcon(status_col));
-		gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
+		//gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
 		synchronized (ginfo){	
 				try {
 					ginfo.wait();
