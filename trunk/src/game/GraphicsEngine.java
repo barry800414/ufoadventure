@@ -1,7 +1,6 @@
 package game;
 
 import javax.imageio.ImageIO;
-
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 
@@ -27,6 +26,8 @@ import java.awt.Dimension;
 import javax.swing.border.LineBorder;
 import java.awt.Point;
 import java.awt.Rectangle;
+import javax.swing.JScrollPane;
+
 
 
 
@@ -62,6 +63,10 @@ public class GraphicsEngine extends JFrame {
 	private BufferedImage item_buttom[] = new BufferedImage[2] ;
 	
 	GameInfo ginfo = null;
+	
+	private JLabel map;
+	private JPanel game_screen;
+	private JScrollPane game_screen_scroll;
 	
 	/**
 	 * This is the default constructor
@@ -106,6 +111,19 @@ public class GraphicsEngine extends JFrame {
 		this.setContentPane(getJContentPane());
 		
 	}
+	
+	private JScrollPane getGameScreenScroll(){
+		if(game_screen_scroll == null)
+			game_screen_scroll = new JScrollPane(getGameScreen());
+		return game_screen_scroll;
+	}
+		
+	private JPanel getGameScreen(){
+		if(game_screen == null)
+			game_screen = new JPanel();
+		
+	}
+	
 	/**
 	 * This method initializes jContentPane
 	 * 
