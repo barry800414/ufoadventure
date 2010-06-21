@@ -204,6 +204,7 @@ public class GameInfo {
 	
     	playerlist = new Player[players_num];
     	for(int i=0;i<players_num;i++) {
+    	    if(i!=0) pic.height = 100;
     	    playerlist[i] = new Player(this,i,"Player " + (i+1),init_cash,init_deposit,1,init_point,0,coor,pic,b_pic_filename[i]);
     	   
     	}

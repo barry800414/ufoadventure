@@ -146,6 +146,8 @@ public class Player extends GameObject{
     public void removeItem(Item item){
     	this.item.remove(item);
     }
-    
+    /*
+     * 0 定時炸彈
+     */
 	   
 }
