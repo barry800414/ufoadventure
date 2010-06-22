@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 public class GameInfo {
     
     public static final int MAX_ROAD = 90;
+    public static final int MAX_PLAYER = 4;
 	public static final int BUILDING = 1;
 	public static final int LAB = 2;
 	public static final int SPECIAL_LOCATION = 3;
@@ -119,6 +120,10 @@ public class GameInfo {
     		Rectangle pic = new Rectangle();
     		Point coor = new Point();
     		num = input.nextInt();
+    		String[] r_pic_filename = new String[2];
+    		r_pic_filename[0] = "Road_button1.png";
+    		r_pic_filename[1] = "Road_button2.png";
+    		
     		
     		roadlist = new Road[num];
     		for(int i=0;i<num;i++){
@@ -131,7 +136,7 @@ public class GameInfo {
     			coor.y = input.nextInt();
     			index = input.nextInt();
     			//System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + index);
-    			roadlist[i] = new Road(name,landlist[index],coor,pic,null);
+    			roadlist[i] = new Road(name,landlist[index],coor,pic,r_pic_filename);
     		}
     	}
     	catch(Exception e){
@@ -198,7 +203,7 @@ public class GameInfo {
 	coor.x = 13;
 	coor.y = 5;
 	Rectangle pic = new Rectangle();
-	pic.height = 200;
+	pic.height = 100;
 	pic.width = 100;
 	pic.x = 2250;
 	pic.y = 1250;

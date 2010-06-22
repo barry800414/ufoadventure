@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
 import java.awt.font.TextAttribute;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.AttributedString;
@@ -34,7 +33,7 @@ import java.awt.GridLayout;
 
 
 
-public class GraphicsEngine extends JFrame {
+public class GG extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
@@ -48,8 +47,6 @@ public class GraphicsEngine extends JFrame {
 	private JButton exit_jButton = null;
 	private JButton dice_jButton = null;
 	private JButton item_jButton[] =  new JButton[Item.MAX_ITEMS];
-	private JButton player_jButton[] = new JButton[GameInfo.MAX_PLAYER];
-	private JButton road_jButton[] = new JButton[GameInfo.MAX_ROAD];
 	//private Insets border = null ;
 	
 	private boolean pressedbutton = true;
@@ -76,7 +73,7 @@ public class GraphicsEngine extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public GraphicsEngine(GameInfo ginfo) {
+	public GG(GameInfo ginfo) {
 		super();
 		this.ginfo = ginfo;
 	}
@@ -93,6 +90,7 @@ public class GraphicsEngine extends JFrame {
 		//this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("NTU Monopoly");
+		
 		//load picture
 		try{
 			status_col = ImageIO.read(new File("status_col.png"));
@@ -133,15 +131,14 @@ public class GraphicsEngine extends JFrame {
 				map = new JPanel();
 				map.setLayout(null);
 				map.setOpaque(false);
-				for(int i=0;i<GameInfo.MAX_ROAD;i++){
-				    map.add(DrawRoad(i));
-				}
-				//JButton test = new JButton();
-				//test.setBounds(2250,1250,100,100);
-				//map.setComponentZOrder(test, 1);
+				JButton test = new JButton();
+				map.add(test);
+				test.setBounds(2250,1250,100,100);
+				map.setComponentZOrder(test, 0);
+				//map.setLayout(new OverlayLayout(map));
 				
-				//map.add(test);
 				//TODO : add button
+				map.add(getBackMap());
 			}
 		
 			buffer_map = new JPanel();
@@ -149,6 +146,8 @@ public class GraphicsEngine extends JFrame {
 			buffer_map.setLayout(new OverlayLayout(buffer_map));
 			buffer_map.add(map);
 			buffer_map.add(getBackMap());
+
+			//buffer_map.setOpaque(false);
 			
 		}
 		return buffer_map;
@@ -171,7 +170,7 @@ public class GraphicsEngine extends JFrame {
 	private JPanel getMainScreenPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
-			jContentPane.setLayout(null);
+			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(get_ntu_jLabel());
 			jContentPane.add(get_calendar_jLabel());
 			jContentPane.add(get_status_col_jLabel());
@@ -197,20 +196,10 @@ public class GraphicsEngine extends JFrame {
 	
 	private JLabel get_calendar_jLabel(){
 		if(calendar_jLabel == null){
-		    	Font newfont = new Font("標楷體",Font.BOLD,22);
-		    	AttributedString as = new AttributedString(" "+ginfo.year+" / "+ginfo.month + " / " + ginfo.day);
-		    	as.addAttribute(TextAttribute.FONT, newfont);
-		    	as.addAttribute(TextAttribute.FOREGROUND,Color.black);
-		    	as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
-		    	BufferedImage buf = calendar_bar;
-			Graphics2D g = (Graphics2D)buf.createGraphics();
-		    	g.drawString(as.getIterator(), 0, 33);
-
-
 			calendar_jLabel = new JLabel();
 			calendar_jLabel.setBounds(new Rectangle(0, 0, 200, 50));
-			//calendar_jLabel.setIcon(new ImageIcon(calendar_bar));
-			calendar_jLabel.setIcon(new ImageIcon(buf));
+			calendar_jLabel.setText("calendar");
+			calendar_jLabel.setIcon(new ImageIcon(calendar_bar));
 			//calendar_jLabel.setBorder(new LineBorder(Color.BLACK,1));
 		}
 		return calendar_jLabel;
@@ -250,7 +239,7 @@ public class GraphicsEngine extends JFrame {
 		BufferedImage buf = new BufferedImage(scr_w,scr_h,BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g = buf.createGraphics();
 		g.drawImage(ntu_map_img,0,0,scr_w,scr_h,center_x - scr_w/2 ,center_y - scr_h/2, center_x + scr_w/2 , center_y + scr_h/2,null);
-		g.drawImage(p.getImage(0), x , y , x+w  , y+h , 0 , 0 , w , h ,null);
+		g.drawImage(p.getImage(), x , y , x+w  , y+h , 0 , 0 , w , h ,null);
 		return buf;
 	}
 	
@@ -364,28 +353,8 @@ public class GraphicsEngine extends JFrame {
 		this.repaint();
 	}
 	
-	public JButton DrawPlayer(Player p){
-		if(player_jButton[p.getID()]==null){
-		    player_jButton[p.getID()] = new JButton();
-		}
-		    player_jButton[p.getID()].setBounds(p.getPicCoor().x,p.getPicCoor().y,p.getPicCoor().width,p.getPicCoor().height);
-		    player_jButton[p.getID()].setIcon(new ImageIcon(p.getImage(0)));
-		return player_jButton[p.getID()];
-	}
-	
-	public JButton DrawRoad(int road_index){
-		if(road_jButton[road_index]==null){
-		    road_jButton[road_index] = new JButton();
-		    road_jButton[road_index].setBounds(ginfo.roadlist[road_index].getPicCoor());
-		    road_jButton[road_index].setIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(0)));
-		    road_jButton[road_index].setPressedIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(1)));
-		}
-		return road_jButton[road_index];
-	}
-	
 	public  void GainControl(int player_index){
 		status_col_jLabel.setIcon(new ImageIcon(status_col));
-		map.add(DrawPlayer(ginfo.playerlist[player_index]));
 		//gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
 		synchronized (ginfo){	
 				try {
