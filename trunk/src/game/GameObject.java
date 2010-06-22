@@ -25,10 +25,10 @@ public class GameObject {
 		
 		if(filename != null){
 			pic = new BufferedImage[filename.length];
-			System.out.println("ojfasdljhfdskhdsjh");
 			try{
-				for(int i=0;i<filename.length;i++)
+				for(int i=0;i<filename.length;i++){
 					pic[i] = ImageIO.read(new File(filename[i]));
+				}
 			}
 			catch(Exception pic_e){
 				pic_e.printStackTrace();
@@ -64,8 +64,8 @@ public class GameObject {
 		this.pic_coor.width = width;
 		this.pic_coor.height = height;
 	}
-	public BufferedImage getImage(){
-		return pic[0];
+	public BufferedImage getImage(int index){
+		return pic[index];
 	}
 	
 }

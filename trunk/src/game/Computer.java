@@ -18,9 +18,12 @@ public class Computer {
     	ResetPlayerRound();
     }
 	
+    public void PlayerRound(Player p){
+    }
+    
     /*
      * move the player by steps
-     */
+     
     public void MovePlayer(Player p){
     	Random rnd = new Random();
     	step = 0;
@@ -43,30 +46,35 @@ public class Computer {
     	    ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
     	}
     }
+    */
     
     public void displaySteps(){
 	
     }
     
     /*
-     * 
-     */
     public void UseItem(Player user, Player targetp ,Road targetr){
     	Item.trigger(user, targetp, targetr);
     }
+    */
 	
+    /*
     public void BuyItem(Player p,int[] item_index){
     	for(int i=0;i<item_index.length;i++) p.item.add(ginfo.itemlist[item_index[i]]);
     }
+    */
     
     public void ChangeCareer(Player p,int career){
     	p.setCareer(career);
     }
 	
+    /*
     public boolean GameContinue(){
     	return ginfo.CheckMode();
     }
+    */
     
+    /*
     public void Run(){
     	Update();
 	for(int i=0;i<ginfo.players_num;i++){
@@ -79,7 +87,8 @@ public class Computer {
 	    RoundEnd(playerlist[i]);
 	}
     }
-	
+	*/
+    
     public void Update(){
     	ginfo.round++;
     	AddDate();
