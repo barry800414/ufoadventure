@@ -1,38 +1,16 @@
 package game;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
+import javax.swing.*;
 
-import java.awt.Font;
-import java.awt.Rectangle;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
 
 import java.awt.font.TextAttribute;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.io.File;
 import java.text.AttributedString;
 
-import javax.imageio.ImageIO;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.Graphics2D;
-import java.awt.Dimension;
-import javax.swing.border.LineBorder;
-import java.awt.Point;
-import java.awt.Rectangle;
-import javax.swing.JScrollPane;
-import javax.swing.OverlayLayout;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-
-
+import java.awt.*;
 
 public class GraphicsEngine extends JFrame {
 
@@ -44,6 +22,7 @@ public class GraphicsEngine extends JFrame {
 	private JLabel calendar_jLabel = null;
 	private JLabel ntu_jLabel = null;
 	private JLabel status_col_jLabel = null;
+	private JLabel buy_house_jLabel = null;
 	private JButton item_bar_jButton = null;
 	private JButton exit_jButton = null;
 	private JButton dice_jButton = null;
@@ -54,6 +33,7 @@ public class GraphicsEngine extends JFrame {
 	
 	private boolean pressedbutton = true;
 	
+	private BufferedImage test;
 	private BufferedImage status_col;
 	private BufferedImage top_bar;
 	private BufferedImage dice_button[] = new BufferedImage[2];
@@ -95,6 +75,7 @@ public class GraphicsEngine extends JFrame {
 		this.setTitle("NTU Monopoly");
 		//load picture
 		try{
+			test = ImageIO.read(new File("test.png"));
 			status_col = ImageIO.read(new File("status_col.png"));
 			ntu_map_img = ImageIO.read(new File("NTUmap.png"));
 			calendar_bar = ImageIO.read(new File("calendar_bar.png"));
@@ -138,7 +119,7 @@ public class GraphicsEngine extends JFrame {
 				}
 				//JButton test = new JButton();
 				//test.setBounds(2250,1250,100,100);
-				//map.setComponentZOrder(test, 1);
+				//map.setComponentZOrder(test, 0);
 				
 				//map.add(test);
 				//TODO : add button
@@ -180,6 +161,7 @@ public class GraphicsEngine extends JFrame {
 			jContentPane.add(get_ItemJButton());
 			jContentPane.add(get_ExitJButton1());
 			jContentPane.add(get_dice_jButton());
+		    	jContentPane.add(BuyHouse());
 		}
 		return jContentPane;
 	}
@@ -215,6 +197,7 @@ public class GraphicsEngine extends JFrame {
 		}
 		return calendar_jLabel;
 	}
+	/*
 	private JLabel get_gamescreen_jLabel(){
 		if(gamescreen_jLabel == null){
 			gamescreen_jLabel = new JLabel();
@@ -223,6 +206,7 @@ public class GraphicsEngine extends JFrame {
 		}
 		return gamescreen_jLabel;
 	}
+	*/
 	
 	private JLabel get_status_col_jLabel(){
 		if(status_col_jLabel == null){
@@ -234,6 +218,7 @@ public class GraphicsEngine extends JFrame {
 		return status_col_jLabel;
 	}
 	
+	/*
 	private BufferedImage draw_game_screen(Player p){
 		int scr_w = GAME_SCREEN_WIDTH, scr_h = GAME_SCREEN_HEIGHT;
 		Rectangle player_pic_coor = p.getPicCoor();
@@ -253,6 +238,7 @@ public class GraphicsEngine extends JFrame {
 		g.drawImage(p.getImage(0), x , y , x+w  , y+h , 0 , 0 , w , h ,null);
 		return buf;
 	}
+	*/
 	
 	
 	/**
@@ -382,6 +368,25 @@ public class GraphicsEngine extends JFrame {
 		}
 		return road_jButton[road_index];
 	}
+	private JLabel BuyHouse(){
+		if(buy_house_jLabel == null){
+		    	buy_house_jLabel = new JLabel();
+		    	buy_house_jLabel.setBounds(new Rectangle(550, 0, 100, 100));
+			buy_house_jLabel.setIcon(new ImageIcon(test));
+			jContentPane.setComponentZOrder(buy_house_jLabel, 0);
+		    	jContentPane.repaint();
+		    	/*
+			try{
+		    	    Thread.sleep(4000);
+		    	}catch(InterruptedException e){
+		    	    
+		    	}
+		    	*/
+		    	//jContentPane.remove(get_dice_jButton());
+		    	//jContentPane.repaint();
+		}
+		return buy_house_jLabel;
+	}
 	
 	public  void GainControl(int player_index){
 		status_col_jLabel.setIcon(new ImageIcon(status_col));
@@ -390,6 +395,7 @@ public class GraphicsEngine extends JFrame {
 		synchronized (ginfo){	
 				try {
 					ginfo.wait();
+					//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
