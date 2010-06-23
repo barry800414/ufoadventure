@@ -21,14 +21,15 @@ public class GraphicsEngine extends JFrame {
 	private JLabel gamescreen_jLabel = null;
 	private JLabel calendar_jLabel = null;
 	private JLabel ntu_jLabel = null;
-	private JLabel status_col_jLabel = null;
+	private JLabel status_col_label = null;
 	private JLabel buy_house_jLabel = null;
 	private JButton item_bar_jButton = null;
 	private JButton exit_jButton = null;
 	private JButton dice_jButton = null;
 	private JButton item_jButton[] =  new JButton[Item.MAX_ITEMS];
-	private JButton player_jButton[] = new JButton[GameInfo.MAX_PLAYER];
-	private JButton road_jButton[] = new JButton[GameInfo.MAX_ROAD];
+	private JButton player_button[] ;
+	private JButton road_button[] ;
+	private JButton land_button[] ;
 	//private Insets border = null ;
 	
 	private boolean pressedbutton = true;
@@ -47,11 +48,15 @@ public class GraphicsEngine extends JFrame {
 	private BufferedImage items[] =  new BufferedImage[Item.MAX_ITEMS];
 	private BufferedImage item_buttom[] = new BufferedImage[2] ;
 	
+	private BufferedImage status_col_buf;
+	
 	GameInfo ginfo = null;
 	
 	private JLabel back_map;
 	private JPanel map,buffer_map;
 	private JScrollPane map_scroll;
+	
+	boolean flag  = true;
 	
 	/**
 	 * This is the default constructor
@@ -59,10 +64,12 @@ public class GraphicsEngine extends JFrame {
 	public GraphicsEngine(GameInfo ginfo) {
 		super();
 		this.ginfo = ginfo;
+		
+		
 	}
 
 	/**
-	 * This method initializes this
+	 * This method initializes this graphics engine
 	 * 
 	 * @return void
 	 */
@@ -74,6 +81,40 @@ public class GraphicsEngine extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("NTU Monopoly");
 		//load picture
+		Load_Pic(); 
+		All_Panel_Init();
+		All_Label_Init();
+		All_Button_Init();
+		Add_All_GameObject();
+		
+		MainScreen_Panel_Init();
+		this.setContentPane(jContentPane);
+		
+	}
+	
+	/**
+	 * This method initializes jContentPane
+	 * 
+	 * @return javax.swing.JPanel
+	 */
+	private void MainScreen_Panel_Init() {
+		if (jContentPane == null) {
+			jContentPane = new JPanel();
+			jContentPane.setLayout(null);
+			jContentPane.add(ntu_jLabel);
+			jContentPane.add(calendar_jLabel);
+			jContentPane.add(status_col_label);
+			jContentPane.add(map_scroll);
+			jContentPane.add(get_ItemJButton());
+			jContentPane.add(get_ExitJButton1());
+			jContentPane.add(get_dice_jButton());
+		}
+	}
+	
+	/*
+	 * load all picture
+	 */
+	private void Load_Pic(){
 		try{
 			test = ImageIO.read(new File("test.png"));
 			status_col = ImageIO.read(new File("status_col.png"));
@@ -92,47 +133,90 @@ public class GraphicsEngine extends JFrame {
 		catch (Exception e){
 			System.out.println("test!");
 		}
-		
-		this.setContentPane(getMainScreenPane());
-		
 	}
 	
-	private JScrollPane getMapScroll(){
+	/*
+	 * Initialize all buttons
+	 */
+	private void All_Button_Init(){
+		player_button = new JButton[ginfo.players_num];
+		road_button = new JButton[ginfo.roadlist.length];
+		land_button = new JButton[ginfo.landlist.length];
+	}
+	
+	/*
+	 * Initialize all panels
+	 */
+	private void All_Panel_Init(){
+		MapScroll_Init();
+	}
+	
+	private void MapScroll_Init(){
 		if(map_scroll == null){
-			map_scroll = new JScrollPane(getMap());
+			Map_Init();
+			map_scroll = new JScrollPane(buffer_map);
 			map_scroll.setBounds(0,50,GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT);
-			//map_scroll.setVerticalScrollBar(new );
-			//map_scroll.setHorizontalScrollBar(map_scroll.createHorizontalScrollBar());
-			//if(map_scroll.getVerticalScrollBar() == null)
 		}
-		return map_scroll;
 	}
 		
-	private JPanel getMap(){
+	private void Map_Init(){
 		if(buffer_map == null){
 			if(map == null){
 				map = new JPanel();
 				map.setLayout(null);
 				map.setOpaque(false);
-				for(int i=0;i<GameInfo.MAX_ROAD;i++){
-				    map.add(DrawRoad(i));
-				}
-				//JButton test = new JButton();
-				//test.setBounds(2250,1250,100,100);
-				//map.setComponentZOrder(test, 0);
-				
-				//map.add(test);
-				//TODO : add button
 			}
-		
 			buffer_map = new JPanel();
-			
 			buffer_map.setLayout(new OverlayLayout(buffer_map));
 			buffer_map.add(map);
 			buffer_map.add(getBackMap());
-			
 		}
-		return buffer_map;
+	}
+	
+	/*
+	 * Initialize all labels
+	 */
+	private void All_Label_Init(){
+		Ntu_Label_Init();
+		Calendar_Label_Init();
+		Status_col_Label_Init();
+	}
+	
+	private void Ntu_Label_Init(){
+		if(ntu_jLabel == null){
+			ntu_jLabel = new JLabel();
+			ntu_jLabel.setBounds(new Rectangle(200, 0, 350, 50));
+			ntu_jLabel.setText("NTU Monopoly");
+			//ntu_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+			ntu_jLabel.setIcon(new ImageIcon(top_bar));
+		}
+	}
+	
+	private void Calendar_Label_Init(){
+		if(calendar_jLabel == null){
+		    Font newfont = new Font("Cooper Black",Font.BOLD,22);
+		    AttributedString as = new AttributedString(" "+ginfo.year+" / "+ginfo.month + " / " + ginfo.day);
+		    as.addAttribute(TextAttribute.FONT, newfont);
+		    as.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		    as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    BufferedImage buf = calendar_bar;
+			Graphics2D g = (Graphics2D)buf.createGraphics();
+		    g.drawString(as.getIterator(), 0, 33);
+			calendar_jLabel = new JLabel();
+			calendar_jLabel.setBounds(new Rectangle(0, 0, 200, 50));
+			//calendar_jLabel.setIcon(new ImageIcon(calendar_bar));
+			calendar_jLabel.setIcon(new ImageIcon(buf));
+			//calendar_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+		}
+	}
+	
+	private void Status_col_Label_Init(){
+		if(status_col_label == null){
+			status_col_label = new JLabel();
+			status_col_label.setBounds(new Rectangle(752,50,200,466));
+			status_col_label.setIcon(new ImageIcon(Draw_Status_Bar_Image(ginfo.playerlist[0])));
+			//status_col_jLabel.setBorder(new LineBorder(Color.BLACK,1));
+		}
 	}
 	
 	private JLabel getBackMap(){
@@ -144,69 +228,7 @@ public class GraphicsEngine extends JFrame {
 		return back_map;
 	}
 	
-	/**
-	 * This method initializes jContentPane
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getMainScreenPane() {
-		if (jContentPane == null) {
-			jContentPane = new JPanel();
-			jContentPane.setLayout(null);
-			jContentPane.add(get_ntu_jLabel());
-			jContentPane.add(get_calendar_jLabel());
-			jContentPane.add(get_status_col_jLabel());
-			//jContentPane.add(get_gamescreen_jLabel());
-			jContentPane.add(getMapScroll());
-			jContentPane.add(get_ItemJButton());
-			jContentPane.add(get_ExitJButton1());
-			jContentPane.add(get_dice_jButton());
-		    	jContentPane.add(BuyHouse());
-		}
-		return jContentPane;
-	}
-
-	private JLabel get_ntu_jLabel(){
-		if(ntu_jLabel == null){
-			ntu_jLabel = new JLabel();
-			ntu_jLabel.setBounds(new Rectangle(200, 0, 350, 50));
-			ntu_jLabel.setText("NTU Monopoly");
-			//ntu_jLabel.setBorder(new LineBorder(Color.BLACK,1));
-			ntu_jLabel.setIcon(new ImageIcon(top_bar));
-		}
-		return ntu_jLabel;
-	}
 	
-	private JLabel get_calendar_jLabel(){
-		if(calendar_jLabel == null){
-		    	Font newfont = new Font("標楷體",Font.BOLD,22);
-		    	AttributedString as = new AttributedString(" "+ginfo.year+" / "+ginfo.month + " / " + ginfo.day);
-		    	as.addAttribute(TextAttribute.FONT, newfont);
-		    	as.addAttribute(TextAttribute.FOREGROUND,Color.black);
-		    	as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
-		    	BufferedImage buf = calendar_bar;
-			Graphics2D g = (Graphics2D)buf.createGraphics();
-		    	g.drawString(as.getIterator(), 0, 33);
-
-
-			calendar_jLabel = new JLabel();
-			calendar_jLabel.setBounds(new Rectangle(0, 0, 200, 50));
-			//calendar_jLabel.setIcon(new ImageIcon(calendar_bar));
-			calendar_jLabel.setIcon(new ImageIcon(buf));
-			//calendar_jLabel.setBorder(new LineBorder(Color.BLACK,1));
-		}
-		return calendar_jLabel;
-	}
-	
-	private JLabel get_status_col_jLabel(){
-		if(status_col_jLabel == null){
-			status_col_jLabel = new JLabel();
-			status_col_jLabel.setBounds(new Rectangle(752,50,200,466));
-			status_col_jLabel.setIcon(new ImageIcon(status_col));
-			//status_col_jLabel.setBorder(new LineBorder(Color.BLACK,1));
-		}
-		return status_col_jLabel;
-	}
 	
 	
 	
@@ -267,26 +289,44 @@ public class GraphicsEngine extends JFrame {
 			dice_jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
-					synchronized (ginfo){
-						ginfo.notifyAll();
+					if(flag){
+						flag = false;
+						synchronized (ginfo){
+							ginfo.notifyAll();
+						}
 					}
+					else
+						System.out.println("!!!!!!!!!!!!!!!!!!!!!");
 				}
 			});
 		}
 		return dice_jButton ;
 	}
 	
-	private Image DrawStatusBar(){
-		BufferedImage buf = new BufferedImage(200,550,5);
-		Graphics g = buf.getGraphics();
+	private Image Draw_Status_Bar_Image(Player p){
+		if(status_col_buf == null)
+			status_col_buf = new BufferedImage(200,466,5);
+		Graphics g = status_col_buf.getGraphics();
 		g.drawImage(status_col,0,0,null);
-		String s = "測試測試" ;
-		Font biakai = new Font("標楷體",Font.PLAIN,16);
-		AttributedString as = new AttributedString(s);
-		as.addAttribute(TextAttribute.FONT,biakai);
-		g.drawString(as.getIterator(),100,100);
 		
-		return buf;
+		//name cash deposit point property house_num location
+		String str[] = new String[7];
+		str[0] = p.getName();
+		str[1] = "金錢 : " + p.getCash();
+		str[2] = "存款 : " + p.getDeposit();
+		str[3] = "點數 : " + p.getPoint();
+		str[4] = "總財產 : " + p.getProperty();
+		str[5] = "房屋數 : " + p.getHouseList().length;
+		str[6] = "位置 : " + ginfo.roadlist[p.getLocation()].getLand().getName();
+		Font cooper_black = new Font("標楷體",Font.BOLD,20);
+		
+		for(int i=0;i<str.length;i++){
+			AttributedString as = new AttributedString(str[i]);
+			as.addAttribute(TextAttribute.FONT,cooper_black);
+			as.addAttribute(TextAttribute.FOREGROUND, new Color(255,154,39));
+			g.drawString(as.getIterator(), 20 ,180 + 40*i);
+		}
+		return status_col_buf;
 	}
 	
 	private JButton create_item_jButton(int x,int y,String item_name){
@@ -319,56 +359,79 @@ public class GraphicsEngine extends JFrame {
 		this.repaint();
 	}
 	
-	public JButton DrawPlayer(Player p){
-		if(player_jButton[p.getID()]==null){
-		    player_jButton[p.getID()] = new JButton();
-		}
-		    player_jButton[p.getID()].setBounds(p.getPicCoor().x,p.getPicCoor().y,p.getPicCoor().width,p.getPicCoor().height);
-		    player_jButton[p.getID()].setIcon(new ImageIcon(p.getImage(0)));
-		return player_jButton[p.getID()];
-	}
-	
-	public JButton DrawRoad(int road_index){
-		if(road_jButton[road_index]==null){
-		    road_jButton[road_index] = new JButton();
-		    road_jButton[road_index].setBounds(ginfo.roadlist[road_index].getPicCoor());
-		    road_jButton[road_index].setIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(0)));
-		    road_jButton[road_index].setPressedIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(1)));
-		}
-		return road_jButton[road_index];
-	}
-	private JLabel BuyHouse(){
-		if(buy_house_jLabel == null){
-		    	buy_house_jLabel = new JLabel();
-		    	buy_house_jLabel.setBounds(new Rectangle(550, 0, 100, 100));
-			buy_house_jLabel.setIcon(new ImageIcon(test));
-			jContentPane.setComponentZOrder(buy_house_jLabel, 0);
-		    	jContentPane.repaint();
-		    	/*
-			try{
-		    	    Thread.sleep(4000);
-		    	}catch(InterruptedException e){
-		    	    
-		    	}
-		    	*/
-		    	//jContentPane.remove(get_dice_jButton());
-		    	//jContentPane.repaint();
-		}
-		return buy_house_jLabel;
-	}
 	
 	public  void GainControl(int player_index){
-		status_col_jLabel.setIcon(new ImageIcon(status_col));
-		map.add(DrawPlayer(ginfo.playerlist[player_index]));
-		//gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
+		Player p = ginfo.playerlist[player_index];
+		
+		int center_x,center_y;
+		
+		
 		synchronized (ginfo){	
 				try {
 					ginfo.wait();
+					p.setLocation(p.getLocation()+1);
+					Repaint_Status_Col(player_index);
+					Repaint_Player_Icon(player_index);
+					center_x = p.getPicCoor().x + p.getPicCoor().width/2;
+					center_y = p.getPicCoor().y + p.getPicCoor().height/2;
+					
+					System.out.println(" " + center_x + " " + center_y + " " + (center_x - GAME_SCREEN_WIDTH/2) + " " + (center_y - GAME_SCREEN_HEIGHT/2));
+					map_scroll.getHorizontalScrollBar().setValue(center_x - GAME_SCREEN_WIDTH/2);
+					map_scroll.getVerticalScrollBar().setValue(center_y - GAME_SCREEN_HEIGHT/2);
 					//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
+					repaint();
+					flag = true;
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 		}
 	}
+	
+	public void Repaint_Status_Col(int player_index){
+		Player p = ginfo.playerlist[player_index];
+		status_col_label.setIcon(new ImageIcon(Draw_Status_Bar_Image(p)));
+	}
+	
+	public void Repaint_Player_Icon(int player_index){
+		Player p = ginfo.playerlist[player_index];
+		player_button[player_index].setBounds(p.getPicCoor().x,p.getPicCoor().y,p.getPicCoor().width,p.getPicCoor().height);
+	}
+	
+	/*
+	 * add all gameobject on the map, map should be initialized first
+	 */
+	public void Add_All_GameObject(){  
+		Player p;
+		Road r;
+		Land l;
+		for(int i=0;i<ginfo.players_num;i++){
+			if(player_button[i]==null)
+				player_button[i] = new JButton();
+			p = ginfo.playerlist[i];
+			player_button[i].setBounds(p.getPicCoor().x,p.getPicCoor().y,p.getPicCoor().width,p.getPicCoor().height);
+		    player_button[i].setIcon(new ImageIcon(p.getImage(0)));
+		    //player_button[i].setContentAreaFilled(false);
+		    map.add(player_button[i]);
+		}
+		for(int i=0;i<ginfo.roadlist.length;i++){
+			if(road_button[i] == null)
+				road_button[i] = new JButton();
+			r = ginfo.roadlist[i];
+			road_button[i].setBounds(r.getPicCoor().x,r.getPicCoor().y,r.getPicCoor().width,r.getPicCoor().height);
+			road_button[i].setContentAreaFilled(false);
+			map.add(road_button[i]);
+		}
+		for(int i=0;i<ginfo.landlist.length;i++){
+			if(land_button[i] == null )
+				land_button[i] = new JButton();
+			l = ginfo.landlist[i];
+			land_button[i].setBounds(l.getPicCoor().x,l.getPicCoor().y,l.getPicCoor().width,l.getPicCoor().height);
+			land_button[i].setContentAreaFilled(false);
+			map.add(land_button[i]);
+		}
+	}
+	
+	
+	
 }
