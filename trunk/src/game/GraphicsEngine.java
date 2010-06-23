@@ -197,16 +197,6 @@ public class GraphicsEngine extends JFrame {
 		}
 		return calendar_jLabel;
 	}
-	/*
-	private JLabel get_gamescreen_jLabel(){
-		if(gamescreen_jLabel == null){
-			gamescreen_jLabel = new JLabel();
-			gamescreen_jLabel.setBounds(new Rectangle(0,50,GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT));
-			gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[0])));
-		}
-		return gamescreen_jLabel;
-	}
-	*/
 	
 	private JLabel get_status_col_jLabel(){
 		if(status_col_jLabel == null){
@@ -218,27 +208,6 @@ public class GraphicsEngine extends JFrame {
 		return status_col_jLabel;
 	}
 	
-	/*
-	private BufferedImage draw_game_screen(Player p){
-		int scr_w = GAME_SCREEN_WIDTH, scr_h = GAME_SCREEN_HEIGHT;
-		Rectangle player_pic_coor = p.getPicCoor();
-		Rectangle road_pic_coor = ginfo.roadlist[p.getLocation()].getPicCoor();
-		int center_x , center_y;
-		center_x = road_pic_coor.x + road_pic_coor.width/2;
-		center_y = road_pic_coor.y + road_pic_coor.height/2;
-		int x,y,w,h;
-		x = scr_w/2 + (player_pic_coor.x - center_x) ;
-		y = scr_h/2 + (player_pic_coor.y - center_y) ;
-		w = player_pic_coor.width;
-		h = player_pic_coor.height;
-		
-		BufferedImage buf = new BufferedImage(scr_w,scr_h,BufferedImage.TYPE_3BYTE_BGR);
-		Graphics2D g = buf.createGraphics();
-		g.drawImage(ntu_map_img,0,0,scr_w,scr_h,center_x - scr_w/2 ,center_y - scr_h/2, center_x + scr_w/2 , center_y + scr_h/2,null);
-		g.drawImage(p.getImage(0), x , y , x+w  , y+h , 0 , 0 , w , h ,null);
-		return buf;
-	}
-	*/
 	
 	
 	/**
