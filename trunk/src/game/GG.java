@@ -1,35 +1,12 @@
 package game;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-
-import java.awt.Font;
-import java.awt.Rectangle;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-
+import javax.swing.*;
 import java.awt.font.TextAttribute;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.io.File;
 import java.text.AttributedString;
-
-import javax.imageio.ImageIO;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.Graphics2D;
-import java.awt.Dimension;
-import javax.swing.border.LineBorder;
-import java.awt.Point;
-import java.awt.Rectangle;
-import javax.swing.JScrollPane;
-import javax.swing.OverlayLayout;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 
 
 
@@ -47,10 +24,13 @@ public class GG extends JFrame {
 	private JButton exit_jButton = null;
 	private JButton dice_jButton = null;
 	private JButton item_jButton[] =  new JButton[Item.MAX_ITEMS];
+	private JButton player_jButton[] = new JButton[GameInfo.MAX_PLAYER];
+	private JButton road_jButton[] = new JButton[GameInfo.MAX_ROAD];
 	//private Insets border = null ;
 	
 	private boolean pressedbutton = true;
 	
+	private BufferedImage test;
 	private BufferedImage status_col;
 	private BufferedImage top_bar;
 	private BufferedImage dice_button[] = new BufferedImage[2];
@@ -90,9 +70,9 @@ public class GG extends JFrame {
 		//this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("NTU Monopoly");
-		
 		//load picture
 		try{
+			test = ImageIO.read(new File("test.png"));
 			status_col = ImageIO.read(new File("status_col.png"));
 			ntu_map_img = ImageIO.read(new File("NTUmap.png"));
 			calendar_bar = ImageIO.read(new File("calendar_bar.png"));
@@ -114,49 +94,36 @@ public class GG extends JFrame {
 		
 	}
 	
-	private JScrollPane getMapScroll(){
-		if(map_scroll == null){
-			map_scroll = new JScrollPane(getMap());
-			map_scroll.setBounds(0,50,GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT);
-			//map_scroll.setVerticalScrollBar(new );
-			//map_scroll.setHorizontalScrollBar(map_scroll.createHorizontalScrollBar());
-			//if(map_scroll.getVerticalScrollBar() == null)
-		}
-		return map_scroll;
+	private void MapReset(Player p){
+	    map.setBounds(GAME_SCREEN_WIDTH/2 - p.getPicCoor().x - p.getPicCoor().width/2, GAME_SCREEN_HEIGHT/2 - p.getPicCoor().y - p.getPicCoor().height/2 + 50,4000,4000);
+	    this.repaint();
 	}
 		
 	private JPanel getMap(){
-		if(buffer_map == null){
 			if(map == null){
 				map = new JPanel();
 				map.setLayout(null);
 				map.setOpaque(false);
-				JButton test = new JButton();
-				map.add(test);
-				test.setBounds(2250,1250,100,100);
-				map.setComponentZOrder(test, 0);
-				//map.setLayout(new OverlayLayout(map));
-				
-				//TODO : add button
+				map.setBounds(0,50,4000,4000);
 				map.add(getBackMap());
-			}
-		
-			buffer_map = new JPanel();
-			
-			buffer_map.setLayout(new OverlayLayout(buffer_map));
-			buffer_map.add(map);
-			buffer_map.add(getBackMap());
-
-			//buffer_map.setOpaque(false);
+				for(int i=0;i<GameInfo.MAX_ROAD;i++){
+				    map.add(DrawRoad(i));
+				}
+				//JButton test = new JButton();
+				//test.setBounds(2250,1250,100,100);
+				//map.setComponentZOrder(test, 0);
+				
+				//map.add(test);
+				//TODO : add button
 			
 		}
-		return buffer_map;
+		return map;
 	}
 	
 	private JLabel getBackMap(){
 		if(back_map == null){
 			back_map = new JLabel();
-			back_map.setSize(4000, 4000);
+			back_map.setBounds(0,0,4000, 4000);
 			back_map.setIcon(new ImageIcon(ntu_map_img));
 		}
 		return back_map;
@@ -170,15 +137,18 @@ public class GG extends JFrame {
 	private JPanel getMainScreenPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
+			jContentPane.setLayout(null);
 			jContentPane.add(get_ntu_jLabel());
 			jContentPane.add(get_calendar_jLabel());
 			jContentPane.add(get_status_col_jLabel());
 			//jContentPane.add(get_gamescreen_jLabel());
-			jContentPane.add(getMapScroll());
 			jContentPane.add(get_ItemJButton());
 			jContentPane.add(get_ExitJButton1());
 			jContentPane.add(get_dice_jButton());
+			jContentPane.add(getMap());/*
+			jContentPane.setComponentZOrder(get_ItemJButton(), 0);
+			jContentPane.setComponentZOrder(get_ExitJButton1(), 0);
+			jContentPane.setComponentZOrder(get_dice_jButton(), 0);*/
 		}
 		return jContentPane;
 	}
@@ -196,21 +166,23 @@ public class GG extends JFrame {
 	
 	private JLabel get_calendar_jLabel(){
 		if(calendar_jLabel == null){
+		    	Font newfont = new Font("標楷體",Font.BOLD,22);
+		    	AttributedString as = new AttributedString(" "+ginfo.year+" / "+ginfo.month + " / " + ginfo.day);
+		    	as.addAttribute(TextAttribute.FONT, newfont);
+		    	as.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		    	as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    	BufferedImage buf = calendar_bar;
+			Graphics2D g = (Graphics2D)buf.createGraphics();
+		    	g.drawString(as.getIterator(), 0, 33);
+
+
 			calendar_jLabel = new JLabel();
 			calendar_jLabel.setBounds(new Rectangle(0, 0, 200, 50));
-			calendar_jLabel.setText("calendar");
-			calendar_jLabel.setIcon(new ImageIcon(calendar_bar));
+			//calendar_jLabel.setIcon(new ImageIcon(calendar_bar));
+			calendar_jLabel.setIcon(new ImageIcon(buf));
 			//calendar_jLabel.setBorder(new LineBorder(Color.BLACK,1));
 		}
 		return calendar_jLabel;
-	}
-	private JLabel get_gamescreen_jLabel(){
-		if(gamescreen_jLabel == null){
-			gamescreen_jLabel = new JLabel();
-			gamescreen_jLabel.setBounds(new Rectangle(0,50,GAME_SCREEN_WIDTH,GAME_SCREEN_HEIGHT));
-			gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[0])));
-		}
-		return gamescreen_jLabel;
 	}
 	
 	private JLabel get_status_col_jLabel(){
@@ -223,25 +195,6 @@ public class GG extends JFrame {
 		return status_col_jLabel;
 	}
 	
-	private BufferedImage draw_game_screen(Player p){
-		int scr_w = GAME_SCREEN_WIDTH, scr_h = GAME_SCREEN_HEIGHT;
-		Rectangle player_pic_coor = p.getPicCoor();
-		Rectangle road_pic_coor = ginfo.roadlist[p.getLocation()].getPicCoor();
-		int center_x , center_y;
-		center_x = road_pic_coor.x + road_pic_coor.width/2;
-		center_y = road_pic_coor.y + road_pic_coor.height/2;
-		int x,y,w,h;
-		x = scr_w/2 + (player_pic_coor.x - center_x) ;
-		y = scr_h/2 + (player_pic_coor.y - center_y) ;
-		w = player_pic_coor.width;
-		h = player_pic_coor.height;
-		
-		BufferedImage buf = new BufferedImage(scr_w,scr_h,BufferedImage.TYPE_3BYTE_BGR);
-		Graphics2D g = buf.createGraphics();
-		g.drawImage(ntu_map_img,0,0,scr_w,scr_h,center_x - scr_w/2 ,center_y - scr_h/2, center_x + scr_w/2 , center_y + scr_h/2,null);
-		g.drawImage(p.getImage(), x , y , x+w  , y+h , 0 , 0 , w , h ,null);
-		return buf;
-	}
 	
 	
 	/**
@@ -353,12 +306,170 @@ public class GG extends JFrame {
 		this.repaint();
 	}
 	
+	public JButton DrawPlayer(Player p){
+		if(player_jButton[p.getID()]==null){
+		    player_jButton[p.getID()] = new JButton();
+		}
+		    player_jButton[p.getID()].setBounds(p.getPicCoor().x,p.getPicCoor().y,p.getPicCoor().width,p.getPicCoor().height);
+		    player_jButton[p.getID()].setIcon(new ImageIcon(p.getImage(0)));
+		return player_jButton[p.getID()];
+	}
+	
+	private boolean tmp;
+	private JPanel building_jPanel = null;
+	private JLabel buildingtxt_jLabel = null;
+	private JButton yes_jButton = null;
+	private JButton no_jButton = null;
+	    JButton buf_2 = get_yes_jButton();
+	    JButton buf_3 = get_no_jButton();
+	public boolean GoToBuilding(Building b,int condition){
+	    JPanel buf = get_building_jPanel();
+	    JLabel buf_1 = get_buildingtxt_jLabel(b, condition);
+	    building_jPanel.add(buf_1);
+	    jContentPane.add(buf);
+	    jContentPane.setComponentZOrder(buf, 0);
+	    this.repaint();
+	    return true;
+	}
+	
+	private JPanel get_building_jPanel(){
+	    if(building_jPanel == null){
+		building_jPanel = new JPanel();
+		building_jPanel.setBounds(new Rectangle(240, 170, 300, 200));
+	    }
+	    return building_jPanel;
+	}
+	private JLabel get_buildingtxt_jLabel(Building b, int condition){
+		if(buildingtxt_jLabel == null){
+		    buildingtxt_jLabel = new JLabel();
+		    buildingtxt_jLabel.setBounds(new Rectangle(20, 20, 260, 80));
+		}
+		    Font newfont = new Font("標楷體",Font.BOLD,18);
+		    AttributedString as1,as2;
+		    if(condition == 1){
+			as1 = new AttributedString("    "+b.getName()+"  價格 :"+b.getLandPrice());
+			as2 = new AttributedString("   這是無人空地  要買嗎?");
+			building_jPanel.add(buf_2);
+			building_jPanel.add(buf_3);
+		    }
+		    else if(condition == 2){
+			as1 = new AttributedString("       "+b.getName()+"  "+b.getFloor()+" 層");
+			as2 = new AttributedString("  升級費 "+(int)(b.getLandPrice()*0.1)+"  要升級嗎?");
+			building_jPanel.add(buf_2);
+			building_jPanel.add(buf_3);
+		    }
+		    else{
+			as1 = new AttributedString("    "+b.getName()+"   擁有者 "+b.getOwner()+"  ");
+			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
+		    }
+		
+		    as1.addAttribute(TextAttribute.FONT, newfont);
+		    as1.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		    as1.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    as2.addAttribute(TextAttribute.FONT, newfont);
+		    as2.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		    as2.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    BufferedImage buf = new BufferedImage(260, 80, BufferedImage.TYPE_3BYTE_BGR);
+		    Graphics2D g = (Graphics2D)buf.createGraphics();
+		    g.setColor(new Color(255,255,255));
+		    g.fillRect(0, 0, 260, 80);
+		    g.drawString(as1.getIterator(), 4, 25);
+		    g.drawString(as2.getIterator(), 4, 58);
+		    buildingtxt_jLabel.setIcon(new ImageIcon(buf));
+		return buildingtxt_jLabel;
+	}
+	
+	private JButton get_yes_jButton(){
+	    if(yes_jButton == null){
+		System.out.println("............");
+		yes_jButton = new JButton();
+		yes_jButton.setBounds(new Rectangle(25, 120, 100, 50));
+		Font newfont = new Font("標楷體",Font.BOLD,22);
+		AttributedString as = new AttributedString("   好   ");
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		
+		BufferedImage buf1 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
+		g1.setColor(new Color(255,253,183));
+		g1.fillRect(0, 0, 100, 50);
+		g1.drawString(as.getIterator(), 4, 30);
+		yes_jButton.setIcon(new ImageIcon(buf1));
+		
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
+		g2.setColor(new Color(255,154,39));
+		g2.fillRect(0, 0, 100, 50);
+		g2.drawString(as.getIterator(), 4, 30);
+		yes_jButton.setPressedIcon(new ImageIcon(buf2));
+		yes_jButton.addActionListener(new java.awt.event.ActionListener() {
+		    public void actionPerformed(java.awt.event.ActionEvent e) {
+			    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
+			    jContentPane.repaint();
+		    }
+		});
+		
+	    }
+	    return yes_jButton;
+	}
+	
+	private JButton get_no_jButton(){
+	    if(no_jButton == null){
+		no_jButton = new JButton();
+		no_jButton.setBounds(new Rectangle(175, 120, 100, 50));
+		Font newfont = new Font("標楷體",Font.BOLD,22);
+		AttributedString as = new AttributedString("  不好   ");
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		BufferedImage buf1 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g = (Graphics2D)buf1.createGraphics();
+		g.setColor(new Color(255,253,183));
+		g.fillRect(0, 0, 100, 50);
+		g.drawString(as.getIterator(), 5, 30);
+		no_jButton.setIcon(new ImageIcon(buf1));
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+		g = (Graphics2D)buf2.createGraphics();
+		g.setColor(new Color(255,154,39));
+		g.fillRect(0, 0, 100, 50);
+		g.drawString(as.getIterator(), 5, 30);
+		no_jButton.setPressedIcon(new ImageIcon(buf2));
+		no_jButton.addActionListener(new java.awt.event.ActionListener() {
+		    public void actionPerformed(java.awt.event.ActionEvent e) {
+			    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
+			    jContentPane.repaint();
+		    }
+		});
+	    }
+	    return no_jButton;
+	}
+	public JButton DrawRoad(int road_index){
+		if(road_jButton[road_index]==null){
+		    road_jButton[road_index] = new JButton();
+		    road_jButton[road_index].setBounds(ginfo.roadlist[road_index].getPicCoor());
+		    road_jButton[road_index].setIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(0)));
+		    road_jButton[road_index].setPressedIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(1)));
+		}
+		return road_jButton[road_index];
+	}
 	public  void GainControl(int player_index){
 		status_col_jLabel.setIcon(new ImageIcon(status_col));
+		JButton buf = DrawPlayer(ginfo.playerlist[player_index]);
+		map.add(buf);
+		map.setComponentZOrder(buf, 0);
+		MapReset(ginfo.playerlist[player_index]);
+		if(ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand() instanceof Building){
+		    GoToBuilding(((Building)ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand()),1);
+		System.out.println(((Building)ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand()).getName());}
 		//gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
 		synchronized (ginfo){	
 				try {
 					ginfo.wait();
+					this.repaint();
+					//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
