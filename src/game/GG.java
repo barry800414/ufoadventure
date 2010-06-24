@@ -320,13 +320,24 @@ public class GG extends JFrame {
 	}
 	
 	private boolean tmp;
+	private String name; 
+	private int money = 0; 
+	private int tmp_number = 0;
+	GG gg = this;
 	private JPanel building_jPanel = null;
 	private JPanel move_jPanel = null;
+	private JPanel ATM_jPanel = null;
 	private JLabel buildingtxt_jLabel = null;
 	private JLabel movetxt_jLabel = null;
+	private JLabel ATMtxt_jLabel = null;
 	private JButton yes_jButton = null;
 	private JButton no_jButton = null;
 	private JButton ok_jButton = null;
+	private JButton[] num_jButton = new JButton[10];
+	private JButton max_jButton = null;
+	private JButton enter_jButton = null;
+	private JButton savemoney_jButton = null;
+	private JButton withdrawn_jButton = null;
 	private LineBorder Border = null;
 	public void GoToBuilding(Building b,int condition){
 	    JPanel buf = get_building_jPanel();
@@ -340,6 +351,7 @@ public class GG extends JFrame {
 	private JPanel get_building_jPanel(){
 	    if(building_jPanel == null){
 		building_jPanel = new JPanel();
+		building_jPanel.setLayout(null);
 		building_jPanel.setBounds(new Rectangle(240, 370, 300, 160));
 	    }
 	    return building_jPanel;
@@ -357,8 +369,8 @@ public class GG extends JFrame {
 			as2 = new AttributedString("   這是無人空地  要買嗎?");
 			building_jPanel.add(get_yes_jButton());
 			building_jPanel.add(get_no_jButton());
-			get_yes_jButton().setBounds(new Rectangle(25, 100, 100, 50));
-			get_no_jButton().setBounds(new Rectangle(175, 100, 100, 50));
+			get_yes_jButton().setLocation(25, 100);
+			get_no_jButton().setLocation(175, 100);;
 			get_yes_jButton().addActionListener(remove_building_jPanel);
 			get_no_jButton().addActionListener(remove_building_jPanel);
 		    }
@@ -367,8 +379,8 @@ public class GG extends JFrame {
 			as2 = new AttributedString("  升級費 "+(int)(b.getLandPrice()*0.1)+"  要升級嗎?");
 			building_jPanel.add(get_yes_jButton());
 			building_jPanel.add(get_no_jButton());
-			get_yes_jButton().setBounds(new Rectangle(25, 100, 100, 50));
-			get_no_jButton().setBounds(new Rectangle(175, 100, 100, 50));
+			get_yes_jButton().setLocation(25, 100);
+			get_no_jButton().setLocation(175, 100);
 			get_yes_jButton().addActionListener(remove_building_jPanel);
 			get_no_jButton().addActionListener(remove_building_jPanel);
 		    }
@@ -376,7 +388,7 @@ public class GG extends JFrame {
 			as1 = new AttributedString(b.getName()+"   擁有者 "+b.getOwner()+" ");
 			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
 			building_jPanel.add(get_ok_jButton());
-			get_ok_jButton().setBounds(new Rectangle(100, 100, 100, 50));
+			get_ok_jButton().setLocation(100, 100);
 			get_ok_jButton().addActionListener(remove_building_jPanel);
 		    }
 		
@@ -398,7 +410,7 @@ public class GG extends JFrame {
 	
 	public void MoveMsgPanel(int move){
 
-	    JPanel buf = get_move_jPanel();
+	    JPanel buf = get_move_jPanel(move);
 	    JLabel buf_1 = get_movetxt_jLabel(move);
 	    buf.add(buf_1);
 	    jContentPane.add(buf);
@@ -406,11 +418,15 @@ public class GG extends JFrame {
 	    this.repaint();
 	}
 	
-	private JPanel get_move_jPanel(){
+	private JPanel get_move_jPanel(int move){
 	    if(move_jPanel == null){
 		move_jPanel = new JPanel();
+		move_jPanel.setLayout(null);
 		move_jPanel.setBounds(new Rectangle(260, 370, 260, 160));
 	    }
+	    move_jPanel.add(get_ok_jButton());
+	    get_ok_jButton().setLocation(80, 100);
+	    get_ok_jButton().addActionListener(remove_move_jPanel);
 	    return move_jPanel;
 	}
 	
@@ -424,9 +440,6 @@ public class GG extends JFrame {
 		    Font newfont = new Font("標楷體",Font.BOLD,28);
 		    AttributedString as = new AttributedString("移動距離 : "+move);
 
-		    move_jPanel.add(get_ok_jButton());
-		    get_ok_jButton().setBounds(new Rectangle(80, 100, 100, 50));
-		    get_ok_jButton().addActionListener(remove_move_jPanel);
 		    as.addAttribute(TextAttribute.FONT, newfont);
 		    as.addAttribute(TextAttribute.FOREGROUND,Color.black);
 		    as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
@@ -439,9 +452,64 @@ public class GG extends JFrame {
 		return movetxt_jLabel;
 	}
 
+	public void GoToATM(){
+	    JPanel buf = get_ATM_jPanel();
+	    buf.add(get_ATMtxt_jLabel());
+	    jContentPane.add(buf);
+	    jContentPane.setComponentZOrder(buf, 0);
+	    this.repaint();
+	}
+	private JPanel get_ATM_jPanel(){
+	    if(ATM_jPanel == null){
+		ATM_jPanel = new JPanel();
+		ATM_jPanel.setLayout(null);
+		ATM_jPanel.setBounds(new Rectangle(250, 120, 280, 350));
+		for(int i=0;i<10;i++) ATM_jPanel.add(get_number_jButton(i));
+		ATM_jPanel.add(get_max_jButton());
+		ATM_jPanel.add(get_enter_jButton());
+		ATM_jPanel.add(get_savemoney_jButton());
+		ATM_jPanel.add(get_withdrawn_jButton());
+		get_number_jButton(1).setLocation(25,100);
+		get_number_jButton(2).setLocation(85,100);
+		get_number_jButton(3).setLocation(145,100);
+		get_number_jButton(0).setLocation(205,100);
+		get_number_jButton(4).setLocation(25,160);
+		get_number_jButton(5).setLocation(85,160);
+		get_number_jButton(6).setLocation(145,160);
+		get_max_jButton().setLocation(205,160);
+		get_number_jButton(7).setLocation(25,220);
+		get_number_jButton(8).setLocation(85,220);
+		get_number_jButton(9).setLocation(145,220);
+		get_enter_jButton().setLocation(205,220);
+		get_savemoney_jButton().setLocation(25,280);
+		get_withdrawn_jButton().setLocation(145,280);
+	    }
+	    return ATM_jPanel;
+	}
+	private JLabel get_ATMtxt_jLabel(){
+		if(ATMtxt_jLabel == null){
+		    ATMtxt_jLabel = new JLabel();
+		    ATMtxt_jLabel.setBounds(new Rectangle(0, 0, 280, 350));
+		    ATMtxt_jLabel.setBorder(getBoarder());
+		}
+		    Font newfont = new Font("標楷體",Font.BOLD,30);
+		    AttributedString as = new AttributedString(name+" : " + money);
+
+		    as.addAttribute(TextAttribute.FONT, newfont);
+		    as.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		    as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    BufferedImage buf = new BufferedImage(280, 350, BufferedImage.TYPE_3BYTE_BGR);
+		    Graphics2D g = (Graphics2D)buf.createGraphics();
+		    g.setColor(new Color(255,253,183));
+		    g.fillRect(0, 0, 280, 350);
+		    g.drawString(as.getIterator(), 30, 60);
+		    ATMtxt_jLabel.setIcon(new ImageIcon(buf));
+		return ATMtxt_jLabel;
+	}
 	private JButton get_yes_jButton(){
 	    if(yes_jButton == null){
 		yes_jButton = new JButton();
+		yes_jButton.setSize(100, 50);
 		Font newfont = new Font("標楷體",Font.BOLD,22);
 		AttributedString as = new AttributedString("   好   ");
 		as.addAttribute(TextAttribute.FONT, newfont);
@@ -471,6 +539,7 @@ public class GG extends JFrame {
 	private JButton get_no_jButton(){
 	    if(no_jButton == null){
 		no_jButton = new JButton();
+		no_jButton.setSize(100, 50);
 		Font newfont = new Font("標楷體",Font.BOLD,22);
 		AttributedString as = new AttributedString("  不好   ");
 		
@@ -499,6 +568,7 @@ public class GG extends JFrame {
 	private JButton get_ok_jButton(){
 	    if(ok_jButton == null){
 		ok_jButton = new JButton();
+		ok_jButton.setSize(100, 50);
 		Font newfont = new Font("標楷體",Font.BOLD,24);
 		AttributedString as = new AttributedString("OK");
 		
@@ -524,6 +594,159 @@ public class GG extends JFrame {
 	    return ok_jButton;
 	}
 	
+	private JButton get_number_jButton(int num){
+	    if(num_jButton[num] == null){
+		num_jButton[num] = new JButton();
+		num_jButton[num].setSize(50, 50);
+		Font newfont = new Font("標楷體",Font.BOLD,16);
+		AttributedString as = new AttributedString(""+num);
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		
+		BufferedImage buf1 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
+		g1.setColor(new Color(255,253,183));
+		g1.fillRect(0, 0, 50, 50);
+		g1.drawString(as.getIterator(), 20, 28);
+		num_jButton[num].setIcon(new ImageIcon(buf1));
+		
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
+		g2.setColor(new Color(255,154,39));
+		g2.fillRect(0, 0, 50, 50);
+		g2.drawString(as.getIterator(), 20, 28);
+		num_jButton[num].setPressedIcon(new ImageIcon(buf2));
+		num_jButton[num].setBorder(getBoarder());
+		
+	    }
+	    return num_jButton[num];
+	}
+	
+	private JButton get_max_jButton(){
+	    if(max_jButton == null){
+		max_jButton = new JButton();
+		max_jButton.setSize(50, 50);
+		Font newfont = new Font("標楷體",Font.BOLD,16);
+		AttributedString as = new AttributedString("Max");
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		
+		BufferedImage buf1 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
+		g1.setColor(new Color(255,253,183));
+		g1.fillRect(0, 0, 50, 50);
+		g1.drawString(as.getIterator(), 11, 28);
+		max_jButton.setIcon(new ImageIcon(buf1));
+		
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
+		g2.setColor(new Color(255,154,39));
+		g2.fillRect(0, 0, 50, 50);
+		g2.drawString(as.getIterator(), 11, 28);
+		max_jButton.setPressedIcon(new ImageIcon(buf2));
+		max_jButton.setBorder(getBoarder());
+		
+	    }
+	    return max_jButton;
+	}
+	
+	private JButton get_enter_jButton(){
+	    if(enter_jButton == null){
+		enter_jButton = new JButton();
+		enter_jButton.setSize(50, 50);
+		Font newfont = new Font("標楷體",Font.BOLD,16);
+		AttributedString as = new AttributedString("Enter");
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		
+		BufferedImage buf1 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
+		g1.setColor(new Color(255,253,183));
+		g1.fillRect(0, 0, 50, 50);
+		g1.drawString(as.getIterator(), 3, 28);
+		enter_jButton.setIcon(new ImageIcon(buf1));
+		
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
+		g2.setColor(new Color(255,154,39));
+		g2.fillRect(0, 0, 50, 50);
+		g2.drawString(as.getIterator(), 3, 28);
+		enter_jButton.setPressedIcon(new ImageIcon(buf2));
+		enter_jButton.setBorder(getBoarder());
+		
+	    }
+	    return enter_jButton;
+	}
+	
+	private JButton get_savemoney_jButton(){
+	    if(savemoney_jButton == null){
+		savemoney_jButton = new JButton();
+		savemoney_jButton.setSize(110, 50);
+		Font newfont = new Font("標楷體",Font.BOLD,16);
+		AttributedString as = new AttributedString("存款");
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		
+		BufferedImage buf1 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
+		g1.setColor(new Color(255,253,183));
+		g1.fillRect(0, 0, 110, 50);
+		g1.drawString(as.getIterator(), 35, 28);
+		savemoney_jButton.setIcon(new ImageIcon(buf1));
+		
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
+		g2.setColor(new Color(255,154,39));
+		g2.fillRect(0, 0, 110, 50);
+		g2.drawString(as.getIterator(), 35, 28);
+		savemoney_jButton.setPressedIcon(new ImageIcon(buf2));
+		savemoney_jButton.setBorder(getBoarder());
+		
+	    }
+	    return savemoney_jButton;
+	}
+	
+	private JButton get_withdrawn_jButton(){
+	    if(withdrawn_jButton == null){
+		withdrawn_jButton = new JButton();
+		withdrawn_jButton.setSize(110, 50);
+		Font newfont = new Font("標楷體",Font.BOLD,16);
+		AttributedString as = new AttributedString("提款");
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		
+		BufferedImage buf1 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
+		g1.setColor(new Color(255,253,183));
+		g1.fillRect(0, 0, 110, 50);
+		g1.drawString(as.getIterator(), 35, 28);
+		withdrawn_jButton.setIcon(new ImageIcon(buf1));
+		
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
+		g2.setColor(new Color(255,154,39));
+		g2.fillRect(0, 0, 110, 50);
+		g2.drawString(as.getIterator(), 35, 28);
+		withdrawn_jButton.setPressedIcon(new ImageIcon(buf2));
+		withdrawn_jButton.setBorder(getBoarder());
+		
+	    }
+	    return withdrawn_jButton;
+	}
+	
+	
+	
+	
 	private ActionListener remove_building_jPanel = new ActionListener(){
 	    public void actionPerformed(ActionEvent e) {
 		    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
@@ -543,6 +766,18 @@ public class GG extends JFrame {
 			}
 	    }
 	};
+	
+
+	private ActionListener ATM_number = new ActionListener(){
+	    public void actionPerformed(ActionEvent e) {
+		
+			synchronized (ginfo){
+				ginfo.notifyAll();
+				    jContentPane.repaint();
+			}
+	    }
+	};
+	
 	private LineBorder getBoarder(){
 	    if(Border == null){
 		Border = new LineBorder(new Color(255,154,39), 2);
@@ -563,6 +798,7 @@ public class GG extends JFrame {
 		JButton buf = DrawPlayer(ginfo.playerlist[player_index]);
 		map.add(buf);
 		map.setComponentZOrder(buf, 0);
+		GoToATM();
 		MapReset(ginfo.playerlist[player_index]);
 		synchronized (ginfo){	
 			try {
