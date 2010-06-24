@@ -5,7 +5,6 @@ public class Game {
     public static void main(String[] args){
     	
     	GameInfo ginfo =  new GameInfo();
-    	
     	GraphicsEngine gengine = new GraphicsEngine(ginfo);
     	GameMainMenu menu = new GameMainMenu(ginfo);
     	menu.Display();
