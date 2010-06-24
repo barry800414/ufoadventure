@@ -8,6 +8,7 @@ import java.awt.font.TextAttribute;
 import java.awt.image.*;
 import java.io.File;
 import java.text.AttributedString;
+import java.awt.event.*;
 import java.awt.*;
 
 
@@ -255,10 +256,11 @@ public class GG extends JFrame {
 			dice_jButton.setPressedIcon(new ImageIcon(dice_button[1]));
 			dice_jButton.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
 					synchronized (ginfo){
 						ginfo.notifyAll();
+						    jContentPane.repaint();
 					}
+					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 		}
@@ -319,31 +321,33 @@ public class GG extends JFrame {
 	
 	private boolean tmp;
 	private JPanel building_jPanel = null;
+	private JPanel move_jPanel = null;
 	private JLabel buildingtxt_jLabel = null;
+	private JLabel movetxt_jLabel = null;
 	private JButton yes_jButton = null;
 	private JButton no_jButton = null;
+	private JButton ok_jButton = null;
 	private LineBorder Border = null;
-	public boolean GoToBuilding(Building b,int condition){
+	public void GoToBuilding(Building b,int condition){
 	    JPanel buf = get_building_jPanel();
 	    JLabel buf_1 = get_buildingtxt_jLabel(b, condition);
-	    building_jPanel.add(buf_1);
+	    buf.add(buf_1);
 	    jContentPane.add(buf);
 	    jContentPane.setComponentZOrder(buf, 0);
 	    this.repaint();
-	    return true;
 	}
 	
 	private JPanel get_building_jPanel(){
 	    if(building_jPanel == null){
 		building_jPanel = new JPanel();
-		building_jPanel.setBounds(new Rectangle(240, 170, 300, 200));
+		building_jPanel.setBounds(new Rectangle(240, 370, 300, 160));
 	    }
 	    return building_jPanel;
 	}
 	private JLabel get_buildingtxt_jLabel(Building b, int condition){
 		if(buildingtxt_jLabel == null){
 		    buildingtxt_jLabel = new JLabel();
-		    buildingtxt_jLabel.setBounds(new Rectangle(0, 0, 300, 200));
+		    buildingtxt_jLabel.setBounds(new Rectangle(0, 0, 300, 160));
 		    buildingtxt_jLabel.setBorder(getBoarder());
 		}
 		    Font newfont = new Font("標楷體",Font.BOLD,18);
@@ -352,21 +356,28 @@ public class GG extends JFrame {
 			as1 = new AttributedString(b.getName()+"  價格:"+b.getLandPrice());
 			as2 = new AttributedString("   這是無人空地  要買嗎?");
 			building_jPanel.add(get_yes_jButton());
-			yes_jButton.setBounds(new Rectangle(25, 120, 100, 50));
 			building_jPanel.add(get_no_jButton());
-			no_jButton.setBounds(new Rectangle(175, 120, 100, 50));
+			get_yes_jButton().setBounds(new Rectangle(25, 100, 100, 50));
+			get_no_jButton().setBounds(new Rectangle(175, 100, 100, 50));
+			get_yes_jButton().addActionListener(remove_building_jPanel);
+			get_no_jButton().addActionListener(remove_building_jPanel);
 		    }
 		    else if(condition == 2){
 			as1 = new AttributedString("   "+b.getName()+"  "+b.getFloor()+" 層");
 			as2 = new AttributedString("  升級費 "+(int)(b.getLandPrice()*0.1)+"  要升級嗎?");
 			building_jPanel.add(get_yes_jButton());
-			yes_jButton.setBounds(new Rectangle(25, 120, 100, 50));
 			building_jPanel.add(get_no_jButton());
-			no_jButton.setBounds(new Rectangle(175, 120, 100, 50));
+			get_yes_jButton().setBounds(new Rectangle(25, 100, 100, 50));
+			get_no_jButton().setBounds(new Rectangle(175, 100, 100, 50));
+			get_yes_jButton().addActionListener(remove_building_jPanel);
+			get_no_jButton().addActionListener(remove_building_jPanel);
 		    }
 		    else{
 			as1 = new AttributedString(b.getName()+"   擁有者 "+b.getOwner()+" ");
 			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
+			building_jPanel.add(get_ok_jButton());
+			get_ok_jButton().setBounds(new Rectangle(100, 100, 100, 50));
+			get_ok_jButton().addActionListener(remove_building_jPanel);
 		    }
 		
 		    as1.addAttribute(TextAttribute.FONT, newfont);
@@ -375,16 +386,59 @@ public class GG extends JFrame {
 		    as2.addAttribute(TextAttribute.FONT, newfont);
 		    as2.addAttribute(TextAttribute.FOREGROUND,Color.black);
 		    as2.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
-		    BufferedImage buf = new BufferedImage(300, 200, BufferedImage.TYPE_3BYTE_BGR);
+		    BufferedImage buf = new BufferedImage(300, 160, BufferedImage.TYPE_3BYTE_BGR);
 		    Graphics2D g = (Graphics2D)buf.createGraphics();
 		    g.setColor(new Color(255,253,183));
-		    g.fillRect(0, 0, 300, 200);
-		    g.drawString(as1.getIterator(), 14, 45);
-		    g.drawString(as2.getIterator(), 14, 78);
+		    g.fillRect(0, 0, 300, 160);
+		    g.drawString(as1.getIterator(), 14, 25);
+		    g.drawString(as2.getIterator(), 14, 58);
 		    buildingtxt_jLabel.setIcon(new ImageIcon(buf));
 		return buildingtxt_jLabel;
 	}
 	
+	public void MoveMsgPanel(int move){
+
+	    JPanel buf = get_move_jPanel();
+	    JLabel buf_1 = get_movetxt_jLabel(move);
+	    buf.add(buf_1);
+	    jContentPane.add(buf);
+	    jContentPane.setComponentZOrder(buf, 0);
+	    this.repaint();
+	}
+	
+	private JPanel get_move_jPanel(){
+	    if(move_jPanel == null){
+		move_jPanel = new JPanel();
+		move_jPanel.setBounds(new Rectangle(260, 370, 260, 160));
+	    }
+	    return move_jPanel;
+	}
+	
+
+	private JLabel get_movetxt_jLabel(int move){
+		if(movetxt_jLabel == null){
+		    movetxt_jLabel = new JLabel();
+		    movetxt_jLabel.setBounds(new Rectangle(0, 0, 260, 160));
+		    movetxt_jLabel.setBorder(getBoarder());
+		}
+		    Font newfont = new Font("標楷體",Font.BOLD,28);
+		    AttributedString as = new AttributedString("移動距離 : "+move);
+
+		    move_jPanel.add(get_ok_jButton());
+		    get_ok_jButton().setBounds(new Rectangle(80, 100, 100, 50));
+		    get_ok_jButton().addActionListener(remove_move_jPanel);
+		    as.addAttribute(TextAttribute.FONT, newfont);
+		    as.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		    as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    BufferedImage buf = new BufferedImage(260, 160, BufferedImage.TYPE_3BYTE_BGR);
+		    Graphics2D g = (Graphics2D)buf.createGraphics();
+		    g.setColor(new Color(255,253,183));
+		    g.fillRect(0, 0, 260, 160);
+		    g.drawString(as.getIterator(), 30, 45);
+		    movetxt_jLabel.setIcon(new ImageIcon(buf));
+		return movetxt_jLabel;
+	}
+
 	private JButton get_yes_jButton(){
 	    if(yes_jButton == null){
 		yes_jButton = new JButton();
@@ -409,12 +463,6 @@ public class GG extends JFrame {
 		g2.drawString(as.getIterator(), 4, 30);
 		yes_jButton.setPressedIcon(new ImageIcon(buf2));
 		yes_jButton.setBorder(getBoarder());
-		yes_jButton.addActionListener(new java.awt.event.ActionListener() {
-		    public void actionPerformed(java.awt.event.ActionEvent e) {
-			    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
-			    jContentPane.repaint();
-		    }
-		});
 		
 	    }
 	    return yes_jButton;
@@ -425,6 +473,7 @@ public class GG extends JFrame {
 		no_jButton = new JButton();
 		Font newfont = new Font("標楷體",Font.BOLD,22);
 		AttributedString as = new AttributedString("  不好   ");
+		
 		as.addAttribute(TextAttribute.FONT, newfont);
 		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
 		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
@@ -434,6 +483,7 @@ public class GG extends JFrame {
 		g.fillRect(0, 0, 100, 50);
 		g.drawString(as.getIterator(), 5, 30);
 		no_jButton.setIcon(new ImageIcon(buf1));
+		
 		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
 		BufferedImage buf2 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
 		g = (Graphics2D)buf2.createGraphics();
@@ -442,16 +492,57 @@ public class GG extends JFrame {
 		g.drawString(as.getIterator(), 5, 30);
 		no_jButton.setPressedIcon(new ImageIcon(buf2));
 		no_jButton.setBorder(getBoarder());
-		no_jButton.addActionListener(new java.awt.event.ActionListener() {
-		    public void actionPerformed(java.awt.event.ActionEvent e) {
-			    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
-			    jContentPane.repaint();
-		    }
-		});
 	    }
 	    return no_jButton;
 	}
 	
+	private JButton get_ok_jButton(){
+	    if(ok_jButton == null){
+		ok_jButton = new JButton();
+		Font newfont = new Font("標楷體",Font.BOLD,24);
+		AttributedString as = new AttributedString("OK");
+		
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		BufferedImage buf1 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g = (Graphics2D)buf1.createGraphics();
+		g.setColor(new Color(255,253,183));
+		g.fillRect(0, 0, 100, 50);
+		g.drawString(as.getIterator(), 35, 30);
+		ok_jButton.setIcon(new ImageIcon(buf1));
+		
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+		g = (Graphics2D)buf2.createGraphics();
+		g.setColor(new Color(255,154,39));
+		g.fillRect(0, 0, 100, 50);
+		g.drawString(as.getIterator(), 35, 30);
+		ok_jButton.setPressedIcon(new ImageIcon(buf2));
+		ok_jButton.setBorder(getBoarder());
+	    }
+	    return ok_jButton;
+	}
+	
+	private ActionListener remove_building_jPanel = new ActionListener(){
+	    public void actionPerformed(ActionEvent e) {
+		    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
+
+			synchronized (ginfo){
+				ginfo.notifyAll();
+				    jContentPane.repaint();
+			}
+	    }
+	};
+	private ActionListener remove_move_jPanel = new ActionListener(){
+	    public void actionPerformed(ActionEvent e) {
+		    jContentPane.remove(move_jPanel); // TODO Auto-generated Event stub actionPerformed()
+			synchronized (ginfo){
+				ginfo.notifyAll();
+				    jContentPane.repaint();
+			}
+	    }
+	};
 	private LineBorder getBoarder(){
 	    if(Border == null){
 		Border = new LineBorder(new Color(255,154,39), 2);
@@ -473,9 +564,17 @@ public class GG extends JFrame {
 		map.add(buf);
 		map.setComponentZOrder(buf, 0);
 		MapReset(ginfo.playerlist[player_index]);
-		if(ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand() instanceof Building){
-		    GoToBuilding(((Building)ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand()),1);
-		System.out.println(((Building)ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand()).getName());}
+		synchronized (ginfo){	
+			try {
+				ginfo.wait();
+				this.repaint();
+				//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+		MoveMsgPanel(1);
 		//gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
 		synchronized (ginfo){	
 				try {
@@ -486,6 +585,20 @@ public class GG extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+		}
+		if(ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand() instanceof Building){
+		    GoToBuilding(((Building)ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand()),3);
+
+		    synchronized (ginfo){	
+			try {
+				ginfo.wait();
+				this.repaint();
+				//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    }
 		}
 	}
 }
