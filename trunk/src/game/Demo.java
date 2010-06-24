@@ -12,6 +12,7 @@ public class Demo {
     	ginfo.Game_Init();
     	gengine.initialize();
     	gengine.setVisible(true);
+        Computer gcom = new Computer(ginfo, gengine);
     	int[] count = {0,0,0,0};
     	
     	while(true){
@@ -22,7 +23,6 @@ public class Demo {
     	}
     	
         
-        //Computer gcom = new Computer(ginfo);
         
         //GameMainMenu a = new GameMainMenu(ginfo);
         //a.Display();

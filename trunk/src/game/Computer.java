@@ -5,12 +5,13 @@ import java.util.*;
 public class Computer {
 	
     private GameInfo ginfo ;
-    private GraphicsEngine gengine;
+    //private GraphicsEngine gengine;
+    private GG gengine;
     private Player[] playerlist;
     public boolean[] playerRound;
     public int playercontrol;
     public int step = 0;
-    public Computer(GameInfo info, GraphicsEngine engine){
+    public Computer(GameInfo info, GG engine){
     	ginfo = info ;
     	gengine = engine;
     	playerlist = ginfo.playerlist;
