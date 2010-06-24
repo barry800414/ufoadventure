@@ -2,6 +2,8 @@ package game;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.awt.font.TextAttribute;
 import java.awt.image.*;
 import java.io.File;
@@ -320,8 +322,7 @@ public class GG extends JFrame {
 	private JLabel buildingtxt_jLabel = null;
 	private JButton yes_jButton = null;
 	private JButton no_jButton = null;
-	    JButton buf_2 = get_yes_jButton();
-	    JButton buf_3 = get_no_jButton();
+	private LineBorder Border = null;
 	public boolean GoToBuilding(Building b,int condition){
 	    JPanel buf = get_building_jPanel();
 	    JLabel buf_1 = get_buildingtxt_jLabel(b, condition);
@@ -342,24 +343,29 @@ public class GG extends JFrame {
 	private JLabel get_buildingtxt_jLabel(Building b, int condition){
 		if(buildingtxt_jLabel == null){
 		    buildingtxt_jLabel = new JLabel();
-		    buildingtxt_jLabel.setBounds(new Rectangle(20, 20, 260, 80));
+		    buildingtxt_jLabel.setBounds(new Rectangle(0, 0, 300, 200));
+		    buildingtxt_jLabel.setBorder(getBoarder());
 		}
 		    Font newfont = new Font("標楷體",Font.BOLD,18);
 		    AttributedString as1,as2;
 		    if(condition == 1){
-			as1 = new AttributedString("    "+b.getName()+"  價格 :"+b.getLandPrice());
+			as1 = new AttributedString(b.getName()+"  價格:"+b.getLandPrice());
 			as2 = new AttributedString("   這是無人空地  要買嗎?");
-			building_jPanel.add(buf_2);
-			building_jPanel.add(buf_3);
+			building_jPanel.add(get_yes_jButton());
+			yes_jButton.setBounds(new Rectangle(25, 120, 100, 50));
+			building_jPanel.add(get_no_jButton());
+			no_jButton.setBounds(new Rectangle(175, 120, 100, 50));
 		    }
 		    else if(condition == 2){
-			as1 = new AttributedString("       "+b.getName()+"  "+b.getFloor()+" 層");
+			as1 = new AttributedString("   "+b.getName()+"  "+b.getFloor()+" 層");
 			as2 = new AttributedString("  升級費 "+(int)(b.getLandPrice()*0.1)+"  要升級嗎?");
-			building_jPanel.add(buf_2);
-			building_jPanel.add(buf_3);
+			building_jPanel.add(get_yes_jButton());
+			yes_jButton.setBounds(new Rectangle(25, 120, 100, 50));
+			building_jPanel.add(get_no_jButton());
+			no_jButton.setBounds(new Rectangle(175, 120, 100, 50));
 		    }
 		    else{
-			as1 = new AttributedString("    "+b.getName()+"   擁有者 "+b.getOwner()+"  ");
+			as1 = new AttributedString(b.getName()+"   擁有者 "+b.getOwner()+" ");
 			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
 		    }
 		
@@ -369,21 +375,19 @@ public class GG extends JFrame {
 		    as2.addAttribute(TextAttribute.FONT, newfont);
 		    as2.addAttribute(TextAttribute.FOREGROUND,Color.black);
 		    as2.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
-		    BufferedImage buf = new BufferedImage(260, 80, BufferedImage.TYPE_3BYTE_BGR);
+		    BufferedImage buf = new BufferedImage(300, 200, BufferedImage.TYPE_3BYTE_BGR);
 		    Graphics2D g = (Graphics2D)buf.createGraphics();
-		    g.setColor(new Color(255,255,255));
-		    g.fillRect(0, 0, 260, 80);
-		    g.drawString(as1.getIterator(), 4, 25);
-		    g.drawString(as2.getIterator(), 4, 58);
+		    g.setColor(new Color(255,253,183));
+		    g.fillRect(0, 0, 300, 200);
+		    g.drawString(as1.getIterator(), 14, 45);
+		    g.drawString(as2.getIterator(), 14, 78);
 		    buildingtxt_jLabel.setIcon(new ImageIcon(buf));
 		return buildingtxt_jLabel;
 	}
 	
 	private JButton get_yes_jButton(){
 	    if(yes_jButton == null){
-		System.out.println("............");
 		yes_jButton = new JButton();
-		yes_jButton.setBounds(new Rectangle(25, 120, 100, 50));
 		Font newfont = new Font("標楷體",Font.BOLD,22);
 		AttributedString as = new AttributedString("   好   ");
 		as.addAttribute(TextAttribute.FONT, newfont);
@@ -404,6 +408,7 @@ public class GG extends JFrame {
 		g2.fillRect(0, 0, 100, 50);
 		g2.drawString(as.getIterator(), 4, 30);
 		yes_jButton.setPressedIcon(new ImageIcon(buf2));
+		yes_jButton.setBorder(getBoarder());
 		yes_jButton.addActionListener(new java.awt.event.ActionListener() {
 		    public void actionPerformed(java.awt.event.ActionEvent e) {
 			    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
@@ -418,7 +423,6 @@ public class GG extends JFrame {
 	private JButton get_no_jButton(){
 	    if(no_jButton == null){
 		no_jButton = new JButton();
-		no_jButton.setBounds(new Rectangle(175, 120, 100, 50));
 		Font newfont = new Font("標楷體",Font.BOLD,22);
 		AttributedString as = new AttributedString("  不好   ");
 		as.addAttribute(TextAttribute.FONT, newfont);
@@ -437,6 +441,7 @@ public class GG extends JFrame {
 		g.fillRect(0, 0, 100, 50);
 		g.drawString(as.getIterator(), 5, 30);
 		no_jButton.setPressedIcon(new ImageIcon(buf2));
+		no_jButton.setBorder(getBoarder());
 		no_jButton.addActionListener(new java.awt.event.ActionListener() {
 		    public void actionPerformed(java.awt.event.ActionEvent e) {
 			    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
@@ -445,6 +450,13 @@ public class GG extends JFrame {
 		});
 	    }
 	    return no_jButton;
+	}
+	
+	private LineBorder getBoarder(){
+	    if(Border == null){
+		Border = new LineBorder(new Color(255,154,39), 2);
+	    }
+	    return Border;
 	}
 	public JButton DrawRoad(int road_index){
 		if(road_jButton[road_index]==null){
