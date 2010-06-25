@@ -319,11 +319,81 @@ public class GG extends JFrame {
 		return player_jButton[p.getID()];
 	}
 	
-	private boolean tmp;
-	private String name; 
-	private int money = 0; 
-	private int tmp_number = 0;
-	GG gg = this;
+	public JButton DrawRoad(int road_index){
+		if(road_jButton[road_index]==null){
+		    road_jButton[road_index] = new JButton();
+		    road_jButton[road_index].setBounds(ginfo.roadlist[road_index].getPicCoor());
+		    road_jButton[road_index].setIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(0)));
+		    road_jButton[road_index].setPressedIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(1)));
+		}
+		return road_jButton[road_index];
+	}
+	public  void GainControl(int player_index){
+	    tmp_p = ginfo.playerlist[0];
+		status_col_jLabel.setIcon(new ImageIcon(status_col));
+		JButton buf = DrawPlayer(ginfo.playerlist[player_index]);
+		map.add(buf);
+		map.setComponentZOrder(buf, 0);
+		MapReset(ginfo.playerlist[player_index]);
+		synchronized (ginfo){	
+			try {
+				ginfo.wait();
+				this.repaint();
+				//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+		tmp=1;
+		while(tmp !=0){
+			GoToATM();
+			synchronized (ginfo){	
+				try {
+					ginfo.wait();
+					this.repaint();
+					//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			}
+		MoveMsgPanel(1);
+		//gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
+		synchronized (ginfo){	
+				try {
+					ginfo.wait();
+					this.repaint();
+					//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		if(ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand() instanceof Building){
+		    GoToBuilding(((Building)ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand()),3);
+
+		    synchronized (ginfo){	
+			try {
+				ginfo.wait();
+				this.repaint();
+				//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    }
+		}
+	}
+	
+	 
+	public int tmp;
+	public int ATM_number = 0;
+	public boolean Out_In = true;
+	Player tmp_p;
+	Road tmp_r;
+	Land tmp_l;
 	private JPanel building_jPanel = null;
 	private JPanel move_jPanel = null;
 	private JPanel ATM_jPanel = null;
@@ -335,6 +405,7 @@ public class GG extends JFrame {
 	private JButton ok_jButton = null;
 	private JButton[] num_jButton = new JButton[10];
 	private JButton max_jButton = null;
+	private JButton clean_jButton = null;
 	private JButton enter_jButton = null;
 	private JButton savemoney_jButton = null;
 	private JButton withdrawn_jButton = null;
@@ -370,9 +441,9 @@ public class GG extends JFrame {
 			building_jPanel.add(get_yes_jButton());
 			building_jPanel.add(get_no_jButton());
 			get_yes_jButton().setLocation(25, 100);
-			get_no_jButton().setLocation(175, 100);;
-			get_yes_jButton().addActionListener(remove_building_jPanel);
-			get_no_jButton().addActionListener(remove_building_jPanel);
+			get_no_jButton().setLocation(175, 100);
+			get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
+			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
 		    }
 		    else if(condition == 2){
 			as1 = new AttributedString("   "+b.getName()+"  "+b.getFloor()+" 層");
@@ -381,15 +452,15 @@ public class GG extends JFrame {
 			building_jPanel.add(get_no_jButton());
 			get_yes_jButton().setLocation(25, 100);
 			get_no_jButton().setLocation(175, 100);
-			get_yes_jButton().addActionListener(remove_building_jPanel);
-			get_no_jButton().addActionListener(remove_building_jPanel);
+			get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
+			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
 		    }
 		    else{
 			as1 = new AttributedString(b.getName()+"   擁有者 "+b.getOwner()+" ");
 			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
 			building_jPanel.add(get_ok_jButton());
 			get_ok_jButton().setLocation(100, 100);
-			get_ok_jButton().addActionListener(remove_building_jPanel);
+			get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
 		    }
 		
 		    as1.addAttribute(TextAttribute.FONT, newfont);
@@ -407,7 +478,15 @@ public class GG extends JFrame {
 		    buildingtxt_jLabel.setIcon(new ImageIcon(buf));
 		return buildingtxt_jLabel;
 	}
-	
+	public void tmp(){
+
+	    JPanel buf = new JPanel();
+	    JLabel buf_1 = new JLabel();
+	    buf.add(buf_1);
+	    jContentPane.add(buf);
+	    jContentPane.setComponentZOrder(buf, 0);
+	    this.repaint();
+	}
 	public void MoveMsgPanel(int move){
 
 	    JPanel buf = get_move_jPanel(move);
@@ -426,7 +505,7 @@ public class GG extends JFrame {
 	    }
 	    move_jPanel.add(get_ok_jButton());
 	    get_ok_jButton().setLocation(80, 100);
-	    get_ok_jButton().addActionListener(remove_move_jPanel);
+	    get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,move_jPanel,0));
 	    return move_jPanel;
 	}
 	
@@ -453,6 +532,7 @@ public class GG extends JFrame {
 	}
 
 	public void GoToATM(){
+	    tmp = 1;
 	    JPanel buf = get_ATM_jPanel();
 	    buf.add(get_ATMtxt_jLabel());
 	    jContentPane.add(buf);
@@ -466,23 +546,31 @@ public class GG extends JFrame {
 		ATM_jPanel.setBounds(new Rectangle(250, 120, 280, 350));
 		for(int i=0;i<10;i++) ATM_jPanel.add(get_number_jButton(i));
 		ATM_jPanel.add(get_max_jButton());
+		ATM_jPanel.add(get_clean_jButton());
 		ATM_jPanel.add(get_enter_jButton());
 		ATM_jPanel.add(get_savemoney_jButton());
 		ATM_jPanel.add(get_withdrawn_jButton());
-		get_number_jButton(1).setLocation(25,100);
-		get_number_jButton(2).setLocation(85,100);
-		get_number_jButton(3).setLocation(145,100);
-		get_number_jButton(0).setLocation(205,100);
-		get_number_jButton(4).setLocation(25,160);
-		get_number_jButton(5).setLocation(85,160);
-		get_number_jButton(6).setLocation(145,160);
-		get_max_jButton().setLocation(205,160);
-		get_number_jButton(7).setLocation(25,220);
-		get_number_jButton(8).setLocation(85,220);
-		get_number_jButton(9).setLocation(145,220);
-		get_enter_jButton().setLocation(205,220);
-		get_savemoney_jButton().setLocation(25,280);
-		get_withdrawn_jButton().setLocation(145,280);
+		get_savemoney_jButton().setLocation(25,100);
+		get_withdrawn_jButton().setLocation(85,100);
+		get_enter_jButton().setLocation(145,100);
+		get_number_jButton(1).setLocation(25,160);
+		get_number_jButton(2).setLocation(85,160);
+		get_number_jButton(3).setLocation(145,160);
+		get_number_jButton(0).setLocation(205,160);
+		get_number_jButton(4).setLocation(25,220);
+		get_number_jButton(5).setLocation(85,220);
+		get_number_jButton(6).setLocation(145,220);
+		get_max_jButton().setLocation(205,220);
+		get_number_jButton(7).setLocation(25,280);
+		get_number_jButton(8).setLocation(85,280);
+		get_number_jButton(9).setLocation(145,280);
+		get_clean_jButton().setLocation(205,280);
+		get_enter_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,ATM_jPanel,0));
+		get_savemoney_jButton().addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, "i"));
+		get_withdrawn_jButton().addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, "o"));
+		get_max_jButton().addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, "m"));
+		get_clean_jButton().addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, "c"));
+		for(int i=0;i<10;i++) get_number_jButton(i).addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, ""+i));;
 	    }
 	    return ATM_jPanel;
 	}
@@ -493,8 +581,11 @@ public class GG extends JFrame {
 		    ATMtxt_jLabel.setBorder(getBoarder());
 		}
 		    Font newfont = new Font("標楷體",Font.BOLD,30);
-		    AttributedString as = new AttributedString(name+" : " + money);
-
+		    AttributedString as;
+		    if(Out_In == true)
+			as = new AttributedString("提款 : " + ATM_number);
+		    else
+			as = new AttributedString("存款 : " + ATM_number);
 		    as.addAttribute(TextAttribute.FONT, newfont);
 		    as.addAttribute(TextAttribute.FOREGROUND,Color.black);
 		    as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
@@ -654,12 +745,12 @@ public class GG extends JFrame {
 	    return max_jButton;
 	}
 	
-	private JButton get_enter_jButton(){
-	    if(enter_jButton == null){
-		enter_jButton = new JButton();
-		enter_jButton.setSize(50, 50);
+	private JButton get_clean_jButton(){
+	    if(clean_jButton == null){
+		clean_jButton = new JButton();
+		clean_jButton.setSize(50, 50);
 		Font newfont = new Font("標楷體",Font.BOLD,16);
-		AttributedString as = new AttributedString("Enter");
+		AttributedString as = new AttributedString("清除");
 		as.addAttribute(TextAttribute.FONT, newfont);
 		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
 		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
@@ -668,15 +759,45 @@ public class GG extends JFrame {
 		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
 		g1.setColor(new Color(255,253,183));
 		g1.fillRect(0, 0, 50, 50);
-		g1.drawString(as.getIterator(), 3, 28);
-		enter_jButton.setIcon(new ImageIcon(buf1));
+		g1.drawString(as.getIterator(), 8, 28);
+		clean_jButton.setIcon(new ImageIcon(buf1));
 		
 		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
 		BufferedImage buf2 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
 		g2.setColor(new Color(255,154,39));
 		g2.fillRect(0, 0, 50, 50);
-		g2.drawString(as.getIterator(), 3, 28);
+		g2.drawString(as.getIterator(), 8, 28);
+		clean_jButton.setPressedIcon(new ImageIcon(buf2));
+		clean_jButton.setBorder(getBoarder());
+		
+	    }
+	    return clean_jButton;
+	}
+	
+	private JButton get_enter_jButton(){
+	    if(enter_jButton == null){
+		enter_jButton = new JButton();
+		enter_jButton.setSize(110, 50);
+		Font newfont = new Font("標楷體",Font.BOLD,16);
+		AttributedString as = new AttributedString("Enter");
+		as.addAttribute(TextAttribute.FONT, newfont);
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		
+		BufferedImage buf1 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
+		g1.setColor(new Color(255,253,183));
+		g1.fillRect(0, 0, 110, 50);
+		g1.drawString(as.getIterator(), 32, 28);
+		enter_jButton.setIcon(new ImageIcon(buf1));
+		
+		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
+		BufferedImage buf2 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
+		g2.setColor(new Color(255,154,39));
+		g2.fillRect(0, 0, 110, 50);
+		g2.drawString(as.getIterator(), 32, 28);
 		enter_jButton.setPressedIcon(new ImageIcon(buf2));
 		enter_jButton.setBorder(getBoarder());
 		
@@ -687,26 +808,26 @@ public class GG extends JFrame {
 	private JButton get_savemoney_jButton(){
 	    if(savemoney_jButton == null){
 		savemoney_jButton = new JButton();
-		savemoney_jButton.setSize(110, 50);
+		savemoney_jButton.setSize(50, 50);
 		Font newfont = new Font("標楷體",Font.BOLD,16);
 		AttributedString as = new AttributedString("存款");
 		as.addAttribute(TextAttribute.FONT, newfont);
 		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
 		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
 		
-		BufferedImage buf1 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage buf1 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
 		g1.setColor(new Color(255,253,183));
-		g1.fillRect(0, 0, 110, 50);
-		g1.drawString(as.getIterator(), 35, 28);
+		g1.fillRect(0, 0, 50, 50);
+		g1.drawString(as.getIterator(), 8, 28);
 		savemoney_jButton.setIcon(new ImageIcon(buf1));
 		
 		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
-		BufferedImage buf2 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage buf2 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
 		g2.setColor(new Color(255,154,39));
-		g2.fillRect(0, 0, 110, 50);
-		g2.drawString(as.getIterator(), 35, 28);
+		g2.fillRect(0, 0, 50, 50);
+		g2.drawString(as.getIterator(), 8, 28);
 		savemoney_jButton.setPressedIcon(new ImageIcon(buf2));
 		savemoney_jButton.setBorder(getBoarder());
 		
@@ -717,26 +838,26 @@ public class GG extends JFrame {
 	private JButton get_withdrawn_jButton(){
 	    if(withdrawn_jButton == null){
 		withdrawn_jButton = new JButton();
-		withdrawn_jButton.setSize(110, 50);
+		withdrawn_jButton.setSize(50, 50);
 		Font newfont = new Font("標楷體",Font.BOLD,16);
 		AttributedString as = new AttributedString("提款");
 		as.addAttribute(TextAttribute.FONT, newfont);
 		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,154,39));
 		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
 		
-		BufferedImage buf1 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage buf1 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g1 = (Graphics2D)buf1.createGraphics();
 		g1.setColor(new Color(255,253,183));
-		g1.fillRect(0, 0, 110, 50);
-		g1.drawString(as.getIterator(), 35, 28);
+		g1.fillRect(0, 0, 50, 50);
+		g1.drawString(as.getIterator(), 8, 28);
 		withdrawn_jButton.setIcon(new ImageIcon(buf1));
 		
 		as.addAttribute(TextAttribute.FOREGROUND,new Color(255,253,183));
-		BufferedImage buf2 = new BufferedImage(110, 50, BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage buf2 = new BufferedImage(50, 50, BufferedImage.TYPE_3BYTE_BGR);
 		Graphics2D g2 = (Graphics2D)buf2.createGraphics();
 		g2.setColor(new Color(255,154,39));
-		g2.fillRect(0, 0, 110, 50);
-		g2.drawString(as.getIterator(), 35, 28);
+		g2.fillRect(0, 0, 50, 50);
+		g2.drawString(as.getIterator(), 8, 28);
 		withdrawn_jButton.setPressedIcon(new ImageIcon(buf2));
 		withdrawn_jButton.setBorder(getBoarder());
 		
@@ -747,36 +868,7 @@ public class GG extends JFrame {
 	
 	
 	
-	private ActionListener remove_building_jPanel = new ActionListener(){
-	    public void actionPerformed(ActionEvent e) {
-		    jContentPane.remove(building_jPanel); // TODO Auto-generated Event stub actionPerformed()
-
-			synchronized (ginfo){
-				ginfo.notifyAll();
-				    jContentPane.repaint();
-			}
-	    }
-	};
-	private ActionListener remove_move_jPanel = new ActionListener(){
-	    public void actionPerformed(ActionEvent e) {
-		    jContentPane.remove(move_jPanel); // TODO Auto-generated Event stub actionPerformed()
-			synchronized (ginfo){
-				ginfo.notifyAll();
-				    jContentPane.repaint();
-			}
-	    }
-	};
 	
-
-	private ActionListener ATM_number = new ActionListener(){
-	    public void actionPerformed(ActionEvent e) {
-		
-			synchronized (ginfo){
-				ginfo.notifyAll();
-				    jContentPane.repaint();
-			}
-	    }
-	};
 	
 	private LineBorder getBoarder(){
 	    if(Border == null){
@@ -784,57 +876,5 @@ public class GG extends JFrame {
 	    }
 	    return Border;
 	}
-	public JButton DrawRoad(int road_index){
-		if(road_jButton[road_index]==null){
-		    road_jButton[road_index] = new JButton();
-		    road_jButton[road_index].setBounds(ginfo.roadlist[road_index].getPicCoor());
-		    road_jButton[road_index].setIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(0)));
-		    road_jButton[road_index].setPressedIcon(new ImageIcon(ginfo.roadlist[road_index].getImage(1)));
-		}
-		return road_jButton[road_index];
-	}
-	public  void GainControl(int player_index){
-		status_col_jLabel.setIcon(new ImageIcon(status_col));
-		JButton buf = DrawPlayer(ginfo.playerlist[player_index]);
-		map.add(buf);
-		map.setComponentZOrder(buf, 0);
-		GoToATM();
-		MapReset(ginfo.playerlist[player_index]);
-		synchronized (ginfo){	
-			try {
-				ginfo.wait();
-				this.repaint();
-				//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	}
-		MoveMsgPanel(1);
-		//gamescreen_jLabel.setIcon(new ImageIcon(draw_game_screen(ginfo.playerlist[player_index])));
-		synchronized (ginfo){	
-				try {
-					ginfo.wait();
-					this.repaint();
-					//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		}
-		if(ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand() instanceof Building){
-		    GoToBuilding(((Building)ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand()),3);
-
-		    synchronized (ginfo){	
-			try {
-				ginfo.wait();
-				this.repaint();
-				//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		    }
-		}
-	}
+	
 }

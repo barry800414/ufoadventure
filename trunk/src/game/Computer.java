@@ -18,7 +18,26 @@ public class Computer {
     	playerRound = new boolean[ginfo.players_num];
     	ResetPlayerRound();
     }
+
+    public void Run(){
 	
+	
+	
+	
+	/*
+    	Update();
+	for(int i=0;i<ginfo.players_num;i++){
+	    playerlist[i].Update();
+	    while(playerRound[i]==true){
+		
+		
+		
+	    }
+	    RoundEnd(playerlist[i]);
+	}
+	*/
+	
+    }
     public void PlayerRound(Player p){
     }
     
@@ -75,20 +94,8 @@ public class Computer {
     }
     */
     
-    /*
-    public void Run(){
-    	Update();
-	for(int i=0;i<ginfo.players_num;i++){
-	    playerlist[i].Update();
-	    while(playerRound[i]==true){
-		
-		
-		
-	    }
-	    RoundEnd(playerlist[i]);
-	}
-    }
-	*/
+    
+	
     
     public void Update(){
     	ginfo.round++;
