@@ -14,6 +14,15 @@ public class Building extends Land{
 	return floor;
     }
     
+
+    public boolean setFloor(int f){
+	if(f <= MAX_FLOOR){
+	    this.floor++;
+	    return true;
+	}
+	else return false;
+    }
+    
     public int getToll(){
 	return getLandPrice() * rate[floor] / 100;
     }
@@ -33,5 +42,6 @@ public class Building extends Land{
     public void land_trigger(GameInfo ginfo,GraphicsEngine gengine,Player p){
     	//((BuildingEvent)event).apply(ginfo,gengine,p);
     }
+
     
 }

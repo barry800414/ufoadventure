@@ -23,7 +23,7 @@ public abstract class Land extends GameObject {
     	//this.event = event ;
     }
     
-    public abstract void land_trigger(GraphicsEngine gengine,Player p);
+    public abstract void land_trigger(GameInfo ginfo, GraphicsEngine gengine,Player p);
 
     public String getName(){
     	return name;
@@ -34,5 +34,12 @@ public abstract class Land extends GameObject {
     public int getLandPrice(){
     	return land_price;
     }
-    
+
+    public boolean setOwner(Player p){
+    	if(p != null){
+    	    this.owner = p;
+    	    return true;
+    	}
+    	else return false;
+    }
 }

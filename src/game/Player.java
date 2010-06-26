@@ -38,9 +38,6 @@ public class Player extends GameObject{
     	setPicCoor();
     	
     }
-    public void Update(){
-	
-    }
     
     public int getID(){  return ID;  }
     public int getCash(){  return cash;  }

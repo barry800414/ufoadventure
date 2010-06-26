@@ -27,7 +27,7 @@ public class GG extends JFrame {
 	private JButton exit_jButton = null;
 	private JButton dice_jButton = null;
 	private JButton item_jButton[] =  new JButton[Item.MAX_ITEMS];
-	private JButton player_jButton[] = new JButton[GameInfo.MAX_PLAYER];
+	private JButton player_jButton[];
 	private JButton road_jButton[] = new JButton[GameInfo.MAX_ROAD];
 	//private Insets border = null ;
 	
@@ -67,13 +67,15 @@ public class GG extends JFrame {
 	 * @return void
 	 */
 	public void initialize() {
+	    
+	    	player_jButton = new JButton[ginfo.players_num];
+	    
+	    
 		this.setSize(WIDTH, HEIGHT);
 		this.setMaximumSize(new Dimension(WIDTH,HEIGHT));
 		this.setMinimumSize(new Dimension(WIDTH,HEIGHT));
-		//this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("NTU Monopoly");
-		//load picture
 		try{
 			test = ImageIO.read(new File("test.png"));
 			status_col = ImageIO.read(new File("status_col.png"));
@@ -97,12 +99,12 @@ public class GG extends JFrame {
 		
 	}
 	
-	private void MapReset(Player p){
+	public void MapReset(Player p){
 	    map.setBounds(GAME_SCREEN_WIDTH/2 - p.getPicCoor().x - p.getPicCoor().width/2, GAME_SCREEN_HEIGHT/2 - p.getPicCoor().y - p.getPicCoor().height/2 + 50,4000,4000);
 	    this.repaint();
 	}
 		
-	private JPanel getMap(){
+	public JPanel getMap(){
 			if(map == null){
 				map = new JPanel();
 				map.setLayout(null);
@@ -111,6 +113,11 @@ public class GG extends JFrame {
 				map.add(getBackMap());
 				for(int i=0;i<GameInfo.MAX_ROAD;i++){
 				    map.add(DrawRoad(i));
+				}
+				
+				for(int i=0;i<ginfo.players_num;i++){
+				    player_jButton[i] = DrawPlayer(ginfo.playerlist[i]);
+				    map.add(player_jButton[i]);
 				}
 				//JButton test = new JButton();
 				//test.setBounds(2250,1250,100,100);
@@ -254,15 +261,7 @@ public class GG extends JFrame {
 			dice_jButton.setContentAreaFilled(false);
 			dice_jButton.setIcon(new ImageIcon(dice_button[0]));
 			dice_jButton.setPressedIcon(new ImageIcon(dice_button[1]));
-			dice_jButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					synchronized (ginfo){
-						ginfo.notifyAll();
-						    jContentPane.repaint();
-					}
-					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
-				}
-			});
+			dice_jButton.addActionListener(new AdvActionListener(this,ginfo,null,null,null,true,1));
 		}
 		return dice_jButton ;
 	}
@@ -313,9 +312,11 @@ public class GG extends JFrame {
 	public JButton DrawPlayer(Player p){
 		if(player_jButton[p.getID()]==null){
 		    player_jButton[p.getID()] = new JButton();
+		    player_jButton[p.getID()].setIcon(new ImageIcon(p.getImage(0)));
 		}
 		    player_jButton[p.getID()].setBounds(p.getPicCoor().x,p.getPicCoor().y,p.getPicCoor().width,p.getPicCoor().height);
-		    player_jButton[p.getID()].setIcon(new ImageIcon(p.getImage(0)));
+
+		    System.out.println("111111111");
 		return player_jButton[p.getID()];
 	}
 	
@@ -329,23 +330,10 @@ public class GG extends JFrame {
 		return road_jButton[road_index];
 	}
 	public  void GainControl(int player_index){
-	    tmp_p = ginfo.playerlist[0];
-		status_col_jLabel.setIcon(new ImageIcon(status_col));
-		JButton buf = DrawPlayer(ginfo.playerlist[player_index]);
-		map.add(buf);
-		map.setComponentZOrder(buf, 0);
-		MapReset(ginfo.playerlist[player_index]);
-		synchronized (ginfo){	
-			try {
-				ginfo.wait();
-				this.repaint();
-				//BuyHouse(ginfo.playerlist[player_index], ginfo.roadlist[ginfo.playerlist[player_index].getLocation()].getLand());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	}
 		tmp=1;
+		ATM_number = 0;
+		Out_In = true;
+		
 		while(tmp !=0){
 			GoToATM();
 			synchronized (ginfo){	
@@ -387,7 +375,31 @@ public class GG extends JFrame {
 		}
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//更改: 71行、118~121行、264行
+	
+	
+	
+	
 	public int tmp;
 	public int ATM_number = 0;
 	public boolean Out_In = true;
@@ -410,6 +422,12 @@ public class GG extends JFrame {
 	private JButton savemoney_jButton = null;
 	private JButton withdrawn_jButton = null;
 	private LineBorder Border = null;
+	public void ScreemUpdate(Player p){
+	    MapReset(p);
+	    DrawPlayer(p);
+	    map.setComponentZOrder(player_jButton[p.getID()], 0);
+	    this.repaint();
+	}
 	public void GoToBuilding(Building b,int condition){
 	    JPanel buf = get_building_jPanel();
 	    JLabel buf_1 = get_buildingtxt_jLabel(b, condition);
@@ -442,8 +460,8 @@ public class GG extends JFrame {
 			building_jPanel.add(get_no_jButton());
 			get_yes_jButton().setLocation(25, 100);
 			get_no_jButton().setLocation(175, 100);
-			get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
-			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
+			get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,1));
+			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,2));
 		    }
 		    else if(condition == 2){
 			as1 = new AttributedString("   "+b.getName()+"  "+b.getFloor()+" 層");
@@ -452,15 +470,15 @@ public class GG extends JFrame {
 			building_jPanel.add(get_no_jButton());
 			get_yes_jButton().setLocation(25, 100);
 			get_no_jButton().setLocation(175, 100);
-			get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
-			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
+			get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,1));
+			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,2));
 		    }
 		    else{
 			as1 = new AttributedString(b.getName()+"   擁有者 "+b.getOwner()+" ");
 			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
 			building_jPanel.add(get_ok_jButton());
 			get_ok_jButton().setLocation(100, 100);
-			get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,0));
+			get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,1));
 		    }
 		
 		    as1.addAttribute(TextAttribute.FONT, newfont);
@@ -477,15 +495,6 @@ public class GG extends JFrame {
 		    g.drawString(as2.getIterator(), 14, 58);
 		    buildingtxt_jLabel.setIcon(new ImageIcon(buf));
 		return buildingtxt_jLabel;
-	}
-	public void tmp(){
-
-	    JPanel buf = new JPanel();
-	    JLabel buf_1 = new JLabel();
-	    buf.add(buf_1);
-	    jContentPane.add(buf);
-	    jContentPane.setComponentZOrder(buf, 0);
-	    this.repaint();
 	}
 	public void MoveMsgPanel(int move){
 
@@ -580,7 +589,7 @@ public class GG extends JFrame {
 		    ATMtxt_jLabel.setBounds(new Rectangle(0, 0, 280, 350));
 		    ATMtxt_jLabel.setBorder(getBoarder());
 		}
-		    Font newfont = new Font("標楷體",Font.BOLD,30);
+		    Font newfont = new Font("標楷體",Font.BOLD,28);
 		    AttributedString as;
 		    if(Out_In == true)
 			as = new AttributedString("提款 : " + ATM_number);
@@ -593,7 +602,7 @@ public class GG extends JFrame {
 		    Graphics2D g = (Graphics2D)buf.createGraphics();
 		    g.setColor(new Color(255,253,183));
 		    g.fillRect(0, 0, 280, 350);
-		    g.drawString(as.getIterator(), 30, 60);
+		    g.drawString(as.getIterator(), 22, 60);
 		    ATMtxt_jLabel.setIcon(new ImageIcon(buf));
 		return ATMtxt_jLabel;
 	}
@@ -864,10 +873,6 @@ public class GG extends JFrame {
 	    }
 	    return withdrawn_jButton;
 	}
-	
-	
-	
-	
 	
 	
 	private LineBorder getBoarder(){
