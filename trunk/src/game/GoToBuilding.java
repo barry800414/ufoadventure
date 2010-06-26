@@ -19,11 +19,12 @@ public class GoToBuilding extends Event{
     	    }
     	    if(gengine.tmp == 1){
     		p.setCash(p.getCash() - b.getLandPrice());
-    		b.setOwner(owner);
+    		b.setOwner(p);
     	    }
     	}
     	else if(owner==p){
 
+    	    gengine.GoToBuilding(b, 2);
     	    synchronized (ginfo){	
     		try {
     		    ginfo.wait();
@@ -32,7 +33,6 @@ public class GoToBuilding extends Event{
     		    e.printStackTrace();
     		}
     	    }
-    	    gengine.GoToBuilding(b, 2);
     	    if(gengine.tmp == 1 && b.getFloor() <= Building.MAX_FLOOR){
     		p.setCash(p.getCash() - (int)(b.getLandPrice() * 0.2));
     		b.setFloor(b.getFloor() + 1);
@@ -41,6 +41,7 @@ public class GoToBuilding extends Event{
     	}
     	else{
 
+		gengine.GoToBuilding(b, 3);
 
     	    synchronized (ginfo){	
     		try {
@@ -50,7 +51,6 @@ public class GoToBuilding extends Event{
     		    e.printStackTrace();
     		}
     	    }
-		gengine.GoToBuilding(b, 3);
     		p.setCash(p.getCash() - b.getToll());
     		owner.setDeposit(owner.getDeposit() + b.getToll());
     	}
@@ -58,8 +58,7 @@ public class GoToBuilding extends Event{
     }
 
     @Override
-    public void apply(GameInfo ginfo, GraphicsEngine gengine, Computer com,
-	    Player p) {
+    public void apply(GameInfo ginfo, GraphicsEngine gengine, Computer com, Player p) {
 	// TODO Auto-generated method stub
 	
     }
