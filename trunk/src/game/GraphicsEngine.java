@@ -2,6 +2,7 @@ package game;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
 import java.awt.font.TextAttribute;
 import java.awt.image.*;
 import java.io.File;
@@ -30,12 +31,20 @@ public class GraphicsEngine extends JFrame {
 	private JPanel top_col_panel = null;
 	private JPanel right_col_panel = null;
 	private JPanel buttom_panel = null;
+	private JPanel building_msg_panel = null;
+	private JPanel lab_msg_panel = null;
+	//private JPanel move_jPanel = null;
+	private JPanel atm_jpanel = null;
+	
 	
 	private JLabel calendar_label = null;
 	private JLabel ntu_label = null;
 	private JLabel status_col_label = null;
 	private JLabel map_label = null;
-	
+	private JLabel building_msg_label = null;
+	private JLabel lab_msg_label = null;
+	//private JLabel movetxt_jLabel = null;
+	//private JLabel ATMtxt_jLabel = null;
 	
 	private JButton item_col_button = null;
 	private JButton exit_button = null;
@@ -44,6 +53,9 @@ public class GraphicsEngine extends JFrame {
 	private JButton road_button[] = null; 
 	private JButton land_button[] = null ;
 	private JButton item_button[] = null ;
+	private JButton yes_button = null;
+	private JButton no_button = null;
+	private JButton ok_button = null;
 	
 	
 	private BufferedImage calendar_image = null; 
@@ -63,9 +75,10 @@ public class GraphicsEngine extends JFrame {
 	
 	private Color orange = new Color(255,154,39);
 	private Color yellow = new Color(255,253,183);
-	private Font biakai = new Font("標楷體",Font.BOLD,22);
-	private Font biakai_small = new Font("標楷體",Font.BOLD,16);
-	
+	private Font biakai_24 = new Font("標楷體",Font.BOLD,24);
+	private Font biakai_22 = new Font("標楷體",Font.BOLD,22);
+	private Font biakai_18 = new Font("標楷體",Font.BOLD,18);
+	private Font biakai_16 = new Font("標楷體",Font.BOLD,16);
 	
 	
 	private GameInfo ginfo = null;
@@ -98,7 +111,9 @@ public class GraphicsEngine extends JFrame {
 		
 	}
 	
-	
+	public JPanel get_Map_Panel(){
+		return map_panel;
+	}
 	
 	/*
 	 * load all picture
@@ -264,7 +279,7 @@ public class GraphicsEngine extends JFrame {
 		    
 		    
 		    AttributedString as = new AttributedString(" "+ginfo.year+" / "+ginfo.month + " / " + ginfo.day);
-		    as.addAttribute(TextAttribute.FONT, biakai);
+		    as.addAttribute(TextAttribute.FONT, biakai_22);
 		    as.addAttribute(TextAttribute.FOREGROUND,Color.BLACK);
 		    as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
 		    g.drawString(as.getIterator(), 0, 33);
@@ -371,10 +386,10 @@ public class GraphicsEngine extends JFrame {
 		
 		for(int i=0;i<str.length;i++){
 			AttributedString as = new AttributedString(str[i]);
-			as.addAttribute(TextAttribute.FONT,biakai);
+			as.addAttribute(TextAttribute.FONT,biakai_22);
 			as.addAttribute(TextAttribute.FOREGROUND,orange);
 			if(i==6)
-				as.addAttribute(TextAttribute.FONT,biakai_small);
+				as.addAttribute(TextAttribute.FONT,biakai_16);
 			g.drawString(as.getIterator(), 20 ,180 + 30*i);
 		}
 		return status_col_label_image;
@@ -457,5 +472,256 @@ public class GraphicsEngine extends JFrame {
 		
 	}
 	
+	//update the screen each turn 
+	public void Screen_Update(int player_index){
+	    Focus_Player(player_index);
+	    this.repaint();
+	}
 	
+	
+	
+	public void Show_Building_Msg(Building origin,Player target){
+		Construct_Building_Msg_Panel(origin,target);
+	    map_panel.add(building_msg_panel);
+	    map_panel.setComponentZOrder(building_msg_panel, 0);
+	    //map_panel.repaint();
+	    synchronized (ginfo){
+	    	ginfo.notifyAll();
+	    }
+	}
+	private void Construct_Building_Msg_Panel(Building b, Player target){
+		if(building_msg_panel == null){
+	    	building_msg_panel = new JPanel();
+	    	building_msg_panel.setLayout(null);
+	    	building_msg_panel.setBounds(new Rectangle(240, 370, 300, 160));
+	    }
+	    building_msg_panel.removeAll();
+	    if(b.getOwner() == null){
+	    	building_msg_panel.add(get_Building_Msg_Label(b,1));
+	    	get_Yes_Button().setLocation(25, 100);
+			get_No_Button().setLocation(175, 100);
+	    	building_msg_panel.add(get_Yes_Button());
+			building_msg_panel.add(get_No_Button());
+	    }
+	    else if(b.getOwner() == target){
+	    	building_msg_panel.add(get_Building_Msg_Label(b,2));
+	    	get_Yes_Button().setLocation(25,100);
+	    	get_No_Button().setLocation(175,100);
+	    	building_msg_panel.add(get_Yes_Button());
+	    	building_msg_panel.add(get_No_Button());
+	    }
+	    else{
+	    	building_msg_panel.add(get_Building_Msg_Label(b,3));
+	    	ok_button.setLocation(100,100);
+	    	building_msg_panel.add(ok_button);
+	    }
+	}
+	private JLabel get_Building_Msg_Label(Building b, int condition){
+		AttributedString as1,as2;
+		BufferedImage buf = new BufferedImage(300, 160, BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g = (Graphics2D)buf.createGraphics();
+		if(building_msg_label == null){
+		    building_msg_label = new JLabel();
+		    building_msg_label.setBounds(new Rectangle(0, 0, 300, 160));
+		    //building_msg_label.setBorder(getBoarder());
+		}
+		if(condition == 1){                 //vacant land
+			as1 = new AttributedString(b.getName()+"  價格:"+b.getLandPrice());
+			as2 = new AttributedString("   這是無人空地  要買嗎?");
+			//get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,1));
+			//get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,2));
+		}
+		else if(condition == 2){            //the building's owner
+			as1 = new AttributedString("   "+b.getName()+"  "+b.getFloor()+" 層");
+			as2 = new AttributedString("  升級費 "+(int)(b.getLandPrice()*0.1)+"  要升級嗎?");
+			//get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,1));
+			//get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,2));
+		}
+		else{                               //belongs to other player
+			as1 = new AttributedString(b.getName()+"   擁有者 :  遊戲者"+(b.getOwner().getID()+1)+" ");
+			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
+			//get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,1));
+		}
+		as1.addAttribute(TextAttribute.FONT, biakai_18);
+		as1.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		as1.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		as2.addAttribute(TextAttribute.FONT, biakai_18);
+		as2.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		as2.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		
+		g.setColor(yellow);
+		g.fillRect(0, 0, 300, 160);
+		g.drawString(as1.getIterator(), 14, 25);
+		g.drawString(as2.getIterator(), 14, 58);
+		building_msg_label.setIcon(new ImageIcon(buf));
+			
+		return building_msg_label;
+	}
+	
+	public void Show_Lab_Msg(Lab lab,Player target){
+	    Construct_Lab_Msg_Panel(lab,target);
+		map_panel.add(lab_msg_panel);
+	    map_panel.setComponentZOrder(lab_msg_panel, 0);
+	    //this.repaint();
+	    synchronized(ginfo){
+	    	try {
+				ginfo.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	    }
+	}
+	
+	private void Construct_Lab_Msg_Panel(Lab lab , Player target){
+	    if(lab_msg_panel == null){
+	    	lab_msg_panel = new JPanel();
+	    	lab_msg_panel.setLayout(null);
+	    	lab_msg_panel.setBounds(new Rectangle(240, 370, 300, 160));
+	    }
+	    if(lab.getOwner() == null){
+	    	lab_msg_panel.add(get_Lab_Msg_Label(lab,1));
+	    	get_Yes_Button().setLocation(25, 100);
+			get_No_Button().setLocation(175, 100);
+	    	lab_msg_panel.add(get_Yes_Button());
+			lab_msg_panel.add(get_No_Button());
+			//get_Yes_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,1));
+			//get_No_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,2));
+	    }
+	    else if(lab.getOwner() == target){
+	    	lab_msg_panel.add(get_Lab_Msg_Label(lab,2));
+	    	get_Yes_Button().setLocation(25, 100);
+			get_No_Button().setLocation(175, 100);
+	    	lab_msg_panel.add(get_Yes_Button());
+			lab_msg_panel.add(get_No_Button());
+			//get_Yes_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,1));
+			//get_No_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,2));
+	    }
+	    else{
+	    	lab_msg_panel.add(get_Lab_Msg_Label(lab,3));
+	    	get_Ok_Button().setLocation(100, 100);
+	    	lab_msg_panel.add(ok_button);
+			//get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,1));
+	    }
+	    lab_msg_panel.removeAll();
+	}
+	
+	private JLabel get_Lab_Msg_Label(Lab lab, int condition){
+		AttributedString as1,as2;
+		BufferedImage buf = new BufferedImage(300, 160, BufferedImage.TYPE_3BYTE_BGR);
+	    Graphics2D g = (Graphics2D)buf.createGraphics();
+		if(lab_msg_label == null){
+		    lab_msg_label = new JLabel();
+		    lab_msg_label.setBounds(new Rectangle(0, 0, 300, 160));
+		    //lab_msg_label.setBorder(getBoarder());
+		}
+		if(condition == 1){
+			as1 = new AttributedString(lab.getName()+"  價格:"+lab.getLandPrice());
+			as2 = new AttributedString("這是無人研究所空地  要買嗎?");
+		}
+		else if(condition == 2){
+			as1 = new AttributedString("   "+lab.getName()+"  "+lab.getFloor()+" 層");
+			as2 = new AttributedString("  升級費 "+(int)(lab.getLandPrice()*0.1)+"  要升級嗎?");
+		}
+		else{
+			as1 = new AttributedString(lab.getName()+"   研發物  : "+lab.getResearch()+" ");
+			as2 = new AttributedString("     要研發嗎?");
+		}
+		as1.addAttribute(TextAttribute.FONT, biakai_18);
+		as1.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		as1.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		as2.addAttribute(TextAttribute.FONT, biakai_18);
+		as2.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		as2.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    
+		g.setColor(yellow);
+		g.fillRect(0, 0, 300, 160);
+		g.drawString(as1.getIterator(), 14, 25);
+		g.drawString(as2.getIterator(), 14, 58);
+		lab_msg_label.setIcon(new ImageIcon(buf));
+		
+		return lab_msg_label;
+	}
+	
+	private JButton get_No_Button(){
+		if(no_button == null){
+			no_button = new JButton();
+			no_button.setSize(100, 50);
+			AttributedString as = new AttributedString("  不好   ");
+			
+			as.addAttribute(TextAttribute.FONT, biakai_22);
+			as.addAttribute(TextAttribute.FOREGROUND,orange);
+			as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+			BufferedImage buf1 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+			Graphics2D g = (Graphics2D)buf1.createGraphics();
+			g.setColor(yellow);
+			g.fillRect(0, 0, 100, 50);
+			g.drawString(as.getIterator(), 5, 30);
+			no_button.setIcon(new ImageIcon(buf1));
+			
+			as.addAttribute(TextAttribute.FOREGROUND,yellow);
+			BufferedImage buf2 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+			g = (Graphics2D)buf2.createGraphics();
+			g.setColor(orange);
+			g.fillRect(0, 0, 100, 50);
+			g.drawString(as.getIterator(), 5, 30);
+			no_button.setPressedIcon(new ImageIcon(buf2));
+			//no_button.setBorder(getBoarder());
+		}
+		return no_button;
+	}
+	private JButton get_Yes_Button(){
+		 if(yes_button == null){
+			yes_button = new JButton();
+			yes_button.setSize(100, 50);
+			Font newfont = new Font("標楷體",Font.BOLD,22);
+			AttributedString as = new AttributedString("   好   ");
+			as.addAttribute(TextAttribute.FONT, newfont);
+			as.addAttribute(TextAttribute.FOREGROUND,orange);
+			as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+				
+			BufferedImage buf1 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+			Graphics2D g1 = (Graphics2D)buf1.createGraphics();
+			g1.setColor(yellow);
+			g1.fillRect(0, 0, 100, 50);
+			g1.drawString(as.getIterator(), 4, 30);
+			yes_button.setIcon(new ImageIcon(buf1));
+				
+			as.addAttribute(TextAttribute.FOREGROUND,yellow);
+			BufferedImage buf2 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+			Graphics2D g2 = (Graphics2D)buf2.createGraphics();
+			g2.setColor(orange);
+			g2.fillRect(0, 0, 100, 50);
+			g2.drawString(as.getIterator(), 4, 30);
+			yes_button.setPressedIcon(new ImageIcon(buf2));
+			//yes_button.setBorder(getBoarder());
+			}
+		 return yes_button;
+	}
+	private JButton get_Ok_Button(){
+		if( ok_button == null){
+			ok_button = new JButton();
+			ok_button.setSize(100, 50);
+			
+			AttributedString as = new AttributedString("OK");
+			as.addAttribute(TextAttribute.FONT, biakai_24);
+			as.addAttribute(TextAttribute.FOREGROUND,orange);
+			as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+			BufferedImage buf = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+			Graphics2D g = (Graphics2D)buf.createGraphics();
+			g.setColor(yellow);
+			g.fillRect(0, 0, 100, 50);
+			g.drawString(as.getIterator(), 35, 30);
+			ok_button.setIcon(new ImageIcon(buf));
+			
+			as.addAttribute(TextAttribute.FOREGROUND,yellow);
+			BufferedImage buf2 = new BufferedImage(100, 50, BufferedImage.TYPE_3BYTE_BGR);
+			g = (Graphics2D)buf2.createGraphics();
+			g.setColor(orange);
+			g.fillRect(0, 0, 100, 50);
+			g.drawString(as.getIterator(), 35, 30);
+			ok_button.setPressedIcon(new ImageIcon(buf2));
+			//get_Ok_Button().setBorder(getBoarder());
+		}
+		    return ok_button;
+	}
 }
