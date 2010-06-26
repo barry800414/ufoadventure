@@ -9,7 +9,7 @@ public class Computer {
     private GG gengine;
     private Player[] playerlist;
     public boolean[] playerRound;
-    public int playercontrol;
+    public Player playercontrol;
     public int step = 0;
     public Computer(GameInfo info, GG engine){
     	ginfo = info ;
@@ -19,23 +19,36 @@ public class Computer {
     	ResetPlayerRound();
     }
 
-    public void Run(){
+    public boolean Run(){
 	
-	
-	
-	
-	/*
     	Update();
 	for(int i=0;i<ginfo.players_num;i++){
-	    playerlist[i].Update();
+	    playercontrol = playerlist[i];
+
+	    System.out.println(playercontrol.getCash() + "    gggggg    " + playercontrol.getDeposit());
+	    gengine.ScreemUpdate(playercontrol);
+	    PlayerUpdate(playercontrol);
 	    while(playerRound[i]==true){
-		
+		synchronized (ginfo){	
+		    try {
+			ginfo.wait();
+			gengine.ScreemUpdate(playercontrol);
+		    } catch (InterruptedException e) {
+			e.printStackTrace();
+		    }
+		}
+		//骰骰子
+		if(gengine.tmp == 1){
+		    MovePlayer(playerlist[i]);
+		    break;
+		}
 		
 		
 	    }
-	    RoundEnd(playerlist[i]);
+	    //RoundEnd(playerlist[i]);
 	}
-	*/
+	return true;
+	
 	
     }
     public void PlayerRound(Player p){
@@ -43,33 +56,45 @@ public class Computer {
     
     /*
      * move the player by steps
-     
+     */
     public void MovePlayer(Player p){
     	Random rnd = new Random();
     	step = 0;
     	for(int i=0;i<p.getDicenum();i++) step = step + rnd.nextInt(6) + 1;
-    	displaySteps();
+    	displaySteps(step);
     	for(int i=step;i>0;i--){
-    	    for(int j=0;j<ginfo.players_num;j++){
-    		
-    		if(j == p.getID()){
-    		    
-    		}
-    		
-    		else if(ginfo.playerlist[j].getLocation() == p.getLocation())
-    		    if(ginfo.playerlist[j].getState()[0] != p.getState()[0]){
-    			ginfo.playerlist[j].setState(0,!ginfo.playerlist[j].getState()[0]);
-    			p.setState(0,!p.getState()[0]);
-    		    }
-    		
-    	    }
-    	    ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
+    	    //ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
     	}
+    	p.setLocation(p.getLocation() + step);
+    	p.setPicCoor();
+	gengine.ScreemUpdate(p);
+    	//ginfo.landlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
+	if(ginfo.roadlist[p.getLocation()].getLand() instanceof Building){
+	    GoToBuilding a = new GoToBuilding();
+	    a.apply(ginfo, gengine, this, p);
+	    synchronized (ginfo){	
+		try {
+		    ginfo.wait();
+		    gengine.ScreemUpdate(playercontrol);
+		} catch (InterruptedException e) {
+		    e.printStackTrace();
+		}
+	    }
+	}
+    	
     }
-    */
     
-    public void displaySteps(){
-	
+    
+    public void displaySteps(int move){
+	gengine.MoveMsgPanel(move);
+	synchronized (ginfo){	
+	    try {
+		ginfo.wait();
+		gengine.ScreemUpdate(playercontrol);
+	    } catch (InterruptedException e) {
+		e.printStackTrace();
+	    }
+	}
     }
     
     /*
@@ -101,6 +126,9 @@ public class Computer {
     	ginfo.round++;
     	AddDate();
     	ResetPlayerRound();
+    }
+    public void PlayerUpdate(Player p){
+	gengine.MapReset(p);
     }
     public void AddDate(){
     	ginfo.day++;

@@ -8,19 +8,12 @@ public class Demo {
     	GG gengine = new GG(ginfo);
     	GameMainMenu menu = new GameMainMenu(ginfo);
     	menu.Display();
-    	System.out.println("test");
     	ginfo.Game_Init();
     	gengine.initialize();
     	gengine.setVisible(true);
         Computer gcom = new Computer(ginfo, gengine);
-    	int[] count = {0,0,0,0};
     	
-    	while(true){
-    		for(int i=0 ;i < ginfo.players_num ;i++){
-    			ginfo.playerlist[i].setLocation(count[i]++);
-    			gengine.GainControl(i);
-    		}
-    	}
+    	while(gcom.Run());
     	
         
         
