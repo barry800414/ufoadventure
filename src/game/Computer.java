@@ -59,7 +59,8 @@ public class Computer {
     public void MovePlayer(Player p){
     	Random rnd = new Random();
     	step = 0;
-    	for(int i=0;i<p.getDicenum();i++) step = step + rnd.nextInt(6) + 1;
+    	//for(int i=0;i<p.getDicenum();i++) step = step + rnd.nextInt(6) + 1;
+    	step = 1;
     	displaySteps(step);
     	for(int i=step;i>0;i--){
     	    //ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);

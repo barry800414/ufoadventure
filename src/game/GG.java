@@ -102,7 +102,6 @@ public class GG extends JFrame {
 	public void MapReset(Player p){
 	    map.setBounds(GAME_SCREEN_WIDTH/2 - p.getPicCoor().x - p.getPicCoor().width/2, GAME_SCREEN_HEIGHT/2 - p.getPicCoor().y - p.getPicCoor().height/2 + 50,4000,4000);
 	    this.repaint();
-	    System.out.println("hhhhh" + p.getID());
 	}
 		
 	public JPanel getMap(){
@@ -317,7 +316,6 @@ public class GG extends JFrame {
 		}
 		    player_jButton[p.getID()].setBounds(p.getPicCoor().x,p.getPicCoor().y,p.getPicCoor().width,p.getPicCoor().height);
 
-		    System.out.println("111111111");
 		return player_jButton[p.getID()];
 	}
 	
@@ -392,6 +390,7 @@ public class GG extends JFrame {
 	
 	
 	
+	
 
 	
 	//更改: 71行、118~121行、264行
@@ -444,6 +443,7 @@ public class GG extends JFrame {
 		building_jPanel.setLayout(null);
 		building_jPanel.setBounds(new Rectangle(240, 370, 300, 160));
 	    }
+	    for(int i=0;i<building_jPanel.getComponents().length;i++) building_jPanel.remove(building_jPanel.getComponent(0));
 	    return building_jPanel;
 	}
 	private JLabel get_buildingtxt_jLabel(Building b, int condition){
@@ -475,7 +475,7 @@ public class GG extends JFrame {
 			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,building_jPanel,2));
 		    }
 		    else{
-			as1 = new AttributedString(b.getName()+"   擁有者 "+b.getOwner()+" ");
+			as1 = new AttributedString(b.getName()+"   擁有者 :  遊戲者"+(b.getOwner().getID()+1)+" ");
 			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
 			building_jPanel.add(get_ok_jButton());
 			get_ok_jButton().setLocation(100, 100);
@@ -518,6 +518,7 @@ public class GG extends JFrame {
 		lab_jPanel.setLayout(null);
 		lab_jPanel.setBounds(new Rectangle(240, 370, 300, 160));
 	    }
+	    for(int i=0;i<lab_jPanel.getComponents().length;i++) lab_jPanel.remove(lab_jPanel.getComponent(i));
 	    return lab_jPanel;
 	}
 	private JLabel get_labtxt_jLabel(Lab l, int condition){
@@ -580,8 +581,6 @@ public class GG extends JFrame {
 	public void MoveMsgPanel(int move){
 
 	    JPanel buf = get_move_jPanel(move);
-	    JLabel buf_1 = get_movetxt_jLabel(move);
-	    buf.add(buf_1);
 	    jContentPane.add(buf);
 	    jContentPane.setComponentZOrder(buf, 0);
 	    this.repaint();
@@ -592,8 +591,10 @@ public class GG extends JFrame {
 		move_jPanel = new JPanel();
 		move_jPanel.setLayout(null);
 		move_jPanel.setBounds(new Rectangle(260, 370, 260, 160));
+		move_jPanel.add(get_movetxt_jLabel(move));
 	    }
 	    move_jPanel.add(get_ok_jButton());
+	    move_jPanel.setComponentZOrder(get_ok_jButton(), 0);
 	    get_ok_jButton().setLocation(80, 100);
 	    get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,move_jPanel,0));
 	    return move_jPanel;
