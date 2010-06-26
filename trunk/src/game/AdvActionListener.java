@@ -55,7 +55,7 @@ public class AdvActionListener implements ActionListener{
 	synchronized (o){
 	    o.notifyAll();
 	    gengine.repaint();
-	    }
+	}
 	    
 	
     }

@@ -102,6 +102,7 @@ public class GG extends JFrame {
 	public void MapReset(Player p){
 	    map.setBounds(GAME_SCREEN_WIDTH/2 - p.getPicCoor().x - p.getPicCoor().width/2, GAME_SCREEN_HEIGHT/2 - p.getPicCoor().y - p.getPicCoor().height/2 + 50,4000,4000);
 	    this.repaint();
+	    System.out.println("hhhhh" + p.getID());
 	}
 		
 	public JPanel getMap(){
@@ -391,9 +392,7 @@ public class GG extends JFrame {
 	
 	
 	
-	
-	
-	
+
 	
 	//更改: 71行、118~121行、264行
 	
@@ -407,9 +406,11 @@ public class GG extends JFrame {
 	Road tmp_r;
 	Land tmp_l;
 	private JPanel building_jPanel = null;
+	private JPanel lab_jPanel = null;
 	private JPanel move_jPanel = null;
 	private JPanel ATM_jPanel = null;
 	private JLabel buildingtxt_jLabel = null;
+	private JLabel labtxt_jLabel = null;
 	private JLabel movetxt_jLabel = null;
 	private JLabel ATMtxt_jLabel = null;
 	private JButton yes_jButton = null;
@@ -496,6 +497,86 @@ public class GG extends JFrame {
 		    buildingtxt_jLabel.setIcon(new ImageIcon(buf));
 		return buildingtxt_jLabel;
 	}
+	
+	
+	
+	
+	
+	
+	public void GoToLab(Lab l,int condition){
+	    JPanel buf = get_lab_jPanel();
+	    JLabel buf_1 = get_labtxt_jLabel(l, condition);
+	    buf.add(buf_1);
+	    jContentPane.add(buf);
+	    jContentPane.setComponentZOrder(buf, 0);
+	    this.repaint();
+	}
+	
+	private JPanel get_lab_jPanel(){
+	    if(lab_jPanel == null){
+		lab_jPanel = new JPanel();
+		lab_jPanel.setLayout(null);
+		lab_jPanel.setBounds(new Rectangle(240, 370, 300, 160));
+	    }
+	    return lab_jPanel;
+	}
+	private JLabel get_labtxt_jLabel(Lab l, int condition){
+		if(labtxt_jLabel == null){
+		    labtxt_jLabel = new JLabel();
+		    labtxt_jLabel.setBounds(new Rectangle(0, 0, 300, 160));
+		    labtxt_jLabel.setBorder(getBoarder());
+		}
+		    Font newfont = new Font("標楷體",Font.BOLD,18);
+		    AttributedString as1,as2;
+		    if(condition == 1){
+			as1 = new AttributedString(l.getName()+"  價格:"+l.getLandPrice());
+			as2 = new AttributedString("這是無人研究所空地  要買嗎?");
+			lab_jPanel.add(get_yes_jButton());
+			lab_jPanel.add(get_no_jButton());
+			get_yes_jButton().setLocation(25, 100);
+			get_no_jButton().setLocation(175, 100);
+			get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,lab_jPanel,1));
+			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,lab_jPanel,2));
+		    }
+		    else if(condition == 2){
+			as1 = new AttributedString("   "+l.getName()+"  "+l.getFloor()+" 層");
+			as2 = new AttributedString("  升級費 "+(int)(l.getLandPrice()*0.1)+"  要升級嗎?");
+			lab_jPanel.add(get_yes_jButton());
+			lab_jPanel.add(get_no_jButton());
+			get_yes_jButton().setLocation(25, 100);
+			get_no_jButton().setLocation(175, 100);
+			get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,lab_jPanel,1));
+			get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,lab_jPanel,2));
+		    }
+		    else{
+			as1 = new AttributedString(l.getName()+"   研發物  : "+l.getResearch()+" ");
+			as2 = new AttributedString("     要研發嗎?");
+			lab_jPanel.add(get_ok_jButton());
+			get_ok_jButton().setLocation(100, 100);
+			get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,jContentPane,lab_jPanel,1));
+		    }
+		
+		    as1.addAttribute(TextAttribute.FONT, newfont);
+		    as1.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		    as1.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    as2.addAttribute(TextAttribute.FONT, newfont);
+		    as2.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		    as2.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		    BufferedImage buf = new BufferedImage(300, 160, BufferedImage.TYPE_3BYTE_BGR);
+		    Graphics2D g = (Graphics2D)buf.createGraphics();
+		    g.setColor(new Color(255,253,183));
+		    g.fillRect(0, 0, 300, 160);
+		    g.drawString(as1.getIterator(), 14, 25);
+		    g.drawString(as2.getIterator(), 14, 58);
+		    labtxt_jLabel.setIcon(new ImageIcon(buf));
+		return labtxt_jLabel;
+	}
+	
+	
+	
+	
+	
+	
 	public void MoveMsgPanel(int move){
 
 	    JPanel buf = get_move_jPanel(move);

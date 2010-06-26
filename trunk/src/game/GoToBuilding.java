@@ -8,13 +8,30 @@ public class GoToBuilding extends Event{
 	
     	if(owner==null){
     	    gengine.GoToBuilding(b, 1);
+
+    	    synchronized (ginfo){	
+    		try {
+    		    ginfo.wait();
+    		    gengine.ScreemUpdate(p);
+    		} catch (InterruptedException e) {
+    		    e.printStackTrace();
+    		}
+    	    }
     	    if(gengine.tmp == 1){
     		p.setCash(p.getCash() - b.getLandPrice());
     		b.setOwner(owner);
-    		System.out.println(p.getCash() + "    kkkkkkkkk    " + b.getLandPrice());
     	    }
     	}
     	else if(owner==p){
+
+    	    synchronized (ginfo){	
+    		try {
+    		    ginfo.wait();
+    		    gengine.ScreemUpdate(p);
+    		} catch (InterruptedException e) {
+    		    e.printStackTrace();
+    		}
+    	    }
     	    gengine.GoToBuilding(b, 2);
     	    if(gengine.tmp == 1 && b.getFloor() <= Building.MAX_FLOOR){
     		p.setCash(p.getCash() - (int)(b.getLandPrice() * 0.2));
@@ -23,11 +40,21 @@ public class GoToBuilding extends Event{
     	    
     	}
     	else{
-    	    
+
+
+    	    synchronized (ginfo){	
+    		try {
+    		    ginfo.wait();
+    		    gengine.ScreemUpdate(p);
+    		} catch (InterruptedException e) {
+    		    e.printStackTrace();
+    		}
+    	    }
 		gengine.GoToBuilding(b, 3);
     		p.setCash(p.getCash() - b.getToll());
     		owner.setDeposit(owner.getDeposit() + b.getToll());
     	}
+
     }
 
     @Override

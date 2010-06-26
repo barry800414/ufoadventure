@@ -25,7 +25,6 @@ public class Computer {
 	for(int i=0;i<ginfo.players_num;i++){
 	    playercontrol = playerlist[i];
 
-	    System.out.println(playercontrol.getCash() + "    gggggg    " + playercontrol.getDeposit());
 	    gengine.ScreemUpdate(playercontrol);
 	    PlayerUpdate(playercontrol);
 	    while(playerRound[i]==true){
@@ -72,6 +71,19 @@ public class Computer {
 	if(ginfo.roadlist[p.getLocation()].getLand() instanceof Building){
 	    GoToBuilding a = new GoToBuilding();
 	    a.apply(ginfo, gengine, this, p);
+	}
+
+	else if(ginfo.roadlist[p.getLocation()].getLand() instanceof Lab){
+	    GoToLab a = new GoToLab();
+	    a.apply(ginfo, gengine, this, p);
+	}
+    	
+    }
+    
+    
+    public void displaySteps(int move){
+	gengine.MoveMsgPanel(move);
+
 	    synchronized (ginfo){	
 		try {
 		    ginfo.wait();
@@ -80,21 +92,6 @@ public class Computer {
 		    e.printStackTrace();
 		}
 	    }
-	}
-    	
-    }
-    
-    
-    public void displaySteps(int move){
-	gengine.MoveMsgPanel(move);
-	synchronized (ginfo){	
-	    try {
-		ginfo.wait();
-		gengine.ScreemUpdate(playercontrol);
-	    } catch (InterruptedException e) {
-		e.printStackTrace();
-	    }
-	}
     }
     
     /*
