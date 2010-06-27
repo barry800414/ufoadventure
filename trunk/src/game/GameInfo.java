@@ -33,6 +33,12 @@ public class GameInfo {
     public Event[] eventlist;
     public Land[] landlist;
     
+    private int control_state;
+    /*control_state is the bridge between GraphicsEngine & Computer
+     * control_state:   0 Throw the dice
+     * 					1 Use Item
+     * 					2  
+     */
     
     public GameInfo(){
     	round=1;
@@ -50,11 +56,18 @@ public class GameInfo {
     	*/
     }
     public void Game_Init(){
-    	item_init("itemlist.txt");
-    	land_init("landlist.txt");
-    	road_init("roadlist.txt");
-    	player_init();
+    	Item_Init("itemlist.txt");
+    	Land_Init("landlist.txt");
+    	Road_Init("roadlist.txt");
+    	Player_Init();
     	
+    }
+    
+    public int get_Control_State(){
+    	return control_state;
+    }
+    public void set_Control_State(int new_state){
+    	control_state = new_state;
     }
     
     /*
@@ -89,7 +102,7 @@ public class GameInfo {
     }
     */
     
-    private boolean item_init(String filename){
+    private boolean Item_Init(String filename){
     	
     	try {
     		Scanner input = new Scanner(new FileInputStream(filename));
@@ -112,7 +125,7 @@ public class GameInfo {
     	}
     	return true;
     }
-    private boolean road_init(String filename){
+    private boolean Road_Init(String filename){
     	try {
     		Scanner input = new Scanner(new FileInputStream(filename));
     		int num ,index ;
@@ -145,7 +158,7 @@ public class GameInfo {
     	}
     	return true;
     }
-    private boolean land_init(String filename){
+    private boolean Land_Init(String filename){
     	try {
     		Scanner input = new Scanner(new FileInputStream(filename));
     		int num ,type ,price,item_index;
@@ -193,21 +206,19 @@ public class GameInfo {
     	return true;
     }
     
-    private void player_init(){
-	
-	String[][] b_pic_filename = new String[3][1];
-	for(int i=0;i<b_pic_filename.length;i++){
-	    b_pic_filename[i][0] = "Player"+i+".png";
-	}
-	Point coor = new Point();
-	coor.x = 13;
-	coor.y = 5;
-	Rectangle pic = new Rectangle();
-	pic.height = 100;
-	pic.width = 100;
-	pic.x = 2250;
-	pic.y = 1250;
-	
+    private void Player_Init(){
+    	String[][] b_pic_filename = new String[3][1];
+    	for(int i=0;i<b_pic_filename.length;i++){
+    		b_pic_filename[i][0] = "Player"+i+".png";
+    	}
+    	Point coor = new Point();
+    	coor.x = 13;
+    	coor.y = 5;
+		Rectangle pic = new Rectangle();
+		pic.height = 100;
+		pic.width = 100;
+		pic.x = 2250;
+		pic.y = 1250;
     	playerlist = new Player[players_num];
     	for(int i=0;i<players_num;i++) {
     	    playerlist[i] = new Player(this,i,"Player " + (i+1),init_cash,init_deposit,1,init_point,0,coor,pic,b_pic_filename[i]);

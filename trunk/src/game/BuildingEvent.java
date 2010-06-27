@@ -34,8 +34,6 @@ public class BuildingEvent extends Event{
 					e.printStackTrace();
 				}
 			}
-			
-			//TODO action listener
 		}
 		else
 			System.out.println("Building Event Applies failure");

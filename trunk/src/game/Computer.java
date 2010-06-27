@@ -5,93 +5,99 @@ import java.util.*;
 public class Computer {
 	
     private GameInfo ginfo ;
-    //private GraphicsEngine gengine;
-    private GG gengine;
+    private GraphicsEngine gengine;
     private Player[] playerlist;
-    public boolean[] playerRound;
-    public Player playercontrol;
-    public int step = 0;
-    public Computer(GameInfo info, GG engine){
-    	ginfo = info ;
-    	gengine = engine;
-    	playerlist = ginfo.playerlist;
-    	playerRound = new boolean[ginfo.players_num];
+    private boolean[] player_mobility;   // true  the player can go 
+    
+    
+    private int state;
+    private int steps = 0;
+    private Random rnd = new Random();
+    
+    public Computer(GameInfo ginfo, GraphicsEngine gengine){
+    	this.ginfo = ginfo ;
+    	this.gengine = gengine;
+    	this.playerlist = ginfo.playerlist;
+    	player_mobility = new boolean[ginfo.players_num];
+    	Reset_Round();
+    }
+
+    public boolean Main_Loop(){
+	
+    	Round_Update();
+    	for(int i=0;i<ginfo.players_num;i++){
+    		while(player_mobility[i]==true){
+    			Gain_Control(i);
+    		}
+    	}
+    	return true;
+    }
+    public void Round_Update(){
+    	ginfo.round++;
+    	AddDate();
     	ResetPlayerRound();
     }
-
-    public boolean Run(){
-	
-    	Update();
-	for(int i=0;i<ginfo.players_num;i++){
-	    playercontrol = playerlist[i];
-
-	    gengine.ScreemUpdate(playercontrol);
-	    PlayerUpdate(playercontrol);
-	    while(playerRound[i]==true){
+    public void Gain_Control(int player_index){
+		Player player = ginfo.playerlist[player_index];
+		//repaint();
 		synchronized (ginfo){	
-		    try {
-			ginfo.wait();
-			gengine.ScreemUpdate(playercontrol);
-		    } catch (InterruptedException e) {
-			e.printStackTrace();
-		    }
+			try {
+				gengine.Screen_Update(player_index);
+				ginfo.wait();   // wait for player to click button
+				
+				state = ginfo.get_Control_State();
+				if(state == 0){
+					Move_Player(player);
+				}
+				else if(state == 1){
+					//TODO : use item
+				}
+				//Show_Building_Msg((Building)ginfo.roadlist[3].getLand(),ginfo.playerlist[player_index]);
+				//Show_Lab_Msg((Lab)ginfo.roadlist[2].getLand(), ginfo.playerlist[player_index]);
+				//Show_Move_Msg(10);
+				//Show_ATM();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		//骰骰子
-		if(gengine.tmp == 1){
-		    MovePlayer(playerlist[i]);
-		    break;
-		}
-		
-		
-	    }
-	    //RoundEnd(playerlist[i]);
 	}
-	return true;
-	
-	
-    }
-    public void PlayerRound(Player p){
-    }
     
     /*
      * move the player by steps
      */
-    public void MovePlayer(Player p){
-    	Random rnd = new Random();
-    	step = 0;
-    	//for(int i=0;i<p.getDicenum();i++) step = step + rnd.nextInt(6) + 1;
-    	step = 1;
-    	displaySteps(step);
-    	for(int i=step;i>0;i--){
+    public void Move_Player(Player player){
+    	steps = 0;
+    	for(int i=0;i<player.getDicenum();i++) 
+    		steps = (steps + rnd.nextInt(6) + 1);
+    	Display_Steps(steps);
+    	for(int i=0;i<steps;i++){
     	    //ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
+    		player.setLocation(player.getLocation() + 1);
+        	player.setPicCoor();
+        	gengine.Screen_Update(player);
+        	
     	}
-    	p.setLocation(p.getLocation() + step);
-    	p.setPicCoor();
-	gengine.ScreemUpdate(p);
     	//ginfo.landlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
-	if(ginfo.roadlist[p.getLocation()].getLand() instanceof Building){
-	    GoToBuilding a = new GoToBuilding();
-	    a.apply(ginfo, gengine, this, p);
-	}
-
-	else if(ginfo.roadlist[p.getLocation()].getLand() instanceof Lab){
-	    GoToLab a = new GoToLab();
-	    a.apply(ginfo, gengine, this, p);
-	}
-    	
+    	if(ginfo.roadlist[player.getLocation()].getLand() instanceof Building){
+    		GoToBuilding a = new GoToBuilding();
+    		a.apply(ginfo, gengine, this, player);
+    	}
+    	else if(ginfo.roadlist[player.getLocation()].getLand() instanceof Lab){
+    		GoToLab a = new GoToLab();
+    		a.apply(ginfo, gengine, this, player);
+    	}
     }
     
     
-    public void displaySteps(int move){
-	gengine.MoveMsgPanel(move);
-
+    private void Display_Steps(int move){
+    	gengine.Show_Move_Msg(steps);
 	    synchronized (ginfo){	
-		try {
-		    ginfo.wait();
-		    gengine.ScreemUpdate(playercontrol);
-		} catch (InterruptedException e) {
-		    e.printStackTrace();
-		}
+	    	try {
+	    		ginfo.wait();
+	    		//gengine.ScreemUpdate(playercontrol);
+	    	} catch (InterruptedException e) {
+	    		e.printStackTrace();
+	    	}
 	    }
     }
     
@@ -120,14 +126,8 @@ public class Computer {
     
 	
     
-    public void Update(){
-    	ginfo.round++;
-    	AddDate();
-    	ResetPlayerRound();
-    }
-    public void PlayerUpdate(Player p){
-	gengine.MapReset(p);
-    }
+    
+   
     public void AddDate(){
     	ginfo.day++;
     	if(ginfo.day==32||
@@ -142,7 +142,7 @@ public class Computer {
     		ginfo.month=1;
     	}
     }
-    public void ResetPlayerRound(){
+    public void Reset_Round(){
     	for(int i=0;i<ginfo.players_num;i++) playerRound[i]=true;
     }
 	
