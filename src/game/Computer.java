@@ -4,11 +4,14 @@ import java.util.*;
 
 public class Computer {
 	
+    
+    public BuildingEvent building_event;
+    public LabEvent lab_event;
+    public Event[] eventlist;
+    
     private GameInfo ginfo ;
     private GraphicsEngine gengine;
-    private Player[] playerlist;
     private boolean[] player_mobility;   // true  the player can go 
-    
     
     private int state;
     private int steps = 0;
@@ -17,11 +20,27 @@ public class Computer {
     public Computer(GameInfo ginfo, GraphicsEngine gengine){
     	this.ginfo = ginfo ;
     	this.gengine = gengine;
-    	this.playerlist = ginfo.playerlist;
+    	Event_Init();
     	player_mobility = new boolean[ginfo.players_num];
-    	Reset_Round();
+    	for(int i=0;i<ginfo.players_num;i++)
+    		player_mobility[i] = true;
     }
-
+    private void Event_Init(){
+    	building_event = new BuildingEvent(ginfo,gengine,this);
+    	lab_event = new LabEvent(ginfo,gengine,this);
+    	Land buf;
+    	for(int i=0;i<ginfo.landlist.length;i++){
+    		buf = ginfo.landlist[i];
+    		if(buf instanceof Building)
+    			buf.setEvent(building_event);
+    		else if(buf instanceof Lab)
+    			buf.setEvent(lab_event);
+    		
+    		//TODO : SpecialLocation
+    	}
+    }
+    
+    
     public boolean Main_Loop(){
 	
     	Round_Update();
@@ -32,19 +51,20 @@ public class Computer {
     	}
     	return true;
     }
+    
     public void Round_Update(){
     	ginfo.round++;
     	AddDate();
-    	ResetPlayerRound();
+    	for(int i=0;i<ginfo.players_num;i++)
+    		player_mobility[i] = true;
     }
     public void Gain_Control(int player_index){
 		Player player = ginfo.playerlist[player_index];
 		//repaint();
 		synchronized (ginfo){	
 			try {
-				gengine.Screen_Update(player_index);
+				gengine.Screen_Update(player);
 				ginfo.wait();   // wait for player to click button
-				
 				state = ginfo.get_Control_State();
 				if(state == 0){
 					Move_Player(player);
@@ -142,8 +162,6 @@ public class Computer {
     		ginfo.month=1;
     	}
     }
-    public void Reset_Round(){
-    	for(int i=0;i<ginfo.players_num;i++) playerRound[i]=true;
-    }
+    
 	
 }

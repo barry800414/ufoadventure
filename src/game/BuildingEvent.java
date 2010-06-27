@@ -1,18 +1,8 @@
 package game;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.font.TextAttribute;
-import java.awt.image.BufferedImage;
-import java.text.AttributedString;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-
+/*
+ * this is the event when the player stand on the building
+ */
 public class BuildingEvent extends Event{
 	
 	
@@ -21,22 +11,41 @@ public class BuildingEvent extends Event{
 	}
 	
 	public void apply(GameObject origin , GameObject target){
-		Building b;
-		Player p;
+		Building building;
+		Player player;
 		if((origin instanceof Building)  && (target instanceof Player)){
-			b = (Building)origin;
-			p = (Player)target;
-			gengine.Show_Building_Msg(b, p);
-			synchronized(ginfo){
-				try {
-					ginfo.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+			building = (Building)origin;
+			player = (Player)target;
+			if(building.getOwner() == null){
+	    	    gengine.Show_Building_Msg(building, 1);
+	    	    Event_Wait();
+	    	    if(ginfo.get_Control_State() == 1){
+	    	    	player.setCash(player.getCash() - building.getLandPrice());
+	    	    	building.setOwner(player);
+	    	    	gengine.Screen_Update(player);
+	    	    }
+	    	}
+	    	else if(building.getOwner() == player){
+	    		gengine.Show_Building_Msg(building, 2);
+	    	    Event_Wait();
+	    	    if(ginfo.get_Control_State() == 1 && building.getFloor() <= Building.MAX_FLOOR){
+	    	    	player.setCash(player.getCash() - (int)(building.getLandPrice() * 0.2));
+	    			building.setFloor(building.getFloor() + 1);
+	    			gengine.Screen_Update(player);
+	    	    }
+	    	    
+	    	}
+	    	else{
+	    		gengine.Show_Building_Msg(building, 3);
+	    		Event_Wait();
+	    		player.setCash(player.getCash() - building.getToll());
+	    		building.getOwner().setDeposit(building.getOwner().getDeposit() + building.getToll());
+	    		gengine.Screen_Update(player);
+	    	}
 		}
 		else
 			System.out.println("Building Event Applies failure");
 	}
+	
 	
 }	
