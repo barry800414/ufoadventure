@@ -19,9 +19,7 @@ public class GameObject {
 		this.map_coor = new Point();
 		this.pic_coor = new Rectangle();
 		setMapCoor(map_coor);
-		//System.out.print(" " + map_coor.x + " " + map_coor.y +" ");
 		setPicCoor(pic_coor);
-		//System.out.print(" " + pic_coor.x + " " + pic_coor.y + " " + pic_coor.height + " " + pic_coor.width + " " );
 		
 		if(filename != null){
 			pic = new BufferedImage[filename.length];

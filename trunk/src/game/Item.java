@@ -5,11 +5,9 @@ public class Item {
 	public static int MAX_ITEMS = 20;
 	
 	public Item(String name, int point, String info) {
-	
-	this.name = name;
-	this.point = point;
-	this.info = info;
-	
+		this.name = name;
+		this.point = point;
+		this.info = info;
     }
     
     //名字

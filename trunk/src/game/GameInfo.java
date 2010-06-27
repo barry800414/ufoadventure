@@ -32,28 +32,24 @@ public class GameInfo {
     public Road[] roadlist;
     public Land[] landlist;
     
-    private int control_state;
+    private int control_state = 0;
     /*control_state is the bridge between GraphicsEngine & Computer
-     * control_state:   0 Throw the dice
-     * 					1 yes , ok  button
-     * 					2  
+     * control_state:   0 no state
+     * 					1 Throw the dice 
+     * 					2 yes , ok  b
+     * 					3 no 
      */
-    //TODO : use constant table to represent the state
+    public static final int DEFAULT_STATE = 0;
+    public static final int THROW_DICE_STATE = 1;
+    public static final int YES_OK_STATE = 2;
+    public static final int NO_STATE = 3;
+    
     
     public GameInfo(){
     	round=1;
     	year=2010;
     	month=6;
     	day=10;
-    	/*
-    	playerlist = new Player[players_num];
-    	System.out.println(players_num + "  dsadasds");
-    	for(int i=0;i<players_num;i++) {
-    	    playerlist[i] = new Player("Player " + (i+1),init_cash,init_deposit,1,init_point);
-    	    System.out.println("player " + (i+1) + " cash :" + playerlist[i].cash + " deposit :" + playerlist[i].deposit  + " point: " + playerlist[i].point);
-    	}
-    	coodinate = new int[19][21];
-    	*/
     }
     public void GameInfo_Init(){
     	Item_Init("itemlist.txt");
@@ -116,7 +112,6 @@ public class GameInfo {
     			point = input.nextInt();
     			info = input.next();
     			itemlist[i] = new Item(name,point,info);
-    			System.out.println(itemlist[i].name + " " + itemlist[i].point + " " + itemlist[i].info);
     		}
     	}
     	catch(Exception e){
@@ -148,7 +143,6 @@ public class GameInfo {
     			coor.x = input.nextInt();
     			coor.y = input.nextInt();
     			index = input.nextInt();
-    			//System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + index);
     			roadlist[i] = new Road(name,landlist[index],coor,pic,r_pic_filename);
     		}
     	}
@@ -180,7 +174,6 @@ public class GameInfo {
     			coor.x = input.nextInt();
     			coor.y = input.nextInt();
     			price = input.nextInt();
-    			System.out.println(name + " " + pic.x + " " + pic.y + " " + pic.width + " " + pic.height + " " + coor.x + " " + coor.y + " " + price );
     			if(type == BUILDING){
     				for(int j=0;j<b_pic_filename.length;j++)
     					b_pic_filename[j] = input.next();

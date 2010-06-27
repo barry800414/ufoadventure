@@ -38,7 +38,7 @@ public class GraphicsEngine extends JFrame {
 	private JPanel building_msg_panel = null;
 	private JPanel lab_msg_panel = null;
 	private JPanel move_msg_panel = null;
-	private JPanel atm_msg_panel = null;
+	private JPanel atm_panel = null;
 	
 	
 	private JLabel calendar_label = null;
@@ -193,7 +193,6 @@ public class GraphicsEngine extends JFrame {
 			content_panel.add(buttom_map_panel);
 			content_panel.add(top_col_panel);
 			content_panel.add(right_col_panel);
-			//System.out.println("content panel test");
 		}
 	}
 	
@@ -329,7 +328,6 @@ public class GraphicsEngine extends JFrame {
 			item_col_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("open button column"); // TODO Auto-generated Event stub actionPerformed()
-					//OpenItemColumn();
 				}
 			});
 		}
@@ -388,6 +386,7 @@ public class GraphicsEngine extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
 					synchronized (ginfo){
+						ginfo.set_Control_State(GameInfo.THROW_DICE_STATE);
 						ginfo.notifyAll();
 					}
 				}
@@ -492,6 +491,10 @@ public class GraphicsEngine extends JFrame {
 	    buttom_map_panel.setComponentZOrder(buf, 0);
 	    buf.repaint();
 	}
+	
+	public void Remove_Building_Msg(){
+		buttom_map_panel.remove(building_msg_panel);
+	}
 	private JPanel Construct_Building_Msg_Panel(Building b,int condition){
 		if(building_msg_panel == null){
 	    	building_msg_panel = new JPanel();
@@ -536,19 +539,14 @@ public class GraphicsEngine extends JFrame {
 		if(condition == 1){                 //vacant land
 			as1 = new AttributedString(b.getName()+"  價格:"+b.getLandPrice());
 			as2 = new AttributedString("   這是無人空地  要買嗎?");
-			//get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,1));
-			//get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,2));
 		}
 		else if(condition == 2){            //the building's owner
 			as1 = new AttributedString("   "+b.getName()+"  "+b.getFloor()+" 層");
 			as2 = new AttributedString("  升級費 "+(int)(b.getLandPrice()*0.1)+"  要升級嗎?");
-			//get_yes_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,1));
-			//get_no_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,2));
 		}
 		else{                               //belongs to other player
 			as1 = new AttributedString(b.getName()+"   擁有者 :  遊戲者"+(b.getOwner().getID()+1)+" ");
 			as2 = new AttributedString("     "+b.getFloor()+" 層"+"\n  過路費  "+b.getToll());
-			//get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,building_msg_panel,1));
 		}
 		as1.addAttribute(TextAttribute.FONT, biakai_18);
 		as1.addAttribute(TextAttribute.FOREGROUND,Color.black);
@@ -571,13 +569,9 @@ public class GraphicsEngine extends JFrame {
 		buttom_map_panel.add(buf);
 	    buttom_map_panel.setComponentZOrder(buf, 0);
 	    buf.repaint();
-	    synchronized(ginfo){
-	    	try {
-				ginfo.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-	    }
+	}
+	public void Remove_Lab_Msg(){
+		buttom_map_panel.remove(lab_msg_panel);
 	}
 	
 	private JPanel Construct_Lab_Msg_Panel(Lab lab , int condition){
@@ -594,8 +588,6 @@ public class GraphicsEngine extends JFrame {
 	    	lab_msg_panel.add(get_Yes_Button());
 			lab_msg_panel.add(get_No_Button());
 			lab_msg_panel.add(get_Lab_Msg_Label(lab,1));
-			//get_Yes_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,1));
-			//get_No_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,2));
 	    }
 	    //lab's owner
 	    else if(condition == 2){
@@ -604,14 +596,11 @@ public class GraphicsEngine extends JFrame {
 	    	lab_msg_panel.add(get_Yes_Button());
 			lab_msg_panel.add(get_No_Button());
 			lab_msg_panel.add(get_Lab_Msg_Label(lab,2));
-			//get_Yes_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,1));
-			//get_No_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,2));
 	    }
 	    else{
 	    	get_Ok_Button().setLocation(100, 100);
 	    	lab_msg_panel.add(ok_button);
 	    	lab_msg_panel.add(get_Lab_Msg_Label(lab,3));
-			//get_ok_jButton().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,1));
 	    }
 	    return lab_msg_panel;
 	}
@@ -680,6 +669,16 @@ public class GraphicsEngine extends JFrame {
 			g.drawString(as.getIterator(), 5, 30);
 			no_button.setPressedIcon(new ImageIcon(buf2));
 			no_button.setBorder(border1);
+			no_button.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("yes button"); // TODO Auto-generated Event stub actionPerformed()
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.NO_STATE);
+						ginfo.notifyAll();
+					}
+				}
+			});
+			
 		}
 		return no_button;
 	}
@@ -710,6 +709,16 @@ public class GraphicsEngine extends JFrame {
 			g.drawString(as.getIterator(), 4, 30);
 			yes_button.setPressedIcon(new ImageIcon(buf2));
 			yes_button.setBorder(border1);
+			yes_button.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("yes button"); // TODO Auto-generated Event stub actionPerformed()
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.YES_OK_STATE);
+						ginfo.notifyAll();
+					}
+				}
+			});
+			
 		}
 		 return yes_button;
 	}
@@ -738,7 +747,16 @@ public class GraphicsEngine extends JFrame {
 			g.fillRect(0, 0, 100, 50);
 			g.drawString(as.getIterator(), 35, 30);
 			ok_button.setPressedIcon(new ImageIcon(buf2));
-			get_Ok_Button().setBorder(border1);
+			ok_button.setBorder(border1);
+			ok_button.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("ok button"); // TODO Auto-generated Event stub actionPerformed()
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.YES_OK_STATE);
+						ginfo.notifyAll();
+					}
+				}
+			});
 		}
 		return ok_button;
 	}
@@ -748,13 +766,10 @@ public class GraphicsEngine extends JFrame {
 	    buttom_map_panel.add(buf);
 	    buttom_map_panel.setComponentZOrder(buf, 0);
 	    buttom_map_panel.repaint();
-	    synchronized(ginfo){
-	    	try {
-				ginfo.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-	    }
+	}
+	
+	public void Remove_Move_Msg(){
+		buttom_map_panel.remove(move_msg_panel);
 	}
 	
 	private JPanel Construct_Move_Msg_Panel(int move){
@@ -768,7 +783,6 @@ public class GraphicsEngine extends JFrame {
 	    move_msg_panel.add(get_Ok_Button());
 	    move_msg_panel.setComponentZOrder(get_Ok_Button(), 0);
 	    get_Ok_Button().setLocation(80, 100);
-	    //get_Ok_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,move_msg_panel,0));
 	    return move_msg_panel;
 	}
 	
@@ -795,7 +809,6 @@ public class GraphicsEngine extends JFrame {
 	
 	
 	public void Show_ATM(){
-	    //tmp = 1;
 	    JPanel buf = Construct_ATM_Panel();
 	    buttom_map_panel.add(buf);
 	    buttom_map_panel.setComponentZOrder(buf, 0);
@@ -808,11 +821,15 @@ public class GraphicsEngine extends JFrame {
 			}                
 	    }
 	}
+	public void Remove_ATM(){
+		buttom_map_panel.remove(atm_panel);
+	}
+	
 	private JPanel Construct_ATM_Panel(){
-	    if(atm_msg_panel == null){
-	    	atm_msg_panel = new JPanel();
-	    	atm_msg_panel.setLayout(null);
-	    	atm_msg_panel.setBounds(new Rectangle(250, 120, 280, 350));
+	    if(atm_panel == null){
+	    	atm_panel = new JPanel();
+	    	atm_panel.setLayout(null);
+	    	atm_panel.setBounds(new Rectangle(250, 120, 280, 350));
 	    	get_ATM_Savemoney_Button().setLocation(25,100);
 	    	get_ATM_Withdraw_Button().setLocation(85,100);
 	    	get_ATM_Enter_Button().setLocation(145,100);
@@ -828,23 +845,16 @@ public class GraphicsEngine extends JFrame {
 	    	get_ATM_Number_Button(7).setLocation(25,280);
 	    	get_ATM_Number_Button(8).setLocation(85,280);
 	    	get_ATM_Number_Button(9).setLocation(145,280);
-	    	for(int i=0;i<10;i++) atm_msg_panel.add(get_ATM_Number_Button(i));
-	    	atm_msg_panel.add(get_ATM_Max_Button());
-	    	atm_msg_panel.add(get_ATM_Clean_Button());
-	    	atm_msg_panel.add(get_ATM_Enter_Button());
-	    	atm_msg_panel.add(get_ATM_Savemoney_Button());
-	    	atm_msg_panel.add(get_ATM_Withdraw_Button());
-	    	atm_msg_panel.add(get_ATM_Msg_Label());
+	    	for(int i=0;i<10;i++) atm_panel.add(get_ATM_Number_Button(i));
+	    	atm_panel.add(get_ATM_Max_Button());
+	    	atm_panel.add(get_ATM_Clean_Button());
+	    	atm_panel.add(get_ATM_Enter_Button());
+	    	atm_panel.add(get_ATM_Savemoney_Button());
+	    	atm_panel.add(get_ATM_Withdraw_Button());
+	    	atm_panel.add(get_ATM_Msg_Label());
 	    }
 	    
-    	
-    	//get_ATM_Enter_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,atm_msg_panel,0));
-    	//get_ATM_Savemoney_Button().addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, "i"));
-    	//get_ATM_Withdraw_Button().addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, "o"));
-    	//get_ATM_Number_Button().addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, "m"));
-    	//get_clean_jButton().addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, "c"));
-    	//for(int i=0;i<10;i++) get_ATM_Number_Button(i).addActionListener(new AdvActionListener(this, ginfo, tmp_p, true, 1, ""+i));;
-	    return atm_msg_panel;
+	    return atm_panel;
 	}
 	private JLabel get_ATM_Msg_Label(){
 		if(atm_msg_label == null){

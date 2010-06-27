@@ -9,19 +9,17 @@ public class Building extends Land{
     public static final int MAX_FLOOR = 5;
     private int floor;
     private int[] toll_rate;  //toll rate
-    private Event event;
     
     public int getFloor(){
     	return floor;
     }
-    
-
     public boolean setFloor(int f){
-	if(f <= MAX_FLOOR){
-	    this.floor++;
-	    return true;
-	}
-	else return false;
+    	if(f <= MAX_FLOOR){
+    		this.floor++;
+    		return true;
+    	}
+    	else 
+    		return false;
     }
     
     public int getToll(){
@@ -36,7 +34,9 @@ public class Building extends Land{
     	    for(int j=0;j<i/2;j++)
     	    	tmp = tmp * 10;
     	    toll_rate[i] = (2 + i % 2 * 3) * tmp;
+    	    System.out.println("test " + toll_rate[i]);
     	}
+    	
     }
     public void land_trigger(GameObject origin,GameObject target){
     	event.apply(origin,target);

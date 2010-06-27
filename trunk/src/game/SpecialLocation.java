@@ -9,6 +9,8 @@ public class SpecialLocation extends Land{
 		super(name,owner,land_price,map_coor,pic_coor,filename);
 	}
 	
-    //protected abstract boolean condition();
+	public void land_trigger(GameObject origin , GameObject target){
+		
+	}
     
 }

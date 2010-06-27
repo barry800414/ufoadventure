@@ -31,11 +31,12 @@ public class Computer {
     	Land buf;
     	for(int i=0;i<ginfo.landlist.length;i++){
     		buf = ginfo.landlist[i];
-    		if(buf instanceof Building)
+    		if(buf instanceof Building){
     			buf.setEvent(building_event);
-    		else if(buf instanceof Lab)
+    		}
+    		else if(buf instanceof Lab){
     			buf.setEvent(lab_event);
-    		
+    		}
     		//TODO : SpecialLocation
     	}
     }
@@ -45,7 +46,7 @@ public class Computer {
 	
     	Round_Update();
     	for(int i=0;i<ginfo.players_num;i++){
-    		while(player_mobility[i]==true){
+    		while(player_mobility[i]){
     			Gain_Control(i);
     		}
     	}
@@ -64,19 +65,19 @@ public class Computer {
 		synchronized (ginfo){	
 			try {
 				gengine.Screen_Update(player);
+				System.out.println("wait test "+ player.getID());
 				ginfo.wait();   // wait for player to click button
 				state = ginfo.get_Control_State();
-				if(state == 0){
+				if(state == GameInfo.THROW_DICE_STATE){
 					Move_Player(player);
+					player_mobility[player_index] = false;
+					ginfo.set_Control_State(GameInfo.DEFAULT_STATE);
 				}
-				else if(state == 1){
+				/*else if(state == 4){
 					//TODO : use item
-				}
-				//Show_Building_Msg((Building)ginfo.roadlist[3].getLand(),ginfo.playerlist[player_index]);
-				//Show_Lab_Msg((Lab)ginfo.roadlist[2].getLand(), ginfo.playerlist[player_index]);
-				//Show_Move_Msg(10);
-				//Show_ATM();
-			} catch (InterruptedException e) {
+				}*/
+			} 
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
@@ -90,35 +91,33 @@ public class Computer {
     	for(int i=0;i<player.getDicenum();i++) 
     		steps = (steps + rnd.nextInt(6) + 1);
     	Display_Steps(steps);
+    	System.out.println("move test!");
     	for(int i=0;i<steps;i++){
     	    //ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
     		player.setLocation(player.getLocation() + 1);
         	player.setPicCoor();
         	gengine.Screen_Update(player);
-        	
+        	try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
     	}
-    	//ginfo.landlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
-    	if(ginfo.roadlist[player.getLocation()].getLand() instanceof Building){
-    		GoToBuilding a = new GoToBuilding();
-    		a.apply(ginfo, gengine, this, player);
-    	}
-    	else if(ginfo.roadlist[player.getLocation()].getLand() instanceof Lab){
-    		GoToLab a = new GoToLab();
-    		a.apply(ginfo, gengine, this, player);
-    	}
+    	Land land = ginfo.roadlist[player.getLocation()].getLand();
+    	if(!(land instanceof SpecialLocation))
+    	land.land_trigger(land,player);
     }
     
     
     private void Display_Steps(int move){
     	gengine.Show_Move_Msg(steps);
-	    synchronized (ginfo){	
-	    	try {
-	    		ginfo.wait();
-	    		//gengine.ScreemUpdate(playercontrol);
-	    	} catch (InterruptedException e) {
-	    		e.printStackTrace();
-	    	}
+	    try {
+	    	ginfo.wait();
+	    	//gengine.ScreemUpdate(playercontrol);
+	    } catch (InterruptedException e) {
+	    	e.printStackTrace();
 	    }
+	    gengine.Remove_Move_Msg();
     }
     
     /*
@@ -142,12 +141,6 @@ public class Computer {
     	return ginfo.CheckMode();
     }
     */
-    
-    
-	
-    
-    
-   
     public void AddDate(){
     	ginfo.day++;
     	if(ginfo.day==32||

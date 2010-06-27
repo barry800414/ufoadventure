@@ -152,7 +152,7 @@ public class GameMainMenu extends JFrame {
 			gridBagConstraints4.gridy = 6;
 			jLabel8 = new JLabel();
 			jLabel8.setFont(newfont);
-			jLabel8.setText("總財產超過250萬");
+			jLabel8.setText("總財產超過200萬");
 			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
 			gridBagConstraints3.gridx = 2;
 			gridBagConstraints3.insets = new Insets(5, 5, 5, 5);
@@ -330,7 +330,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					player_num = 2;
 					setButtomJLabel();
-					System.out.println("2"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			jRadioButton.doClick();
@@ -353,7 +352,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					player_num = 3;
 					setButtomJLabel();
-					System.out.println("3"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			playergroup.add(jRadioButton1);
@@ -375,7 +373,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					player_num = 4;
 					setButtomJLabel();
-					System.out.println("4"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			playergroup.add(jRadioButton2);
@@ -392,12 +389,11 @@ public class GameMainMenu extends JFrame {
 		if (jRadioButton3 == null) {
 			jRadioButton3 = new JRadioButton();
 			jRadioButton3.setFont(newfont);
-			jRadioButton3.setText("50萬");
+			jRadioButton3.setText("80萬");
 			jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					property = 500000;
 					setButtomJLabel();
-					System.out.println("50w"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			jRadioButton3.doClick();
@@ -415,12 +411,11 @@ public class GameMainMenu extends JFrame {
 		if (jRadioButton4 == null) {
 			jRadioButton4 = new JRadioButton();
 			jRadioButton4.setFont(newfont);
-			jRadioButton4.setText("100萬");
+			jRadioButton4.setText("120萬");
 			jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					property = 1000000;
+					property = 1200000;
 					setButtomJLabel();
-					System.out.println("100w"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			propertygroup.add(jRadioButton4);
@@ -442,7 +437,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					property = 1500000;
 					setButtomJLabel();
-					System.out.println("150w"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			propertygroup.add(jRadioButton5);
@@ -464,7 +458,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					percent = 5;
 					setButtomJLabel();
-					System.out.println("50%/50%"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			jRadioButton6.doClick();
@@ -487,7 +480,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					percent = 3;
 					setButtomJLabel();
-					System.out.println("30%/70%"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			percentgroup.add(jRadioButton7);
@@ -509,7 +501,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					percent = 7;
 					setButtomJLabel();
-					System.out.println("70%/30%"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			percentgroup.add(jRadioButton8);
@@ -531,7 +522,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					point = 0;
 					setButtomJLabel();
-					System.out.println("0 point"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			jRadioButton9.doClick();
@@ -554,7 +544,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					point = 100;
 					setButtomJLabel();
-					System.out.println("100 point"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			pointgroup.add(jRadioButton10);
@@ -576,7 +565,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					point = 200 ;
 					setButtomJLabel();
-					System.out.println("200 point"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			pointgroup.add(jRadioButton11);
@@ -598,7 +586,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					mode = 1;
 					setButtomJLabel();
-					System.out.println("real monopoly"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			jRadioButton12.doClick();
@@ -621,7 +608,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					mode = 2;
 					setButtomJLabel();
-					System.out.println("real house king"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			modegroup.add(jRadioButton13);
@@ -643,7 +629,6 @@ public class GameMainMenu extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					mode = 3 ;
 					setButtomJLabel();
-					System.out.println("real rich man"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
 			modegroup.add(jRadioButton14);
