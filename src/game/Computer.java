@@ -7,11 +7,13 @@ public class Computer {
     
     public BuildingEvent building_event;
     public LabEvent lab_event;
+    public RandomEvent random_event;
     public Event[] eventlist;
     
     private GameInfo ginfo ;
     private GraphicsEngine gengine;
     private boolean[] player_mobility;   // true  the player can go 
+    private Event event_stack[];
     
     private int state;
     private int steps = 0;
@@ -28,6 +30,8 @@ public class Computer {
     private void Event_Init(){
     	building_event = new BuildingEvent(ginfo,gengine,this);
     	lab_event = new LabEvent(ginfo,gengine,this);
+    	random_event = new RandomEvent(ginfo,gengine,this);
+    	
     	Land buf;
     	for(int i=0;i<ginfo.landlist.length;i++){
     		buf = ginfo.landlist[i];
@@ -36,6 +40,9 @@ public class Computer {
     		}
     		else if(buf instanceof Lab){
     			buf.setEvent(lab_event);
+    		}
+    		else{
+    			buf.setEvent(random_event);
     		}
     		//TODO : SpecialLocation
     	}
@@ -65,7 +72,7 @@ public class Computer {
 		synchronized (ginfo){	
 			try {
 				gengine.Screen_Update(player);
-				System.out.println("wait test "+ player.getID());
+				gengine.Show_Random_Event_Msg("測試測試");
 				ginfo.wait();   // wait for player to click button
 				state = ginfo.get_Control_State();
 				if(state == GameInfo.THROW_DICE_STATE){
@@ -73,9 +80,10 @@ public class Computer {
 					player_mobility[player_index] = false;
 					ginfo.set_Control_State(GameInfo.DEFAULT_STATE);
 				}
-				/*else if(state == 4){
-					//TODO : use item
-				}*/
+				else if(state == GameInfo.ITEM_COLUMN){
+					gengine.Open_Item_Column(player);
+					ginfo.set_Control_State(GameInfo.DEFAULT_STATE);
+				}
 			} 
 			catch (InterruptedException e) {
 				e.printStackTrace();
@@ -89,7 +97,7 @@ public class Computer {
     public void Move_Player(Player player){
     	steps = 0;
     	for(int i=0;i<player.getDicenum();i++) 
-    		steps = (steps + rnd.nextInt(6) + 1);
+    		steps = (steps + rnd.nextInt(6) + 10);
     	Display_Steps(steps);
     	System.out.println("move test!");
     	for(int i=0;i<steps;i++){

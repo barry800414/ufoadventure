@@ -39,6 +39,8 @@ public class GraphicsEngine extends JFrame {
 	private JPanel lab_msg_panel = null;
 	private JPanel move_msg_panel = null;
 	private JPanel atm_panel = null;
+	private JPanel random_event_msg_panel = null;
+	private JPanel item_column_panel = null;
 	
 	
 	private JLabel calendar_label = null;
@@ -49,6 +51,7 @@ public class GraphicsEngine extends JFrame {
 	private JLabel lab_msg_label = null;
 	private JLabel move_msg_label = null;
 	private JLabel atm_msg_label = null;
+	private JLabel random_event_msg_label = null;
 	
 	private JButton item_col_button = null;
 	private JButton exit_button = null;
@@ -78,7 +81,7 @@ public class GraphicsEngine extends JFrame {
 	private BufferedImage go_button_image[] = null;
 	private BufferedImage exit_button_image[] = null;
 	private BufferedImage player_button_image[] = null;
-	private BufferedImage land_button_image[][] = null;
+	private BufferedImage land_button_image[] = null;
 	private BufferedImage road_button_image[] = null;
 	private BufferedImage item_button_image[] = null;
 	
@@ -150,27 +153,32 @@ public class GraphicsEngine extends JFrame {
 			item_col_button_image = new BufferedImage[3];
 			item_col_button_image[0] = ImageIO.read(new File("item_button.png"));
 			item_col_button_image[1] = ImageIO.read(new File("item_button2.png"));
+			item_col_button_image[2] = ImageIO.read(new File("item_button3.png"));
 			go_button_image = new BufferedImage[3];
 			go_button_image[0] = ImageIO.read(new File("dice_button.png"));
 			go_button_image[1] = ImageIO.read(new File("dice_button2.png"));
+			go_button_image[2] = ImageIO.read(new File("dice_button3.png"));
 			exit_button_image = new BufferedImage[3];
 			exit_button_image[0] = ImageIO.read(new File("exit_button.png"));
 			exit_button_image[1] = ImageIO.read(new File("exit_button2.png"));
+			exit_button_image[2] = ImageIO.read(new File("exit_button3.png"));
 			player_button_image = new BufferedImage[ginfo.players_num];
 			for(int i=0;i<ginfo.players_num;i++)
 				player_button_image[i] = ginfo.playerlist[i].getImage(0);
 			    
-			land_button_image = new BufferedImage[ginfo.landlist.length][];
-			for(int i=0;i<ginfo.landlist.length;i++){
-				land_button_image[i] = new BufferedImage[Building.MAX_FLOOR+1];
-				for(int j=0;j<Building.MAX_FLOOR+1;j++){
-					land_button_image[i][j] = ImageIO.read(new File("building.png"));
-				}
-			}
+			land_button_image = new BufferedImage[Building.MAX_FLOOR+1];
+			land_button_image[0] = ImageIO.read(new File("building.png"));
+			land_button_image[1] = ImageIO.read(new File("building1.png"));
+			land_button_image[2] = ImageIO.read(new File("building2.png"));
+			land_button_image[3] = ImageIO.read(new File("building3.png"));
+			land_button_image[4] = ImageIO.read(new File("building4.png"));
+			land_button_image[5] = ImageIO.read(new File("building5.png"));
+			
 			//TODO add road button picture  (road_button_image) 
 			item_button_image = new BufferedImage[3];
 			item_button_image[0] = ImageIO.read(new File("item_buttom.png"));
 			item_button_image[1] = ImageIO.read(new File("item_buttom2.png"));
+			item_button_image[2] = ImageIO.read(new File("item_buttom3.png"));
 		}
 		catch (Exception e){
 			System.out.println("Load picture failure!");
@@ -325,9 +333,14 @@ public class GraphicsEngine extends JFrame {
 			item_col_button.setContentAreaFilled(false);
 			item_col_button.setIcon(new ImageIcon(item_col_button_image[0]));
 			item_col_button.setPressedIcon(new ImageIcon(item_col_button_image[1]));
+			item_col_button.setRolloverIcon(new ImageIcon(item_col_button_image[2]));
 			item_col_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("open button column"); // TODO Auto-generated Event stub actionPerformed()
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.ITEM_COLUMN);
+						ginfo.notifyAll();
+					}
 				}
 			});
 		}
@@ -341,9 +354,11 @@ public class GraphicsEngine extends JFrame {
 			exit_button.setContentAreaFilled(false);
 			exit_button.setIcon(new ImageIcon(exit_button_image[0]));
 			exit_button.setPressedIcon(new ImageIcon(exit_button_image[1]));
+			exit_button.setRolloverIcon(new ImageIcon(exit_button_image[2]));
 			exit_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("Exit"); // TODO Auto-generated Event stub actionPerformed()
+					//new Audio("./sounds/InstSel.wav.wav").start();
 					System.exit(0);
 				}
 			});
@@ -382,6 +397,7 @@ public class GraphicsEngine extends JFrame {
 			go_button.setContentAreaFilled(false);
 			go_button.setIcon(new ImageIcon(go_button_image[0]));
 			go_button.setPressedIcon(new ImageIcon(go_button_image[1]));
+			go_button.setRolloverIcon(new ImageIcon(go_button_image[2]));
 			go_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
@@ -422,16 +438,46 @@ public class GraphicsEngine extends JFrame {
 		return status_col_label_image;
 	}
 	
-	/*
-	private JButton create_item_jButton(int x,int y,String item_name){
+	public void Open_Item_Column(Player player){
+		JPanel buf = Construct_Item_Column_Panel(player); 
+		buttom_map_panel.add(buf);
+		buttom_map_panel.setComponentZOrder(buf, 0);
+	    buf.repaint();
+	}
+	
+	public void Remove_Item_Column_Panel(){
+		buttom_map_panel.remove(item_column_panel);
+		buttom_map_panel.repaint();
+	}
+	
+	private JPanel Construct_Item_Column_Panel(Player player){
+		if(item_column_panel == null){
+			item_column_panel = new JPanel();
+			item_column_panel.setLayout(null);
+			right_col_panel.setBounds(100,300,400,120);
+		}
+		item_column_panel.removeAll();
+		for(int i=0;i<4;i++){
+			for(int j=0;j<5;j++){
+				JButton buf = get_Item_Button(i,j,"test "+ i + " " + j);
+				item_column_panel.add(buf);
+			}
+		}
+		return item_column_panel;
+	}
+	
+	private JButton get_Item_Button(int x,int y,String item_name){
 		int index = x*5+y;
+		if( item_button == null)
+			item_button = new JButton[20];
 		if( item_button[index]==null){
 			item_button[index] = new JButton();
-			item_button[index].setBounds(new Rectangle(184+80*y, 446+ 30*x,80,30));
+			item_button[index].setBounds(new Rectangle(80*y,30*x,80,30));
 			item_button[index].setBorderPainted(false);
 			item_button[index].setContentAreaFilled(false);
-			item_button[index].setIcon(new ImageIcon(item_buttom[0]));
-			item_button[index].setPressedIcon(new ImageIcon(item_buttom[1]));
+			item_button[index].setIcon(new ImageIcon(item_button_image[0]));
+			item_button[index].setPressedIcon(new ImageIcon(item_button_image[1]));
+			item_button[index].setRolloverIcon(new ImageIcon(item_button_image[2]));
 			item_button[index].addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("xdd"); // TODO Auto-generated Event stub actionPerformed()
@@ -440,20 +486,6 @@ public class GraphicsEngine extends JFrame {
 		}
 		return item_button[index];
 	}
-	
-	public void OpenItemColumn(){
-		for(int i=0;i<4;i++){
-			for(int j=0;j<5;j++){
-				System.out.println("test" + i + " " + j);
-				JButton buf = create_item_button(i,j,"test "+ i + " " + j);
-				jContentPane.add(buf);
-				jContentPane.setComponentZOrder(buf, 0);
-			}
-		}
-		this.repaint();
-	}*/
-	
-	
 	
 	
 	public void Repaint_Status_Col(Player player){
@@ -483,6 +515,12 @@ public class GraphicsEngine extends JFrame {
 	    this.repaint();
 	}
 	
+	public void Build_House(Building building){
+		ImageIcon house = new ImageIcon(land_button_image[building.getFloor()]);
+		land_button[building.get_Button_Index()].setIcon(house);
+		land_button[building.get_Button_Index()].setDisabledIcon(house);
+		land_button[building.get_Button_Index()].repaint();
+	}
 	
 	
 	public void Show_Building_Msg(Building origin,int condition){
@@ -494,6 +532,7 @@ public class GraphicsEngine extends JFrame {
 	
 	public void Remove_Building_Msg(){
 		buttom_map_panel.remove(building_msg_panel);
+		buttom_map_panel.repaint();
 	}
 	private JPanel Construct_Building_Msg_Panel(Building b,int condition){
 		if(building_msg_panel == null){
@@ -572,6 +611,7 @@ public class GraphicsEngine extends JFrame {
 	}
 	public void Remove_Lab_Msg(){
 		buttom_map_panel.remove(lab_msg_panel);
+		buttom_map_panel.repaint();
 	}
 	
 	private JPanel Construct_Lab_Msg_Panel(Lab lab , int condition){
@@ -671,7 +711,7 @@ public class GraphicsEngine extends JFrame {
 			no_button.setBorder(border1);
 			no_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("yes button"); // TODO Auto-generated Event stub actionPerformed()
+					System.out.println("no button"); // TODO Auto-generated Event stub actionPerformed()
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.NO_STATE);
 						ginfo.notifyAll();
@@ -770,6 +810,7 @@ public class GraphicsEngine extends JFrame {
 	
 	public void Remove_Move_Msg(){
 		buttom_map_panel.remove(move_msg_panel);
+		buttom_map_panel.repaint();
 	}
 	
 	private JPanel Construct_Move_Msg_Panel(int move){
@@ -813,16 +854,11 @@ public class GraphicsEngine extends JFrame {
 	    buttom_map_panel.add(buf);
 	    buttom_map_panel.setComponentZOrder(buf, 0);
 	    this.repaint();
-	    synchronized(ginfo){
-	    	try {
-				ginfo.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}                
-	    }
+	    
 	}
 	public void Remove_ATM(){
 		buttom_map_panel.remove(atm_panel);
+		buttom_map_panel.repaint();
 	}
 	
 	private JPanel Construct_ATM_Panel(){
@@ -1049,5 +1085,47 @@ public class GraphicsEngine extends JFrame {
 	    return atm_withdraw_button;
 	}
 	
-
+	public void Show_Random_Event_Msg(String message){
+		JPanel buf = Construct_Random_Event_Msg_Panel(message);
+	    buttom_map_panel.add(buf);
+	    buttom_map_panel.setComponentZOrder(buf, 0);
+	    this.repaint();
+	}
+	public void Remove_Random_Event_Msg(){
+		buttom_map_panel.remove(random_event_msg_panel);
+		buttom_map_panel.repaint();
+	}
+	
+	private JPanel Construct_Random_Event_Msg_Panel(String message){
+		if(random_event_msg_panel == null){
+			random_event_msg_panel = new JPanel();
+			random_event_msg_panel.setLayout(null);
+			random_event_msg_panel.setBounds(new Rectangle(100, 400, 550, 100));
+		}
+		get_random_event_msg_label(message).setLocation(0,0);
+		get_Ok_Button().setLocation(425,25);
+		random_event_msg_panel.add(get_Ok_Button());
+		random_event_msg_panel.add(get_random_event_msg_label(message));
+		return random_event_msg_panel;
+	}
+	private JLabel get_random_event_msg_label(String message){
+		if(random_event_msg_label == null){
+			random_event_msg_label = new JLabel();
+			random_event_msg_label.setBounds(new Rectangle(0, 0, 550, 100));
+			random_event_msg_label.setBorder(border1);
+		}
+		AttributedString as = new AttributedString(message);
+		as.addAttribute(TextAttribute.FONT, biakai_18);
+		as.addAttribute(TextAttribute.FOREGROUND,Color.black);
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		BufferedImage buf = new BufferedImage(550,100 , BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g = (Graphics2D)buf.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setColor(yellow);
+		g.fillRect(0, 0, 550, 100);
+		g.drawString(as.getIterator(), 30, 30);
+		random_event_msg_label.setIcon(new ImageIcon(buf));
+		
+		return random_event_msg_label;
+	}
 }

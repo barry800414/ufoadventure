@@ -38,11 +38,13 @@ public class GameInfo {
      * 					1 Throw the dice 
      * 					2 yes , ok  b
      * 					3 no 
+     * 					4 item column
      */
     public static final int DEFAULT_STATE = 0;
     public static final int THROW_DICE_STATE = 1;
     public static final int YES_OK_STATE = 2;
     public static final int NO_STATE = 3;
+    public static final int ITEM_COLUMN = 4;
     
     
     public GameInfo(){
@@ -143,7 +145,7 @@ public class GameInfo {
     			coor.x = input.nextInt();
     			coor.y = input.nextInt();
     			index = input.nextInt();
-    			roadlist[i] = new Road(name,landlist[index],coor,pic,r_pic_filename);
+    			roadlist[i] = new Road(i,name,landlist[index],coor,pic,r_pic_filename);
     		}
     	}
     	catch(Exception e){
@@ -177,18 +179,18 @@ public class GameInfo {
     			if(type == BUILDING){
     				for(int j=0;j<b_pic_filename.length;j++)
     					b_pic_filename[j] = input.next();
-    				landlist[i] = new Building(name,null,price,coor,pic,null);
+    				landlist[i] = new Building(i,name,null,price,coor,pic,null);
     			}
     			else if(type == LAB){
     				item_index = input.nextInt();
     				for(int j=0;j<l_pic_filename.length;j++)
     					l_pic_filename[j] = input.next();
-    				landlist[i] = new Lab(name,null,price,itemlist[item_index],coor,pic,null);
+    				landlist[i] = new Lab(i,name,null,price,itemlist[item_index],coor,pic,null);
     			}
     			else if(type == SPECIAL_LOCATION){
     				//for(int j=0;j<s_pic_filename.length;j++)
     				//	s_pic_filename[j] = input.next();
-    				landlist[i] = new SpecialLocation(name,null,price,coor,pic,null);
+    				landlist[i] = new SpecialLocation(i,name,null,price,coor,pic,null);
     			}
     		}
     	}
