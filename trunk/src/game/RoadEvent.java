@@ -1,7 +1,14 @@
 package game;
 
 public class RoadEvent extends Event{
-	public void apply(GameInfo ginfo,GraphicsEngine gengine,Player p,int rest_steps){
+	
+	
+	
+	public RoadEvent(GameInfo ginfo, GraphicsEngine gengine, Computer com) {
+		super(ginfo, gengine, com);
+	}
+
+	public void apply(GameObject origin,GameObject target){
 		
 	}
 }

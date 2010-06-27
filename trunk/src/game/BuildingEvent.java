@@ -22,6 +22,7 @@ public class BuildingEvent extends Event{
 	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE){
 	    	    	player.setCash(player.getCash() - building.getLandPrice());
 	    	    	building.setOwner(player);
+	    	    	gengine.Build_House(building);
 	    	    	gengine.Screen_Update(player);
 	    	    }
 	    	}
@@ -31,6 +32,7 @@ public class BuildingEvent extends Event{
 	    	    if(ginfo.get_Control_State() == 1 && building.getFloor() <= Building.MAX_FLOOR){
 	    	    	player.setCash(player.getCash() - (int)(building.getLandPrice() * 0.2));
 	    			building.setFloor(building.getFloor() + 1);
+	    			gengine.Build_House(building);
 	    			gengine.Screen_Update(player);
 	    	    }
 	    	}

@@ -9,9 +9,11 @@ public class Road extends GameObject{
     private Land land;
     private String name;
     private boolean[] state;
+    private int button_index;
     
-    public Road(String name ,Land land,Point map_coor,Rectangle pic_coor,String[] filename){
+    public Road(int index,String name ,Land land,Point map_coor,Rectangle pic_coor,String[] filename){
     	super(map_coor,pic_coor,filename);
+    	this.button_index = index;
     	this.name = name;
     	this.land = land;
     	System.out.println(" " + name);
@@ -31,6 +33,9 @@ public class Road extends GameObject{
     	return event;
     }
     
+    public int get_Button_Index(){
+    	return button_index;
+    }
     
     public void road_trigger(Computer com,GameInfo ginfo,GraphicsEngine gengine,Player p,int rest_steps) {
     	//(RoadEvent)event.apply(ginfo,gengine,p,rest_steps);	
