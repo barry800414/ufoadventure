@@ -30,15 +30,15 @@ public class GameInfo {
     public Player[] playerlist ;
     public Item[] itemlist;
     public Road[] roadlist;
-    public Event[] eventlist;
     public Land[] landlist;
     
     private int control_state;
     /*control_state is the bridge between GraphicsEngine & Computer
      * control_state:   0 Throw the dice
-     * 					1 Use Item
+     * 					1 yes , ok  button
      * 					2  
      */
+    //TODO : use constant table to represent the state
     
     public GameInfo(){
     	round=1;
@@ -55,7 +55,7 @@ public class GameInfo {
     	coodinate = new int[19][21];
     	*/
     }
-    public void Game_Init(){
+    public void GameInfo_Init(){
     	Item_Init("itemlist.txt");
     	Land_Init("landlist.txt");
     	Road_Init("roadlist.txt");
@@ -224,6 +224,6 @@ public class GameInfo {
     	    playerlist[i] = new Player(this,i,"Player " + (i+1),init_cash,init_deposit,1,init_point,0,coor,pic,b_pic_filename[i]);
     	   
     	}
-	
     }
+   
 }

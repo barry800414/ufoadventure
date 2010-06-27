@@ -14,4 +14,14 @@ public abstract class Event {
 	
 	public abstract void apply(GameObject origin,GameObject target);
     
+	protected void Event_Wait(){
+		synchronized (ginfo){	
+	    	try {
+	    		ginfo.wait();
+	    	} catch (InterruptedException e) {
+	    		e.printStackTrace();
+	    	}
+	    }
+	}
+	
 }

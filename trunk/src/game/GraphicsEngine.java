@@ -486,33 +486,36 @@ public class GraphicsEngine extends JFrame {
 	
 	
 	
-	public void Show_Building_Msg(Building origin,Player target){
-		JPanel buf = Construct_Building_Msg_Panel(origin,target);
+	public void Show_Building_Msg(Building origin,int condition){
+		JPanel buf = Construct_Building_Msg_Panel(origin,condition);
 	    buttom_map_panel.add(buf);
 	    buttom_map_panel.setComponentZOrder(buf, 0);
 	    buf.repaint();
 	}
-	private JPanel Construct_Building_Msg_Panel(Building b, Player target){
+	private JPanel Construct_Building_Msg_Panel(Building b,int condition){
 		if(building_msg_panel == null){
 	    	building_msg_panel = new JPanel();
 	    	building_msg_panel.setLayout(null);
 	    	building_msg_panel.setBounds(new Rectangle(240, 300, 300, 160));
 	    }
 	    building_msg_panel.removeAll();
-	    if(b.getOwner() == null){
+	    // vacant land
+	    if(condition == 1){
 	    	get_Yes_Button().setLocation(25, 100);
 			get_No_Button().setLocation(175, 100);
 	    	building_msg_panel.add(get_Yes_Button());
 			building_msg_panel.add(get_No_Button());
 			building_msg_panel.add(get_Building_Msg_Label(b,1));
 	    }
-	    else if(b.getOwner() == target){
+	    // building's owner
+	    else if(condition == 2){
 	    	get_Yes_Button().setLocation(25,100);
 	    	get_No_Button().setLocation(175,100);
 	    	building_msg_panel.add(get_Yes_Button());
 	    	building_msg_panel.add(get_No_Button());
 	    	building_msg_panel.add(get_Building_Msg_Label(b,2));
 	    }
+	    //other player's building
 	    else{
 	    	ok_button.setLocation(100,100);
 	    	building_msg_panel.add(ok_button);
@@ -563,8 +566,8 @@ public class GraphicsEngine extends JFrame {
 		return building_msg_label;
 	}
 	
-	public void Show_Lab_Msg(Lab lab,Player target){
-	    JPanel buf = Construct_Lab_Msg_Panel(lab,target);
+	public void Show_Lab_Msg(Lab lab,int condition){
+	    JPanel buf = Construct_Lab_Msg_Panel(lab,condition);
 		buttom_map_panel.add(buf);
 	    buttom_map_panel.setComponentZOrder(buf, 0);
 	    buf.repaint();
@@ -577,14 +580,15 @@ public class GraphicsEngine extends JFrame {
 	    }
 	}
 	
-	private JPanel Construct_Lab_Msg_Panel(Lab lab , Player target){
+	private JPanel Construct_Lab_Msg_Panel(Lab lab , int condition){
 	    if(lab_msg_panel == null){
 	    	lab_msg_panel = new JPanel();
 	    	lab_msg_panel.setLayout(null);
 	    	lab_msg_panel.setBounds(new Rectangle(240, 300, 300, 160));
 	    }
 	    lab_msg_panel.removeAll();
-	    if(lab.getOwner() == null){
+	    //vacant lab land
+	    if(condition == 1){
 	    	get_Yes_Button().setLocation(25, 100);
 			get_No_Button().setLocation(175, 100);
 	    	lab_msg_panel.add(get_Yes_Button());
@@ -593,7 +597,8 @@ public class GraphicsEngine extends JFrame {
 			//get_Yes_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,1));
 			//get_No_Button().addActionListener(new AdvActionListener(this,ginfo,null,null,null,false,map_panel,lab_msg_panel,2));
 	    }
-	    else if(lab.getOwner() == target){
+	    //lab's owner
+	    else if(condition == 2){
 	    	get_Yes_Button().setLocation(25, 100);
 			get_No_Button().setLocation(175, 100);
 	    	lab_msg_panel.add(get_Yes_Button());

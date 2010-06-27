@@ -22,9 +22,6 @@ public abstract class Land extends GameObject {
     	this.land_price = land_price ; 
     	//this.event = event ;
     }
-    
-    public abstract void land_trigger(GameInfo ginfo, GraphicsEngine gengine,Player p);
-
     public String getName(){
     	return name;
     }
@@ -42,4 +39,10 @@ public abstract class Land extends GameObject {
     	}
     	else return false;
     }
+    
+    public void setEvent(Event event){
+    	this.event = event;
+    }
+    
+    public abstract void land_trigger(GameObject origin, GameObject target);
 }
