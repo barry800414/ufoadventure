@@ -19,7 +19,7 @@ public class LabEvent extends Event{
 			if(lab.getOwner() == null){
 	    	    gengine.Show_Lab_Msg(lab, 1);
 	    	    Event_Wait();
-	    	    if(ginfo.get_Control_State() == 1){
+	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE){
 	    	    	player.setCash(player.getCash() - lab.getLandPrice());
 	    	    	lab.setOwner(player);
 	    	    	gengine.Screen_Update(player);
@@ -28,18 +28,20 @@ public class LabEvent extends Event{
 	    	else if(lab.getOwner() == player){
 	    		gengine.Show_Lab_Msg(lab, 2);
 	    	    Event_Wait();
-	    	    if(ginfo.get_Control_State() == 1 && lab.getFloor() <= Building.MAX_FLOOR){
+	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE && lab.getFloor() <= Building.MAX_FLOOR){
 	    	    	player.setCash(player.getCash() - (int)(lab.getLandPrice() * 0.2));
 	    			lab.setFloor(lab.getFloor() + 1);
 	    			gengine.Screen_Update(player);
 	    	    }
 	    	    // TODO : research the items
 	    	}
-	    	else{
+	    	/*else{
 	    		// TODO : remove it ?
 	    		gengine.Show_Lab_Msg(lab, 3);
 	    		Event_Wait();
-	    	}
+	    	}*/
+			gengine.Remove_Lab_Msg();
+			Event_Sleep(1500);
 		}
 		else
 			System.out.println("Lab Event Applies failure");

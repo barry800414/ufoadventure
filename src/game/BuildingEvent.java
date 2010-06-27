@@ -19,7 +19,7 @@ public class BuildingEvent extends Event{
 			if(building.getOwner() == null){
 	    	    gengine.Show_Building_Msg(building, 1);
 	    	    Event_Wait();
-	    	    if(ginfo.get_Control_State() == 1){
+	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE){
 	    	    	player.setCash(player.getCash() - building.getLandPrice());
 	    	    	building.setOwner(player);
 	    	    	gengine.Screen_Update(player);
@@ -33,7 +33,6 @@ public class BuildingEvent extends Event{
 	    			building.setFloor(building.getFloor() + 1);
 	    			gengine.Screen_Update(player);
 	    	    }
-	    	    
 	    	}
 	    	else{
 	    		gengine.Show_Building_Msg(building, 3);
@@ -42,6 +41,8 @@ public class BuildingEvent extends Event{
 	    		building.getOwner().setDeposit(building.getOwner().getDeposit() + building.getToll());
 	    		gengine.Screen_Update(player);
 	    	}
+			gengine.Remove_Building_Msg();
+			Event_Sleep(1500);
 		}
 		else
 			System.out.println("Building Event Applies failure");
