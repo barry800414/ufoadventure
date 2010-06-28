@@ -54,42 +54,52 @@ public class ATM_Event extends Event{
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[0]){
 	    			money = money * 10 ;
+	    			money = money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[1]){
 	    			money = money * 10 +1;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[2]){
 	    			money = money * 10 +2;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[3]){
 	    			money = money * 10 +3;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[4]){
 	    			money = money * 10 +4;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[5]){
 	    			money = money * 10 +5;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[6]){
 	    			money = money * 10 +6;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[7]){
 	    			money = money * 10 +7;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[8]){
 	    			money = money * 10 +8;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[9]){
 	    			money = money * 10 +9;
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		Event_Wait();
@@ -101,5 +111,13 @@ public class ATM_Event extends Event{
 		}
 		else
 			System.out.println("ATM Event Applies failure");
+	}
+	private int check_limit(int money,Player player,boolean withdraw_save){
+		if(withdraw_save){
+			return money > player.getDeposit() ? player.getDeposit() : money;
+		}
+		else{
+			return money > player.getCash() ? player.getCash() : money;
+		}
 	}
 }

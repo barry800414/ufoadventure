@@ -14,7 +14,7 @@ public class Computer {
     private GameInfo ginfo ;
     private GraphicsEngine gengine;
     private boolean[] player_mobility;   // true  the player can go 
-    private Event event_stack[];
+    
     
     private int state;
     private int steps = 0;
@@ -25,8 +25,9 @@ public class Computer {
     	this.gengine = gengine;
     	Event_Init();
     	player_mobility = new boolean[ginfo.players_num];
-    	for(int i=0;i<ginfo.players_num;i++)
+    	for(int i=0;i<ginfo.players_num;i++){
     		player_mobility[i] = true;
+    	}
     }
     private void Event_Init(){
     	building_event = new BuildingEvent(ginfo,gengine,this);
@@ -99,9 +100,15 @@ public class Computer {
      * move the player by steps
      */
     public void Move_Player(Player player){
-    	steps = 0;
-    	for(int i=0;i<player.getDicenum();i++) 
-    		steps = (steps + rnd.nextInt(6) + 10);
+    	if(player.getID()==0)
+    		steps = 41;
+    	else if (player.getID()==1 || player.getID()==2)
+    		steps = 15;
+    	else{	
+    		steps = 0;
+    		for(int i=0;i<player.getDicenum();i++) 
+    			steps = (steps + rnd.nextInt(6) + 10);
+    	}
     	Display_Steps(steps);
     	System.out.println("move test!");
     	for(int i=0;i<steps;i++){
@@ -110,7 +117,7 @@ public class Computer {
         	player.setPicCoor();
         	gengine.Screen_Update(player);
         	try {
-				Thread.sleep(200);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -131,11 +138,7 @@ public class Computer {
 	    gengine.Remove_Move_Msg();
     }
     
-    /*
-    public void UseItem(Player user, Player targetp ,Road targetr){
-    	Item.trigger(user, targetp, targetr);
-    }
-    */
+    
 	
     /*
     public void BuyItem(Player p,int[] item_index){
