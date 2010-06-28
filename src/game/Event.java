@@ -15,22 +15,21 @@ public abstract class Event {
 	public abstract void apply(GameObject origin,GameObject target);
     
 	protected void Event_Wait(){
-		//synchronized (ginfo){	
-	    	try {
-	    		ginfo.wait();
-	    	} catch (InterruptedException e) {
-	    		e.printStackTrace();
-	    	}
-	    //}
+	    try {
+	    	ginfo.wait();
+	    } 
+	    catch (InterruptedException e) {
+	    	e.printStackTrace();
+	    }
 	}
 	
 	protected void Event_Sleep(int mini_sec){
 		try {
 			Thread.sleep(mini_sec);
-		} catch (InterruptedException e) {
+		} 
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 }

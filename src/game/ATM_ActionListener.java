@@ -14,7 +14,7 @@ public class ATM_ActionListener implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent arg0) {
-		new GameAudio("InstOK.wav").start();
+		//new GameBackGroundAudio("InstOK.wav").start();
 		synchronized(ginfo){
 			ginfo.set_Control_State(GameInfo.ATM_NUM[num]);
 			ginfo.notifyAll();

@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Computer {
 	
-    
     public BuildingEvent building_event;
     public LabEvent lab_event;
     public RandomEvent random_event;
@@ -100,17 +99,11 @@ public class Computer {
      * move the player by steps
      */
     public void Move_Player(Player player){
-    	if(player.getID()==0)
-    		steps = 41;
-    	else if (player.getID()==1 || player.getID()==2)
-    		steps = 15;
-    	else{	
-    		steps = 0;
-    		for(int i=0;i<player.getDicenum();i++) 
-    			steps = (steps + rnd.nextInt(6) + 10);
-    	}
+    	
+    	steps = 0;
+    	for(int i=0;i<player.getDicenum();i++) 
+    		steps = (steps + rnd.nextInt(6) );
     	Display_Steps(steps);
-    	System.out.println("move test!");
     	for(int i=0;i<steps;i++){
     	    //ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
     		player.setLocation(player.getLocation() + 1);
@@ -131,7 +124,6 @@ public class Computer {
     	gengine.Show_Move_Msg(steps);
 	    try {
 	    	ginfo.wait();
-	    	//gengine.ScreemUpdate(playercontrol);
 	    } catch (InterruptedException e) {
 	    	e.printStackTrace();
 	    }

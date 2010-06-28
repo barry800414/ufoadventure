@@ -9,7 +9,6 @@ public abstract class Land extends GameObject {
     private String name;  //名字
     private Player owner;  //擁有者
     private int land_price;  //價格
-    private String filename;
     private int button_index;
     //private String info; //說明()
     //protected int ID;  //編號

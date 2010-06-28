@@ -121,7 +121,6 @@ public class Player extends GameObject{
     	int x = road.x;
     	int y = road.y + road.height / 2  -  getPicCoor().height ;
     	this.setPicCoor(x , y , getPicCoor().width, getPicCoor().height);
-    	//System.out.println( y + " mmmmmmm  " +  road.y );
     }
     
     // TODO : calc the building value etc.. 

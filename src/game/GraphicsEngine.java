@@ -334,9 +334,8 @@ public class GraphicsEngine extends JFrame {
 			item_col_button.setRolloverIcon(new ImageIcon(item_col_button_image[2]));
 			item_col_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("open button column"); // TODO Auto-generated Event stub actionPerformed()
 					synchronized(ginfo){
-						new GameAudio("InstOK.wav").start();
+						//new GameAudio("InstOK.wav").start();
 						ginfo.set_Control_State(GameInfo.ITEM_COLUMN);
 						ginfo.notifyAll();
 					}
@@ -356,7 +355,6 @@ public class GraphicsEngine extends JFrame {
 			exit_button.setRolloverIcon(new ImageIcon(exit_button_image[2]));
 			exit_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("Exit"); // TODO Auto-generated Event stub actionPerformed()
 					
 					//new Audio("./sounds/InstSel.wav.wav").start();
 					System.exit(0);
@@ -400,9 +398,8 @@ public class GraphicsEngine extends JFrame {
 			go_button.setRolloverIcon(new ImageIcon(go_button_image[2]));
 			go_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
 					synchronized (ginfo){
-						new GameAudio("InstOK.wav").start();
+						//new GameAudio("InstOK.wav").start();
 						ginfo.set_Control_State(GameInfo.THROW_DICE_STATE);
 						ginfo.notifyAll();
 					}
@@ -500,8 +497,7 @@ public class GraphicsEngine extends JFrame {
 			item_button[index].setText("均富卡");
 			item_button[index].addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					new GameAudio("InstOK.wav").start();
-					System.out.println("xdd"); // TODO Auto-generated Event stub actionPerformed()
+					//new GameAudio("InstOK.wav").start();
 				}
 			});
 		}
@@ -738,8 +734,7 @@ public class GraphicsEngine extends JFrame {
 			no_button.setBorder(border1);
 			no_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("no button"); // TODO Auto-generated Event stub actionPerformed()
-					new GameAudio("InstOK.wav").start();
+					//new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.NO_STATE);
 						ginfo.notifyAll();
@@ -779,8 +774,7 @@ public class GraphicsEngine extends JFrame {
 			yes_button.setBorder(border1);
 			yes_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("yes button"); // TODO Auto-generated Event stub actionPerformed()
-					new GameAudio("InstOK.wav").start();
+					//new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.YES_OK_STATE);
 						ginfo.notifyAll();
@@ -819,8 +813,7 @@ public class GraphicsEngine extends JFrame {
 			ok_button.setBorder(border1);
 			ok_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("ok button"); // TODO Auto-generated Event stub actionPerformed()
-					new GameAudio("InstOK.wav").start();
+					//new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.YES_OK_STATE);
 						ginfo.notifyAll();
@@ -1010,8 +1003,7 @@ public class GraphicsEngine extends JFrame {
 	    	atm_max_button.setBorder(border1);
 	    	atm_max_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("max button"); // TODO Auto-generated Event stub actionPerformed()
-					new GameAudio("InstOK.wav").start();
+					//new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.ATM_max);
 						ginfo.notifyAll();
@@ -1048,8 +1040,7 @@ public class GraphicsEngine extends JFrame {
 	    	atm_clean_button.setBorder(border1);
 	    	atm_clean_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("clear button"); // TODO Auto-generated Event stub actionPerformed()
-					new GameAudio("InstOK.wav").start();
+					//new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.ATM_clear);
 						ginfo.notifyAll();
@@ -1087,8 +1078,7 @@ public class GraphicsEngine extends JFrame {
 	    	atm_enter_button.setBorder(border1);
 	    	atm_enter_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("enter button"); // TODO Auto-generated Event stub actionPerformed()
-					new GameAudio("InstOK.wav").start();
+					//new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.ATM_enter);
 						ginfo.notifyAll();
@@ -1125,8 +1115,7 @@ public class GraphicsEngine extends JFrame {
 	    	atm_savemoney_button.setBorder(border1);
 	    	atm_savemoney_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("save button"); // TODO Auto-generated Event stub actionPerformed()
-					new GameAudio("InstOK.wav").start();
+					//new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.ATM_save);
 						ginfo.notifyAll();
@@ -1163,8 +1152,7 @@ public class GraphicsEngine extends JFrame {
 			atm_withdraw_button.setBorder(border1);
 			atm_withdraw_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("withdraw button"); // TODO Auto-generated Event stub actionPerformed()
-					new GameAudio("InstOK.wav").start();
+					//new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.ATM_withdraw);
 						ginfo.notifyAll();

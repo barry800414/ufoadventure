@@ -10,11 +10,9 @@ public class ATM_Event extends Event{
 	}
 	
 	public void apply(GameObject origin , GameObject target){
-		Building building;
 		Player player;
 		money = 0;
 		if((origin instanceof SpecialLocation)  && (target instanceof Player)){
-			SpecialLocation s = (SpecialLocation)origin;
 			player = (Player)target;
 	    	gengine.Show_ATM();
 	    	Event_Wait();
@@ -54,7 +52,7 @@ public class ATM_Event extends Event{
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[0]){
 	    			money = money * 10 ;
-	    			money = money = check_limit(money,player,withdraw_save);
+	    			money = check_limit(money,player,withdraw_save);
 	    			gengine.Reset_ATM_Label(money, withdraw_save);
 	    		}
 	    		else if(state == GameInfo.ATM_NUM[1]){

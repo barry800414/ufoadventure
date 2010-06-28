@@ -45,7 +45,6 @@ public class LabEvent extends Event{
 			gengine.Remove_Lab_Msg();
 			Event_Sleep(1000);
 		}
-		else
 			System.out.println("Lab Event Applies failure");
 	}
 }
