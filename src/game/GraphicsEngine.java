@@ -21,8 +21,8 @@ public class GraphicsEngine extends JFrame {
 	public static final Rectangle SCREEN = new Rectangle(0,0,960,600);
 	public static final Rectangle MAP =  new Rectangle(0,50,752 ,516);
 	public static final Rectangle TOP_COL = new Rectangle(0,0,952,50);
-	public static final Rectangle CALENDAR = new Rectangle(0,0,200,50);
-	public static final Rectangle NTU_MONOPOLY = new Rectangle(200, 0, 350, 50);
+	public static final Rectangle CALENDAR = new Rectangle(0,0,250,50);
+	public static final Rectangle NTU_MONOPOLY = new Rectangle(249, 0, 453, 50);
 	public static final Rectangle ITEM_COL_BUTTON = new Rectangle(702, 0,150, 50);
 	public static final Rectangle EXIT_BUTTON = new Rectangle(852,0,100,50);
 	public static final Rectangle RIGHT_COL =  new Rectangle(752,50,200,516);
@@ -81,7 +81,8 @@ public class GraphicsEngine extends JFrame {
 	private BufferedImage go_button_image[] = null;
 	private BufferedImage exit_button_image[] = null;
 	private BufferedImage player_button_image[] = null;
-	private BufferedImage land_button_image[] = null;
+	private BufferedImage building_button_image[] = null;
+	private BufferedImage lab_button_image[] = null;
 	private BufferedImage road_button_image[] = null;
 	private BufferedImage item_button_image[] = null;
 	
@@ -96,7 +97,6 @@ public class GraphicsEngine extends JFrame {
 	private LineBorder border1 = new LineBorder(orange, 2);
 	
 	private GameInfo ginfo = null;
-	private int button_state;
 	public int ATM_number = 0;
 	public boolean Withdraw_Save = true;  // true Withdraw   false Save
 	
@@ -146,7 +146,7 @@ public class GraphicsEngine extends JFrame {
 	 */
 	private void Load_Pic(){
 		try{
-			calendar_image = ImageIO.read(new File("calendar_bar.png")); 
+			calendar_image = ImageIO.read(new File("calendar_buttom.png")); 
 			ntu_monopoly_image = ImageIO.read(new File("top_bar.png"));
 			status_col_image = ImageIO.read(new File("status_col.png"));
 			map_image = ImageIO.read(new File("NTUmap.png"));
@@ -166,13 +166,18 @@ public class GraphicsEngine extends JFrame {
 			for(int i=0;i<ginfo.players_num;i++)
 				player_button_image[i] = ginfo.playerlist[i].getImage(0);
 			    
-			land_button_image = new BufferedImage[Building.MAX_FLOOR+1];
-			land_button_image[0] = ImageIO.read(new File("building.png"));
-			land_button_image[1] = ImageIO.read(new File("building1.png"));
-			land_button_image[2] = ImageIO.read(new File("building2.png"));
-			land_button_image[3] = ImageIO.read(new File("building3.png"));
-			land_button_image[4] = ImageIO.read(new File("building4.png"));
-			land_button_image[5] = ImageIO.read(new File("building5.png"));
+			building_button_image = new BufferedImage[Building.MAX_FLOOR+1];
+			building_button_image[0] = ImageIO.read(new File("building.png"));
+			building_button_image[1] = ImageIO.read(new File("building1.png"));
+			building_button_image[2] = ImageIO.read(new File("building2.png"));
+			building_button_image[3] = ImageIO.read(new File("building3.png"));
+			building_button_image[4] = ImageIO.read(new File("building4.png"));
+			building_button_image[5] = ImageIO.read(new File("building5.png"));
+			
+			lab_button_image = new BufferedImage[Lab.MAX_FLOOR+1];
+			lab_button_image[0] = ImageIO.read(new File("building.png"));
+			lab_button_image[1] = ImageIO.read(new File("lab.png"));
+			lab_button_image[2] = ImageIO.read(new File("lab2.png"));
 			
 			//TODO add road button picture  (road_button_image) 
 			item_button_image = new BufferedImage[3];
@@ -317,7 +322,7 @@ public class GraphicsEngine extends JFrame {
 		    as.addAttribute(TextAttribute.FONT, biakai_22);
 		    as.addAttribute(TextAttribute.FOREGROUND,Color.BLACK);
 		    as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
-		    g.drawString(as.getIterator(), 0, 33);
+		    g.drawString(as.getIterator(), 30, 33);
 		    
 		    calendar_label = new JLabel();
 			calendar_label.setBounds(new Rectangle(CALENDAR));
@@ -338,6 +343,7 @@ public class GraphicsEngine extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("open button column"); // TODO Auto-generated Event stub actionPerformed()
 					synchronized(ginfo){
+						new GameAudio("InstOK.wav").start();
 						ginfo.set_Control_State(GameInfo.ITEM_COLUMN);
 						ginfo.notifyAll();
 					}
@@ -358,6 +364,7 @@ public class GraphicsEngine extends JFrame {
 			exit_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("Exit"); // TODO Auto-generated Event stub actionPerformed()
+					
 					//new Audio("./sounds/InstSel.wav.wav").start();
 					System.exit(0);
 				}
@@ -402,6 +409,7 @@ public class GraphicsEngine extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("Go"); // TODO Auto-generated Event stub actionPerformed()
 					synchronized (ginfo){
+						new GameAudio("InstOK.wav").start();
 						ginfo.set_Control_State(GameInfo.THROW_DICE_STATE);
 						ginfo.notifyAll();
 					}
@@ -416,6 +424,7 @@ public class GraphicsEngine extends JFrame {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.clearRect(0, 0, STATUS_COL.width, STATUS_COL.height);
 		g.drawImage(status_col_image,0,0,null);
+		g.drawImage(p.getImage(0),40,35,null);
 		
 		//name cash deposit point property house_num location
 		String str[] = new String[7];
@@ -438,6 +447,23 @@ public class GraphicsEngine extends JFrame {
 		return status_col_label_image;
 	}
 	
+	public void Refresh_Calendar(GameInfo ginfo){
+		Graphics2D g = (Graphics2D)calendar_label_image.getGraphics();
+	    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	    g.clearRect(0, 0, CALENDAR.width, CALENDAR.height);
+	    g.drawImage(calendar_image,0,0,null);
+	    
+	    AttributedString as = new AttributedString(" "+ginfo.year+" / "+ginfo.month + " / " + ginfo.day);
+	    as.addAttribute(TextAttribute.FONT, biakai_22);
+	    as.addAttribute(TextAttribute.FOREGROUND,Color.BLACK);
+	    as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+	    g.drawString(as.getIterator(), 30, 33);
+	    
+	    calendar_label = new JLabel();
+		calendar_label.setBounds(new Rectangle(CALENDAR));
+		calendar_label.setIcon(new ImageIcon(calendar_label_image));
+	}
+	
 	public void Open_Item_Column(Player player){
 		JPanel buf = Construct_Item_Column_Panel(player); 
 		buttom_map_panel.add(buf);
@@ -454,7 +480,7 @@ public class GraphicsEngine extends JFrame {
 		if(item_column_panel == null){
 			item_column_panel = new JPanel();
 			item_column_panel.setLayout(null);
-			right_col_panel.setBounds(100,300,400,120);
+			item_column_panel.setBounds(100,300,400,120);
 		}
 		item_column_panel.removeAll();
 		for(int i=0;i<4;i++){
@@ -480,6 +506,7 @@ public class GraphicsEngine extends JFrame {
 			item_button[index].setRolloverIcon(new ImageIcon(item_button_image[2]));
 			item_button[index].addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					new GameAudio("InstOK.wav").start();
 					System.out.println("xdd"); // TODO Auto-generated Event stub actionPerformed()
 				}
 			});
@@ -516,12 +543,18 @@ public class GraphicsEngine extends JFrame {
 	}
 	
 	public void Build_House(Building building){
-		ImageIcon house = new ImageIcon(land_button_image[building.getFloor()]);
+		ImageIcon house = new ImageIcon(building_button_image[building.getFloor()]);
 		land_button[building.get_Button_Index()].setIcon(house);
 		land_button[building.get_Button_Index()].setDisabledIcon(house);
 		land_button[building.get_Button_Index()].repaint();
 	}
 	
+	public void Build_Lab(Lab lab){
+		ImageIcon house = new ImageIcon(lab_button_image[lab.getFloor()]);
+		land_button[lab.get_Button_Index()].setIcon(house);
+		land_button[lab.get_Button_Index()].setDisabledIcon(house);
+		land_button[lab.get_Button_Index()].repaint();
+	}
 	
 	public void Show_Building_Msg(Building origin,int condition){
 		JPanel buf = Construct_Building_Msg_Panel(origin,condition);
@@ -712,6 +745,7 @@ public class GraphicsEngine extends JFrame {
 			no_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("no button"); // TODO Auto-generated Event stub actionPerformed()
+					new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.NO_STATE);
 						ginfo.notifyAll();
@@ -752,6 +786,7 @@ public class GraphicsEngine extends JFrame {
 			yes_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("yes button"); // TODO Auto-generated Event stub actionPerformed()
+					new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.YES_OK_STATE);
 						ginfo.notifyAll();
@@ -791,6 +826,7 @@ public class GraphicsEngine extends JFrame {
 			ok_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					System.out.println("ok button"); // TODO Auto-generated Event stub actionPerformed()
+					new GameAudio("InstOK.wav").start();
 					synchronized(ginfo){
 						ginfo.set_Control_State(GameInfo.YES_OK_STATE);
 						ginfo.notifyAll();
@@ -859,6 +895,14 @@ public class GraphicsEngine extends JFrame {
 	public void Remove_ATM(){
 		buttom_map_panel.remove(atm_panel);
 		buttom_map_panel.repaint();
+	}
+	
+	public void Reset_ATM_Label(int money,boolean withdraw_save){
+		Withdraw_Save = withdraw_save;
+		ATM_number = money;
+		atm_panel.remove(atm_msg_label);
+		atm_panel.add(get_ATM_Msg_Label());
+		atm_panel.repaint();
 	}
 	
 	private JPanel Construct_ATM_Panel(){
@@ -940,6 +984,8 @@ public class GraphicsEngine extends JFrame {
 	    	g.drawString(as.getIterator(), 20, 28);
 	    	atm_num_button[num].setPressedIcon(new ImageIcon(buf2));
 	    	atm_num_button[num].setBorder(border1);
+	    	ATM_ActionListener atm_num_listener = new ATM_ActionListener(ginfo,num);
+	    	atm_num_button[num].addActionListener(atm_num_listener);
 	    }
 	    return atm_num_button[num];
 	}
@@ -968,6 +1014,16 @@ public class GraphicsEngine extends JFrame {
 	    	g.drawString(as.getIterator(), 11, 28);
 	    	atm_max_button.setPressedIcon(new ImageIcon(buf2));
 	    	atm_max_button.setBorder(border1);
+	    	atm_max_button.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("max button"); // TODO Auto-generated Event stub actionPerformed()
+					new GameAudio("InstOK.wav").start();
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.ATM_max);
+						ginfo.notifyAll();
+					}
+				}
+			});
 	    }
 	    return atm_max_button;
 	}
@@ -996,6 +1052,16 @@ public class GraphicsEngine extends JFrame {
 	    	g.drawString(as.getIterator(), 8, 28);
 	    	atm_clean_button.setPressedIcon(new ImageIcon(buf2));
 	    	atm_clean_button.setBorder(border1);
+	    	atm_clean_button.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("clear button"); // TODO Auto-generated Event stub actionPerformed()
+					new GameAudio("InstOK.wav").start();
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.ATM_clear);
+						ginfo.notifyAll();
+					}
+				}
+			});
 	    }
 	    return atm_clean_button;
 	}
@@ -1025,6 +1091,16 @@ public class GraphicsEngine extends JFrame {
 	    	g.drawString(as.getIterator(), 32, 28);
 	    	atm_enter_button.setPressedIcon(new ImageIcon(buf2));
 	    	atm_enter_button.setBorder(border1);
+	    	atm_enter_button.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("enter button"); // TODO Auto-generated Event stub actionPerformed()
+					new GameAudio("InstOK.wav").start();
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.ATM_enter);
+						ginfo.notifyAll();
+					}
+				}
+			});
 	    }
 	    return atm_enter_button;
 	}
@@ -1053,6 +1129,16 @@ public class GraphicsEngine extends JFrame {
 	    	g.drawString(as.getIterator(), 8, 28);
 	    	atm_savemoney_button.setPressedIcon(new ImageIcon(buf2));
 	    	atm_savemoney_button.setBorder(border1);
+	    	atm_savemoney_button.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("save button"); // TODO Auto-generated Event stub actionPerformed()
+					new GameAudio("InstOK.wav").start();
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.ATM_save);
+						ginfo.notifyAll();
+					}
+				}
+			});
 	    }
 	    return atm_savemoney_button;
 	}
@@ -1081,6 +1167,16 @@ public class GraphicsEngine extends JFrame {
 			g.drawString(as.getIterator(), 8, 28);
 			atm_withdraw_button.setPressedIcon(new ImageIcon(buf2));
 			atm_withdraw_button.setBorder(border1);
+			atm_withdraw_button.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("withdraw button"); // TODO Auto-generated Event stub actionPerformed()
+					new GameAudio("InstOK.wav").start();
+					synchronized(ginfo){
+						ginfo.set_Control_State(GameInfo.ATM_withdraw);
+						ginfo.notifyAll();
+					}
+				}
+			});
 	    }
 	    return atm_withdraw_button;
 	}

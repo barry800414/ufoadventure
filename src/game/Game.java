@@ -13,7 +13,9 @@ public class Game {
     	gengine.setVisible(true);
     	
     	boolean gameflag = true;
-    	
+    	GameAudio background = new GameAudio("midi04.wav");
+		background.set_Circle_Play(true);
+		background.start();
     	while(gameflag){
     		gameflag = gcom.Main_Loop();
     	}

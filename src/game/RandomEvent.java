@@ -18,7 +18,7 @@ public class RandomEvent extends Event{
 			case 0 :
 				gengine.Show_Random_Event_Msg("參加系卡獲得冠軍  獎金三萬!!!!!");
 	    	    Event_Wait();
-	    	    if(ginfo.get_Control_State() == 1){
+	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE){
 	    	    	player.setCash(player.getCash() + 30000);
 	    			gengine.Screen_Update(player);
 	    	    }
@@ -26,7 +26,7 @@ public class RandomEvent extends Event{
 			case 1 :
 				gengine.Show_Random_Event_Msg("提款卡被搶  存款失去三萬");
 	    	    Event_Wait();
-	    	    if(ginfo.get_Control_State() == 1){
+	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE){
 	    	    	player.setDeposit(player.getDeposit() - 30000);
 	    			gengine.Screen_Update(player);
 	    	    }

@@ -39,19 +39,41 @@ public class GameInfo {
      * 					2 yes , ok  b
      * 					3 no 
      * 					4 item column
+     * 					5 ATM_0
+     * 					6 ATM_1
+     * 					7 ATM_2
+     * 					8 ATM_3
+     * 					9 ATM_4
+     * 					10 ATM_5
+     * 					11 ATM_6
+     * 					12 ATM_7
+     * 					13 ATM_8
+     * 					14 ATM_9
+     * 					15 ATM_withdraw
+     * 					16 ATM_save
+     * 					17 ATM_clear
+     * 					18 ATM_max
+     * 					19 ATM_enter
      */
     public static final int DEFAULT_STATE = 0;
     public static final int THROW_DICE_STATE = 1;
     public static final int YES_OK_STATE = 2;
     public static final int NO_STATE = 3;
     public static final int ITEM_COLUMN = 4;
+    public static final int[] ATM_NUM = {5,6,7,8,9,10,11,12,13,14};
+    public static final int ATM_withdraw = 15;
+    public static final int ATM_save = 16;
+    public static final int ATM_clear = 17;
+    public static final int ATM_max = 18;
+    public static final int ATM_enter = 19;
+    
     
     
     public GameInfo(){
     	round=1;
     	year=2010;
     	month=6;
-    	day=10;
+    	day=28;
     }
     public void GameInfo_Init(){
     	Item_Init("itemlist.txt");
@@ -202,23 +224,23 @@ public class GameInfo {
     }
     
     private void Player_Init(){
-    	String[][] b_pic_filename = new String[3][1];
-    	for(int i=0;i<b_pic_filename.length;i++){
-    		b_pic_filename[i][0] = "Player"+i+".png";
-    	}
-    	Point coor = new Point();
-    	coor.x = 13;
-    	coor.y = 5;
-		Rectangle pic = new Rectangle();
-		pic.height = 100;
-		pic.width = 100;
-		pic.x = 2250;
-		pic.y = 1250;
+    	String[][] p_pic_filename = new String[4][1];	
+    	p_pic_filename[0][0] = "baby.png";
+    	p_pic_filename[1][0] = "handsome1.png";
+    	p_pic_filename[2][0] = "handsome2.png";
+    	p_pic_filename[3][0] = "java.png";
+    	
+    	String[] p_name = new String[4];
+    	p_name[0] = "小貝比";
+    	p_name[1] = "帥哥一號";
+    	p_name[2] = "帥哥二號";
+    	p_name[3] = "Java god";
+    	Point coor = new Point(13,5);
+		Rectangle pic = new Rectangle(2250,1250,100,100);
     	playerlist = new Player[players_num];
     	for(int i=0;i<players_num;i++) {
-    	    playerlist[i] = new Player(this,i,"Player " + (i+1),init_cash,init_deposit,1,init_point,0,coor,pic,b_pic_filename[i]);
-    	   
+    	    playerlist[i] = new Player(this,i, p_name[i] ,init_cash,init_deposit,1,init_point,0,coor,pic,p_pic_filename[i]);
     	}
     }
-   
+    
 }
