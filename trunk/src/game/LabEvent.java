@@ -22,6 +22,7 @@ public class LabEvent extends Event{
 	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE){
 	    	    	player.setCash(player.getCash() - lab.getLandPrice());
 	    	    	lab.setOwner(player);
+	    	    	gengine.Build_Lab(lab);
 	    	    	gengine.Screen_Update(player);
 	    	    }
 	    	}
@@ -31,6 +32,7 @@ public class LabEvent extends Event{
 	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE && lab.getFloor() <= Building.MAX_FLOOR){
 	    	    	player.setCash(player.getCash() - (int)(lab.getLandPrice() * 0.2));
 	    			lab.setFloor(lab.getFloor() + 1);
+	    			gengine.Build_Lab(lab);
 	    			gengine.Screen_Update(player);
 	    	    }
 	    	    // TODO : research the items
@@ -41,7 +43,7 @@ public class LabEvent extends Event{
 	    		Event_Wait();
 	    	}*/
 			gengine.Remove_Lab_Msg();
-			Event_Sleep(1500);
+			Event_Sleep(100);
 		}
 		else
 			System.out.println("Lab Event Applies failure");

@@ -29,7 +29,7 @@ public class BuildingEvent extends Event{
 	    	else if(building.getOwner() == player){
 	    		gengine.Show_Building_Msg(building, 2);
 	    	    Event_Wait();
-	    	    if(ginfo.get_Control_State() == 1 && building.getFloor() <= Building.MAX_FLOOR){
+	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE && building.getFloor() <= Building.MAX_FLOOR){
 	    	    	player.setCash(player.getCash() - (int)(building.getLandPrice() * 0.2));
 	    			building.setFloor(building.getFloor() + 1);
 	    			gengine.Build_House(building);
@@ -44,7 +44,7 @@ public class BuildingEvent extends Event{
 	    		gengine.Screen_Update(player);
 	    	}
 			gengine.Remove_Building_Msg();
-			Event_Sleep(1500);
+			Event_Sleep(100);
 		}
 		else
 			System.out.println("Building Event Applies failure");

@@ -8,6 +8,7 @@ public class Computer {
     public BuildingEvent building_event;
     public LabEvent lab_event;
     public RandomEvent random_event;
+    public ATM_Event atm_event;
     public Event[] eventlist;
     
     private GameInfo ginfo ;
@@ -31,11 +32,14 @@ public class Computer {
     	building_event = new BuildingEvent(ginfo,gengine,this);
     	lab_event = new LabEvent(ginfo,gengine,this);
     	random_event = new RandomEvent(ginfo,gengine,this);
+    	atm_event = new ATM_Event(ginfo,gengine,this);
     	
     	Land buf;
     	for(int i=0;i<ginfo.landlist.length;i++){
     		buf = ginfo.landlist[i];
-    		if(buf instanceof Building){
+    		if(i == 37 || i== 60)
+    			buf.setEvent(atm_event);
+    		else if(buf instanceof Building){
     			buf.setEvent(building_event);
     		}
     		else if(buf instanceof Lab){
@@ -44,8 +48,8 @@ public class Computer {
     		else{
     			buf.setEvent(random_event);
     		}
-    		//TODO : SpecialLocation
     	}
+    	
     }
     
     
@@ -63,6 +67,7 @@ public class Computer {
     public void Round_Update(){
     	ginfo.round++;
     	AddDate();
+    	gengine.Refresh_Calendar(ginfo);
     	for(int i=0;i<ginfo.players_num;i++)
     		player_mobility[i] = true;
     }
@@ -72,7 +77,6 @@ public class Computer {
 		synchronized (ginfo){	
 			try {
 				gengine.Screen_Update(player);
-				gengine.Show_Random_Event_Msg("測試測試");
 				ginfo.wait();   // wait for player to click button
 				state = ginfo.get_Control_State();
 				if(state == GameInfo.THROW_DICE_STATE){
@@ -95,9 +99,9 @@ public class Computer {
      * move the player by steps
      */
     public void Move_Player(Player player){
-    	steps = 0;
-    	for(int i=0;i<player.getDicenum();i++) 
-    		steps = (steps + rnd.nextInt(6) + 10);
+    	steps = 41;
+    	//for(int i=0;i<player.getDicenum();i++) 
+    	//	steps = (steps + rnd.nextInt(6) + 10);
     	Display_Steps(steps);
     	System.out.println("move test!");
     	for(int i=0;i<steps;i++){
@@ -112,7 +116,6 @@ public class Computer {
 			}
     	}
     	Land land = ginfo.roadlist[player.getLocation()].getLand();
-    	if(!(land instanceof SpecialLocation))
     	land.land_trigger(land,player);
     }
     
