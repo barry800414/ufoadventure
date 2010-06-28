@@ -31,8 +31,10 @@ public class RandomEvent extends Event{
 	    			gengine.Screen_Update(player);
 	    	    }
 	    	    break;
+			
 		}
 		gengine.Remove_Random_Event_Msg();
+		Event_Sleep(1000);
 	}
 	
 	

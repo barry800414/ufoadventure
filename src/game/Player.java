@@ -23,7 +23,6 @@ public class Player extends GameObject{
     private ArrayList<Item> item = new ArrayList<Item>(0);     //道具
     private ArrayList<Land> house = new ArrayList<Land>(0);    //房屋   to be repaired
     
-    
     //to do : Item[] item  , int[] house , Career , Road start
     public Player(GameInfo ginfo,int ID,String name,int cash,int deposit,int dice_num,int point,int location,Point map_coor,Rectangle pic_coor,String[] filename){
     	super(map_coor,pic_coor,filename);
@@ -36,7 +35,6 @@ public class Player extends GameObject{
     	this.dice_num = dice_num;
     	this.point = point;
     	setPicCoor();
-    	
     }
     
     public int getID(){  return ID;  }
@@ -143,6 +141,8 @@ public class Player extends GameObject{
     public void removeItem(Item item){
     	this.item.remove(item);
     }
+    
+    
     /*
      * 0 定時炸彈
      */

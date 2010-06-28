@@ -44,7 +44,7 @@ public class BuildingEvent extends Event{
 	    		gengine.Screen_Update(player);
 	    	}
 			gengine.Remove_Building_Msg();
-			Event_Sleep(100);
+			Event_Sleep(1000);
 		}
 		else
 			System.out.println("Building Event Applies failure");
