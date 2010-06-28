@@ -99,9 +99,9 @@ public class Computer {
      * move the player by steps
      */
     public void Move_Player(Player player){
-    	steps = 41;
-    	//for(int i=0;i<player.getDicenum();i++) 
-    	//	steps = (steps + rnd.nextInt(6) + 10);
+    	steps = 0;
+    	for(int i=0;i<player.getDicenum();i++) 
+    		steps = (steps + rnd.nextInt(6) + 10);
     	Display_Steps(steps);
     	System.out.println("move test!");
     	for(int i=0;i<steps;i++){
