@@ -12,10 +12,11 @@ public class Game {
     	Computer gcom = new Computer(ginfo,gengine);
     	gengine.setVisible(true);
     	
+    	GameBackGroundAudio audio = new GameBackGroundAudio();
+    	audio.start();
+    	
     	boolean gameflag = true;
-    	GameAudio background = new GameAudio("midi04.wav");
-		background.set_Circle_Play(true);
-		background.start();
+		
     	while(gameflag){
     		gameflag = gcom.Main_Loop();
     	}

@@ -16,7 +16,6 @@ public class Road extends GameObject{
     	this.button_index = index;
     	this.name = name;
     	this.land = land;
-    	System.out.println(" " + name);
     	//this.event = event ;
     	this.land = land ;
     }

@@ -1,5 +1,4 @@
 package game;
-
 import java.util.*;
 
 public class RandomEvent extends Event{

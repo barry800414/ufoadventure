@@ -653,7 +653,6 @@ public class GameMainMenu extends JFrame {
 					ginfo.init_deposit = property * (10 - percent) / 10;
 					ginfo.init_point = point;
 					ginfo.gamemode = mode;
-					System.out.println("actionPerformed()" + ginfo.init_cash); // TODO Auto-generated Event stub actionPerformed()
 					gameflag = true;
 				}
 			});
