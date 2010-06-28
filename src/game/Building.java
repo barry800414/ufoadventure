@@ -31,7 +31,6 @@ public class Building extends Land{
     	toll_rate = new int[MAX_FLOOR + 1];
     	for(int i=0;i<toll_rate.length;i++){
     	    toll_rate[i] = 10 + i*10;
-    	    System.out.println("test " + toll_rate[i]);
     	}
     	
     }
