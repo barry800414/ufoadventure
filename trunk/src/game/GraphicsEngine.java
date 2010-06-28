@@ -99,14 +99,7 @@ public class GraphicsEngine extends JFrame {
 	private GameInfo ginfo = null;
 	public int ATM_number = 0;
 	public boolean Withdraw_Save = true;  // true Withdraw   false Save
-	
-	
-	/*button state :    if button state = 0 , then when player click the 
-	 * 					button , it will fire the action perform 
-	 * 					0  Go Button, Item Column Button
-	 * 					1  Yes No Ok Button
-	 * 					2  ATM Button
-	 */
+
 						
 	
 	

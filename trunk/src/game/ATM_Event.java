@@ -96,6 +96,7 @@ public class ATM_Event extends Event{
 	    	}
 	    	
 			gengine.Remove_ATM();
+			gengine.Screen_Update(player);
 			Event_Sleep(1000);
 		}
 		else
