@@ -102,7 +102,7 @@ public class Computer {
     	
     	steps = 0;
     	for(int i=0;i<player.getDicenum();i++) 
-    		steps = (steps + rnd.nextInt(6) );
+    		steps = (steps + rnd.nextInt(6) +1);
     	Display_Steps(steps);
     	for(int i=0;i<steps;i++){
     	    //ginfo.roadlist[p.getLocation()].road_trigger(this, ginfo, gengine, p, i-1);
