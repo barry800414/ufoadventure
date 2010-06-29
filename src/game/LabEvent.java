@@ -22,6 +22,7 @@ public class LabEvent extends Event{
 	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE){
 	    	    	player.setCash(player.getCash() - lab.getLandPrice());
 	    	    	lab.setOwner(player);
+	    	    	player.addHouse(lab);
 	    	    	gengine.Build_Lab(lab);
 	    	    	gengine.Screen_Update(player);
 	    	    }
@@ -45,6 +46,7 @@ public class LabEvent extends Event{
 			gengine.Remove_Lab_Msg();
 			Event_Sleep(1000);
 		}
+		else
 			System.out.println("Lab Event Applies failure");
 	}
 }

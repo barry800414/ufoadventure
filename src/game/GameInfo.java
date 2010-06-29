@@ -125,7 +125,7 @@ public class GameInfo {
     private boolean Item_Init(String filename){
     	
     	try {
-    		Scanner input = new Scanner(new FileInputStream(filename));
+    		Scanner input = new Scanner(new File(filename),"UTF-8");
     		int num , point ;
     		String name , info;
     		num = input.nextInt();
@@ -146,7 +146,7 @@ public class GameInfo {
     }
     private boolean Road_Init(String filename){
     	try {
-    		Scanner input = new Scanner(new FileInputStream(filename));
+    		Scanner input = new Scanner(new File(filename),"UTF-8");
     		int num ,index ;
     		String name ;
     		Rectangle pic = new Rectangle();
@@ -178,7 +178,7 @@ public class GameInfo {
     }
     private boolean Land_Init(String filename){
     	try {
-    		Scanner input = new Scanner(new FileInputStream(filename));
+    		Scanner input = new Scanner(new File(filename),"UTF-8");
     		int num ,type ,price,item_index;
     		String name ;
     		String[] b_pic_filename = new String[6];

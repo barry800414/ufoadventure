@@ -22,6 +22,7 @@ public class BuildingEvent extends Event{
 	    	    if(ginfo.get_Control_State() == GameInfo.YES_OK_STATE){
 	    	    	player.setCash(player.getCash() - building.getLandPrice());
 	    	    	building.setOwner(player);
+	    	    	player.addHouse(building);
 	    	    	gengine.Build_House(building);
 	    	    	gengine.Screen_Update(player);
 	    	    }

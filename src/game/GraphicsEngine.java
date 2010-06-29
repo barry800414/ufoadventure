@@ -494,7 +494,6 @@ public class GraphicsEngine extends JFrame {
 			item_button[index].setIcon(new ImageIcon(item_button_image[0]));
 			item_button[index].setPressedIcon(new ImageIcon(item_button_image[1]));
 			item_button[index].setRolloverIcon(new ImageIcon(item_button_image[2]));
-			item_button[index].setText("均富卡");
 			item_button[index].addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
