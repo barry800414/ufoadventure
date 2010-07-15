@@ -4,20 +4,23 @@ package game;
 
 
 import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
 import java.awt.font.TextAttribute;
 import java.awt.image.*;
 import java.io.File;
 import java.text.AttributedString;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 
 public class GraphicsEngine extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	public static final Rectangle FRAME = new Rectangle(0,0,968,634); 
 	public static final Rectangle SCREEN = new Rectangle(0,0,960,600);
 	public static final Rectangle MAP =  new Rectangle(0,50,752 ,516);
 	public static final Rectangle TOP_COL = new Rectangle(0,0,952,50);
@@ -43,6 +46,7 @@ public class GraphicsEngine extends JFrame {
 	private JPanel item_column_panel = null;
 	
 	
+	private JLabel main_menu_label = null;
 	private JLabel calendar_label = null;
 	private JLabel ntu_label = null;
 	private JLabel status_col_label = null;
@@ -71,6 +75,7 @@ public class GraphicsEngine extends JFrame {
 	private JButton atm_withdraw_button = null;
 	
 	
+	private BufferedImage main_menu_image = null ;
 	private BufferedImage calendar_image = null; 
 	private BufferedImage ntu_monopoly_image = null;
 	private BufferedImage status_col_image = null;
@@ -89,12 +94,14 @@ public class GraphicsEngine extends JFrame {
 	
 	private Color orange = new Color(255,154,39);
 	private Color yellow = new Color(255,253,183);
+	private Color yellow_2 = new Color(255,253,200);
 	private Font biakai_28 = new Font("標楷體",Font.BOLD,28);
 	private Font biakai_24 = new Font("標楷體",Font.BOLD,24);
 	private Font biakai_22 = new Font("標楷體",Font.BOLD,22);
 	private Font biakai_18 = new Font("標楷體",Font.BOLD,18);
 	private Font biakai_16 = new Font("標楷體",Font.BOLD,16);
-	private LineBorder border1 = new LineBorder(orange, 2);
+	private Font cooper_black_28 = new Font("Cooper Black",Font.BOLD,28); 
+	private LineBorder orange_border = new LineBorder(orange, 2);
 	
 	private GameInfo ginfo = null;
 	public int ATM_number = 0;
@@ -139,6 +146,7 @@ public class GraphicsEngine extends JFrame {
 	 */
 	private void Load_Pic(){
 		try{
+			main_menu_image =  ImageIO.read(new File("main_menu.png"));
 			calendar_image = ImageIO.read(new File("calendar_buttom.png")); 
 			ntu_monopoly_image = ImageIO.read(new File("top_bar.png"));
 			status_col_image = ImageIO.read(new File("status_col.png"));
@@ -188,18 +196,41 @@ public class GraphicsEngine extends JFrame {
 	 * This method initializes content_panel
 	 */
 	private void Content_Panel_Init() {
-		if (content_panel == null) {
+		if(content_panel == null) {
 			content_panel = new JPanel();
 			content_panel.setLayout(null);
-			
-			Map_Panel_Init();
-			Top_Col_Panel_Init();
-			Right_Col_Panel_Init();
-			
-			content_panel.add(buttom_map_panel);
-			content_panel.add(top_col_panel);
-			content_panel.add(right_col_panel);
+			content_panel.addMouseListener(new MD());
 		}
+	}
+	
+	private class MD extends MouseAdapter {
+        public void mousePressed(MouseEvent me) {
+            System.out.println("x :" + me.getX() + "  y :" + me.getY());
+        }
+    };
+	
+	public void Display_MainMenu(){
+		if(main_menu_label == null){
+			main_menu_label = new JLabel();
+			main_menu_label.setBounds(0,0,960,600);
+			
+		}
+		BufferedImage buf = new BufferedImage(SCREEN.width,SCREEN.height,BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D g2d = buf.createGraphics();
+		g2d.drawImage(main_menu_image,0,0,null);
+		main_menu_label.setIcon(new ImageIcon(buf));
+		content_panel.add(Create_Button(new Rectangle(300,300,100,100),"Test",cooper_black_28));
+		content_panel.add(main_menu_label);
+		repaint();
+	}
+	
+	private void Game_Screen_Init(){
+		Map_Panel_Init();
+		Top_Col_Panel_Init();
+		Right_Col_Panel_Init();
+		content_panel.add(buttom_map_panel);
+		content_panel.add(top_col_panel);
+		content_panel.add(right_col_panel);
 	}
 	
 	/*
@@ -595,7 +626,7 @@ public class GraphicsEngine extends JFrame {
 		if(building_msg_label == null){
 		    building_msg_label = new JLabel();
 		    building_msg_label.setBounds(new Rectangle(0, 0, 300, 160));
-		    building_msg_label.setBorder(border1);
+		    building_msg_label.setBorder(orange_border);
 		}
 		if(condition == 1){                 //vacant land
 			as1 = new AttributedString(b.getName()+"  價格:"+b.getLandPrice());
@@ -675,7 +706,7 @@ public class GraphicsEngine extends JFrame {
 	    if(lab_msg_label == null){
 		    lab_msg_label = new JLabel();
 		    lab_msg_label.setBounds(new Rectangle(0, 0, 300, 160));
-		    lab_msg_label.setBorder(border1);
+		    lab_msg_label.setBorder(orange_border);
 		}
 		if(condition == 1){
 			as1 = new AttributedString(lab.getName()+"  價格:"+lab.getLandPrice());
@@ -730,7 +761,7 @@ public class GraphicsEngine extends JFrame {
 			g.fillRect(0, 0, 100, 50);
 			g.drawString(as.getIterator(), 5, 30);
 			no_button.setPressedIcon(new ImageIcon(buf2));
-			no_button.setBorder(border1);
+			no_button.setBorder(orange_border);
 			no_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
@@ -770,7 +801,7 @@ public class GraphicsEngine extends JFrame {
 			g.fillRect(0, 0, 100, 50);
 			g.drawString(as.getIterator(), 4, 30);
 			yes_button.setPressedIcon(new ImageIcon(buf2));
-			yes_button.setBorder(border1);
+			yes_button.setBorder(orange_border);
 			yes_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
@@ -809,7 +840,7 @@ public class GraphicsEngine extends JFrame {
 			g.fillRect(0, 0, 100, 50);
 			g.drawString(as.getIterator(), 35, 30);
 			ok_button.setPressedIcon(new ImageIcon(buf2));
-			ok_button.setBorder(border1);
+			ok_button.setBorder(orange_border);
 			ok_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
@@ -854,7 +885,7 @@ public class GraphicsEngine extends JFrame {
 		if(move_msg_label == null){
 		    move_msg_label = new JLabel();
 		    move_msg_label.setBounds(new Rectangle(0, 0, 260, 160));
-		    move_msg_label.setBorder(border1);
+		    move_msg_label.setBorder(orange_border);
 		}
 		AttributedString as = new AttributedString("移動距離 : "+move);
 		as.addAttribute(TextAttribute.FONT, biakai_28);
@@ -926,7 +957,7 @@ public class GraphicsEngine extends JFrame {
 		if(atm_msg_label == null){
 		    atm_msg_label = new JLabel();
 		    atm_msg_label.setBounds(new Rectangle(0, 0, 280, 350));
-		    atm_msg_label.setBorder(border1);
+		    atm_msg_label.setBorder(orange_border);
 		}
 		AttributedString as;
 		if(Withdraw_Save == true)
@@ -969,7 +1000,7 @@ public class GraphicsEngine extends JFrame {
 	    	g.fillRect(0, 0, 50, 50);
 	    	g.drawString(as.getIterator(), 20, 28);
 	    	atm_num_button[num].setPressedIcon(new ImageIcon(buf2));
-	    	atm_num_button[num].setBorder(border1);
+	    	atm_num_button[num].setBorder(orange_border);
 	    	ATM_ActionListener atm_num_listener = new ATM_ActionListener(ginfo,num);
 	    	atm_num_button[num].addActionListener(atm_num_listener);
 	    }
@@ -999,7 +1030,7 @@ public class GraphicsEngine extends JFrame {
 	    	g.fillRect(0, 0, 50, 50);
 	    	g.drawString(as.getIterator(), 11, 28);
 	    	atm_max_button.setPressedIcon(new ImageIcon(buf2));
-	    	atm_max_button.setBorder(border1);
+	    	atm_max_button.setBorder(orange_border);
 	    	atm_max_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
@@ -1036,7 +1067,7 @@ public class GraphicsEngine extends JFrame {
 	    	g.fillRect(0, 0, 50, 50);
 	    	g.drawString(as.getIterator(), 8, 28);
 	    	atm_clean_button.setPressedIcon(new ImageIcon(buf2));
-	    	atm_clean_button.setBorder(border1);
+	    	atm_clean_button.setBorder(orange_border);
 	    	atm_clean_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
@@ -1074,7 +1105,7 @@ public class GraphicsEngine extends JFrame {
 	    	g.fillRect(0, 0, 110, 50);
 	    	g.drawString(as.getIterator(), 32, 28);
 	    	atm_enter_button.setPressedIcon(new ImageIcon(buf2));
-	    	atm_enter_button.setBorder(border1);
+	    	atm_enter_button.setBorder(orange_border);
 	    	atm_enter_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
@@ -1111,7 +1142,7 @@ public class GraphicsEngine extends JFrame {
 	    	g.fillRect(0, 0, 50, 50);
 	    	g.drawString(as.getIterator(), 8, 28);
 	    	atm_savemoney_button.setPressedIcon(new ImageIcon(buf2));
-	    	atm_savemoney_button.setBorder(border1);
+	    	atm_savemoney_button.setBorder(orange_border);
 	    	atm_savemoney_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
@@ -1148,7 +1179,7 @@ public class GraphicsEngine extends JFrame {
 	    	g.fillRect(0, 0, 50, 50);
 			g.drawString(as.getIterator(), 8, 28);
 			atm_withdraw_button.setPressedIcon(new ImageIcon(buf2));
-			atm_withdraw_button.setBorder(border1);
+			atm_withdraw_button.setBorder(orange_border);
 			atm_withdraw_button.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//new GameAudio("InstOK.wav").start();
@@ -1189,7 +1220,7 @@ public class GraphicsEngine extends JFrame {
 		if(random_event_msg_label == null){
 			random_event_msg_label = new JLabel();
 			random_event_msg_label.setBounds(new Rectangle(0, 0, 550, 100));
-			random_event_msg_label.setBorder(border1);
+			random_event_msg_label.setBorder(orange_border);
 		}
 		AttributedString as = new AttributedString(message);
 		as.addAttribute(TextAttribute.FONT, biakai_18);
@@ -1205,4 +1236,48 @@ public class GraphicsEngine extends JFrame {
 		
 		return random_event_msg_label;
 	}
+
+	private JButton Create_Button(Rectangle bounds ,String str,Font font,int str_x ,int str_y){
+		JButton button = new JButton();
+		button.setBounds(bounds);
+		button.setBorder(orange_border);
+		
+		BufferedImage buf = new BufferedImage(bounds.width,bounds.height,BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage roll_buf = new BufferedImage(bounds.width,bounds.height,BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage press_buf = new BufferedImage(bounds.width,bounds.height,BufferedImage.TYPE_3BYTE_BGR);
+		
+		Graphics2D g2d = buf.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(yellow);
+		g2d.fillRect(0, 0, bounds.width, bounds.height);
+		AttributedString as = new AttributedString(str);
+		as.addAttribute(TextAttribute.FONT, font);
+		as.addAttribute(TextAttribute.FOREGROUND,orange);
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		g2d.drawString(as.getIterator(),x,y);
+		button.setIcon(new ImageIcon(buf));
+		
+		g2d = roll_buf.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(yellow_2);
+		g2d.fillRect(0, 0, bounds.width, bounds.height);
+		as.addAttribute(TextAttribute.FONT, font);
+		as.addAttribute(TextAttribute.FOREGROUND,orange);
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		g2d.drawString(as.getIterator(),x,y);
+		button.setRolloverIcon(new ImageIcon(roll_buf));
+		
+		g2d = press_buf.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(orange);
+		g2d.fillRect(0, 0, bounds.width, bounds.height);
+		as.addAttribute(TextAttribute.FONT, font);
+		as.addAttribute(TextAttribute.FOREGROUND,yellow);
+		as.addAttribute(TextAttribute.BACKGROUND,Color.OPAQUE);
+		g2d.drawString(as.getIterator(),x,y);
+		button.setPressedIcon(new ImageIcon(press_buf));
+		
+		return button;
+	}
+	
 }
